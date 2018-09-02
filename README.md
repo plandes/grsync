@@ -53,7 +53,7 @@ invokes the program to *thaw* the distributing.
    
    To do this step manually:
    1. [Install](#obtaining) the `grsync` program.
-   2. Thaw it: `grsync thaw -d ./dist`
+   2. Thaw the distribution on the target: `grsync thaw -d ./dist`
 
 
 ## Changelog
