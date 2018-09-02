@@ -21,6 +21,7 @@ class TestConfig(unittest.TestCase):
                                         '~/.xsession',
                                         '~/.emacs',
                                         '~/.emacs.d',
+                                        '~/code/home-dir',
                                         '~/code/emacs'],
                    'discover.target':
                    [{'link': {'source': '~/.profile_${os}',

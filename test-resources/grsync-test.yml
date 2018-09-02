@@ -16,6 +16,7 @@ discover:
     - ~/.xsession
     - ~/.emacs
     - ~/.emacs.d
+    - ^{discover.codedir}/home-dir
     - ^{discover.codedir}/emacs
   # symbolic links that are string interpolated with the platform's name
   target:
