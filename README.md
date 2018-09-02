@@ -2,14 +2,22 @@
 
 [![Travis CI Build Status][travis-badge]][travis-link]
 
-Persist and create build out environments in a nascent account.  The program
-*memorizing* a users home directory and building it out on another system.
-This is done by:
+This program captures your home directory and synchronize it with another host
+using Git repo metadata, symbolic links and persisted files.
+
+I wrote this because I couldn't find anything that creates repositories with
+the idea of having a portable and easy to recreate your home directory on
+another host.  If I've reinvented the wheel, please let me know :)
+
+More specifically: it persists and creates build out environments in a nascent
+account.  The program *memorizing* a users home directory and building it out
+on another system.  This is done by:
 1. Copying files, directories and git repos configuration.
 2. Creating a distribution compressed file.
 3. Uncompress on the destination system and create repos.
 
 A future release will also synchronize and manage multiple GitHub repositories.
+
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 ## Table of Contents
