@@ -11,6 +11,17 @@ This is done by:
 
 A future release will also synchronize and manage multiple GitHub repositories.
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+## Table of Contents
+
+- [Obtaining](#obtaining)
+- [Usage](#usage)
+- [Requirements](#requirements)
+- [Changelog](#changelog)
+- [License](#license)
+
+<!-- markdown-toc end -->
+
 
 ## Obtaining
 
@@ -20,12 +31,6 @@ pip install zensols.grsync
 ```
 
 Binaries are also available on [pypi].
-
-
-## Requirements
-
-* At least [Python 3.6]
-* A system that supports [PyYAML]
 
 
 ## Usage
@@ -54,6 +59,12 @@ invokes the program to *thaw* the distributing.
    To do this step manually:
    1. [Install](#obtaining) the `grsync` program.
    2. Thaw the distribution on the target: `grsync thaw -d ./dist`
+
+
+## Requirements
+
+* At least [Python 3.6]
+* A system that supports [PyYAML]
 
 
 ## Changelog
