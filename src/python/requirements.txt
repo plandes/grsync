@@ -1,2 +1,2 @@
-zensols.actioncli>=1.0.7
+zensols.actioncli>=1.0.8
 gitpython>=2.1.11
