@@ -14,7 +14,7 @@ class BootstrapGenerator(object):
 
 if [ $# -eq 0 ] ; then
     echo "usage: $0 <python_dir> [grsync dir] [python<version>]"
-    echo "where: python_dir is the directory where python is installed"
+    echo "where: python_dir is the bin directory where python is installed"
     echo "       grsync_dir is the distribution directory copied from the source"
     echo "       python<version> is the version of python (i.e. python3.6)"
     exit 1
@@ -37,7 +37,7 @@ fi
 
 PYTHON_DIR=%(python_dir)s
 PIP=${PYTHON_DIR}/bin/pip
-VIRTUAL_ENV=${NATIVE_PYTHON_BIN_DIR}/bin/virtualenv
+VIRTUAL_ENV=${NATIVE_PYTHON_BIN_DIR}/virtualenv
 PYTHON_PAR=`dirname $PYTHON_DIR`
 WHEELS_DIR=${GRSYNC_INST_DIR}/%(wheel_dir)s
 WHEELS=${WHEELS_DIR}/*.whl
