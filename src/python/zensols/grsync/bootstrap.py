@@ -42,6 +42,10 @@ PYTHON_PAR=`dirname $PYTHON_DIR`
 WHEELS_DIR=${GRSYNC_INST_DIR}/%(wheel_dir)s
 WHEELS=${WHEELS_DIR}/*.whl
 
+if [ -f ${PIP} ] ; then
+    PIP=${PYTHON_DIR}/bin/pip3
+fi
+
 echo "GRSYNC_INST_DIR=${GRSYNC_INST_DIR}"
 echo "PYTHON_DIR=${PYTHON_DIR}"
 echo "PYTHON_VER=${PYTHON_VER}"
