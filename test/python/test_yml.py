@@ -29,12 +29,12 @@ class TestConfig(unittest.TestCase):
                               '~/code/home-dir/dot/os/${os}/profile'}}],
                    'discover.codedir': '~/code',
                    'discover.wheel.create': False}
-        config = YamlConfig('test-resources/grsync-test.yml', delimiter='^')
+        config = YamlConfig('test-resources/yaml-test.yml', delimiter='^')
         self.maxDiff = float('inf')
         self.assertEqual(correct, config.options)
 
     def test_set_dist(self):
-        config = AppConfig('test-resources/grsync-test.yml')
+        config = AppConfig('test-resources/midsize-test.yml')
         self.assertEqual(Path('./dist'), config.dist_dir)
         config.dist_dir = Path('./anewdir')
         self.assertEqual(Path('./anewdir'), config.dist_dir)

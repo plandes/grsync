@@ -1,8 +1,10 @@
 ## makefile automates the build and deployment for python projects
 
 PROJ_TYPE=	python
-WHINE=		1
-CONFIG=		test-resources/grsync.yml
+#ARGS=		-w 2
+#CONFIG=		test-resources/small-test.yml
+#CONFIG=		test-resources/midsize-test.yml
+CONFIG=/Users/landes/opt/etc/grsync.yml
 
 # make build dependencies
 _ :=	$(shell [ ! -d .git ] && git init ; [ ! -d zenbuild ] && \
@@ -12,16 +14,25 @@ include ./zenbuild/main.mk
 
 .PHONY:		discover
 discover:
-		make PYTHON_BIN_ARGS='info -c $(CONFIG) -w $(WHINE)' run
+		make PYTHON_BIN_ARGS='info -c $(CONFIG) $(ARGS)' run
+
+.PHONY:		repos
+repos:
+		make PYTHON_BIN_ARGS='repos -c $(CONFIG) $(ARGS)' run
+
+.PHONY:		repoinfo
+repoinfo:
+		make PYTHON_BIN_ARGS='repoinfo -c $(CONFIG) $(ARGS) -n home-dir' run
 
 .PHONY:		freeze
 freeze:
-		make PYTHON_BIN_ARGS='freeze -c $(CONFIG) -w $(WHINE)' run
+		mkdir -p $(MTARG)
+		make PYTHON_BIN_ARGS='freeze -c $(CONFIG) -d $(MTARG)/dist $(ARGS)' run
 
 .PHONY:		thaw
 thaw:
 		rm -rf $(MTARG)/t
-		make PYTHON_BIN_ARGS='thaw -d $(MTARG) -t $(MTARG)/t -w $(WHINE)' run
+		make PYTHON_BIN_ARGS='thaw -d $(MTARG) -t $(MTARG)/t $(ARGS)' run
 
 .PHONY:		appinfo
 appinfo:
@@ -38,4 +49,4 @@ rethaw:		clean freeze thaw
 
 .PHONY:		delete
 delete:
-		make PYTHON_BIN_ARGS='delete --dryrun -t $(MTARG)/t -c $(CONFIG) -w $(WHINE)' run
+		make PYTHON_BIN_ARGS='delete --dryrun -t $(MTARG)/t -c $(CONFIG) $(ARGS)' run

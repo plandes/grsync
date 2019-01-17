@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('zensols.grsync.bstrap')
+logger = logging.getLogger(__name__)
 
 
 class BootstrapGenerator(object):

@@ -24,6 +24,9 @@ A future release will also synchronize and manage multiple GitHub repositories.
 
 - [Obtaining](#obtaining)
 - [Usage](#usage)
+    - [Repository Information](#repository-information)
+    - [Command Line Help](#command-line-help)
+- [Symbolic Links](#symbolic-links)
 - [Requirements](#requirements)
 - [Changelog](#changelog)
 - [License](#license)
@@ -44,8 +47,8 @@ Binaries are also available on [pypi].
 ## Usage
 
 The program has two phases: freeze and thaw.  Git repositories (URLs and
-configuration, not files), symbolic links and files are first *froozen* into a
-distribution zip.
+configuration, not files), symbolic links (see [caveat](#symbolic-links)) and
+files are first *froozen* into a distribution zip.
 
 This distribution file is then copied to the target machine that is to be
 configured with the user's home directory setup.  The distribution also
@@ -67,6 +70,59 @@ invokes the program to *thaw* the distributing.
    To do this step manually:
    1. [Install](#obtaining) the `grsync` program.
    2. Thaw the distribution on the target: `grsync thaw -d ./dist`
+
+
+### Repository Information
+
+As you build your `grsync.yml` configuration file, it's helpful to see what
+repositories it's finding.  This is you can do this with the `repos` and
+`repoinfo`, which show repositories, remotes, and indexed symbol links to or
+within the repositories.
+
+
+### Command Line Help
+
+This information is given by the command line `grsync -h`, but repeated here
+for convenience:
+```sql
+Usage: usage: grsync <list|freeze|info|repoinfo|repos|thaw> [options]
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -w NUMBER, --whine=NUMBER
+                        add verbosity to logging
+  -c FILE, --config=FILE
+                        configuration file
+Actions:
+  freeze    Create a distribution
+  -d, --distdir <string>                    the location of build out distribution
+  --wheeldep <string>       zensols.grsync  used to create the wheel dep files
+
+  info      Pretty print discovery information
+
+  repoinfo  Get information on repositories
+  -n, --name <string>                       comma spearated list of repo names
+
+  repos     Output all repository top level info
+  -f, --format <string>     {name}          format string (i.e. {name}: {path} ({remotes}))
+
+  thaw      Build out a distribution
+  -d, --distdir <string>                    the location of build out distribution
+  -t, --targetdir <string>                  the location of build out target dir
+```
+
+
+## Symbolic Links
+
+As mentioned in the [usage](#usage) section, symbolic links pointing to any
+file in a repository are *froozen*, which means that integrity at thaw time is
+ensured.  However, links **not** pointing to a repository are currently
+persisted, but the files and directories they point to are not.
+
+A future release might have a *follow symbolic links* type functionality that
+allows this.  However, for now, you must include both the link and the data it
+points to get this integrity.
 
 
 ## Requirements

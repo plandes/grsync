@@ -10,7 +10,7 @@ from pathlib import Path
 from zensols.actioncli import YamlConfig
 from zensols.grsync import Discoverer, RepoSpec, BootstrapGenerator
 
-logger = logging.getLogger('zensols.grsync.dist')
+logger = logging.getLogger(__name__)
 
 
 class DistManager(object):
@@ -21,8 +21,7 @@ class DistManager(object):
 
     """
     def __init__(self, config: YamlConfig=None, dist_dir: Path=None,
-                 target_dir=None, only_repo_names=None,
-                 wheel_dependency='zensols.grsync'):
+                 target_dir=None):
         self.config = config
         # config will be missing on thaw
         if config is None:
@@ -37,8 +36,6 @@ class DistManager(object):
             self.target_dir = Path(target_dir)
         else:
             self.target_dir = Path.home()
-        self.only_repo_names = only_repo_names
-        self.wheel_dependency = wheel_dependency
         self.file_install_path = 'to_install'
         self.config_dir = 'conf'
         self.defs_file = '{}/dist.json'.format(self.config_dir)
@@ -53,7 +50,52 @@ class DistManager(object):
         """
         return Path(self.dist_dir, 'dist.zip')
 
-    def _create_wheels(self):
+    def discover_info(self):
+        """Proviate information about what's found in the user home directory.  This is
+        later used to freeze the data.
+
+        """
+        disc = Discoverer(self.config)
+        struct = disc.freeze()
+        pprint.PrettyPrinter().pprint(struct)
+
+    def _to_home_relative(self, path):
+        return str(Path(Path.home(), path).absolute())
+
+    def print_repos(self, fmt='{name}'):
+        disc = Discoverer(self.config)
+        struct = disc.freeze()
+        for repo_spec in struct['repo_specs']:
+            remotes = map(lambda x: x['name'], repo_spec['remotes'])
+            remotes = ' '.join(sorted(remotes))
+            rs = {'name': repo_spec['name'],
+                  'path': self._to_home_relative(repo_spec['path']),
+                  'remotes': remotes}
+            print(fmt.format(**rs))
+
+    def print_repo_info(self, names=None):
+        disc = Discoverer(self.config)
+        struct = disc.freeze()
+        specs = {x['name']: x for x in struct['repo_specs']}
+        if names is None:
+            names = sorted(specs.keys())
+        else:
+            names = names.split()
+        for name in names:
+            if name not in specs:
+                raise ValueError(f'no such repository: {name}')
+            s = specs[name]
+            path = str(Path(Path.home(), s['path']).absolute())
+            print(f"{s['name']}:\n  path: {path}\n  remotes:")
+            for r in s['remotes']:
+                print(f"    {r['name']}: {r['url']}")
+            print('  links:')
+            for l in s['links']:
+                source = self._to_home_relative(l['source'])
+                target = self._to_home_relative(l['target'])
+                print(f"    {source} -> {target}")
+
+    def _create_wheels(self, wheel_dependency):
         """Create wheel dependencies on this software so the host doesn't need Internet
         connectivity.  Currently the YAML dependency breaks this since only
         binary per host wheels are available for download and the wrong was is
@@ -63,13 +105,13 @@ class DistManager(object):
         wheel_dir_name = self.config.wheel_dir_name
         wheel_dir = Path(self.dist_dir, wheel_dir_name)
         logger.info('creating wheels from dependency {} in {}'.format(
-            self.wheel_dependency, wheel_dir))
+            wheel_dependency, wheel_dir))
         if not wheel_dir.exists():
             wheel_dir.mkdir(
                 self.dir_create_mode, parents=True, exist_ok=True)
         from pip._internal import main
         pip_cmd = 'wheel --wheel-dir={} --no-cache-dir {}'.format(
-            wheel_dir, self.wheel_dependency)
+            wheel_dir, wheel_dependency)
         logger.debug('pip cmd: {}'.format(pip_cmd))
         main(pip_cmd.split())
 
@@ -81,7 +123,6 @@ class DistManager(object):
         if not self.dist_dir.exists():
             self.dist_dir.mkdir(
                 self.dir_create_mode, parents=True, exist_ok=True)
-        logger.info('freezing distribution in {}'.format(dist_file))
         disc = Discoverer(self.config)
         data = disc.freeze()
         with zipfile.ZipFile(dist_file, mode='w') as zf:
@@ -95,17 +136,9 @@ class DistManager(object):
             logger.info('writing distribution defs to {}'.
                         format(self.defs_file))
             zf.writestr(self.defs_file, json.dumps(data, indent=2))
+        logger.info('created frozen distribution in {}'.format(dist_file))
 
-    def discover_info(self):
-        """Proviate information about what's found in the user home directory.  This is
-        later used to freeze the data.
-
-        """
-        disc = Discoverer(self.config)
-        data = disc.freeze()
-        pprint.PrettyPrinter().pprint(data)
-
-    def freeze(self):
+    def freeze(self, wheel_dependency):
         """Freeze the distribution by saving creating a script to thaw along with all
         artifacts (i.e. repo definitions) in a zip file.
 
@@ -118,7 +151,7 @@ class DistManager(object):
         # wheel creation last since pip clobers/reconfigures logging
         create_wheel = self.config.get_option('discover.wheel.create')
         if create_wheel:
-            self._create_wheels()
+            self._create_wheels(wheel_dependency)
 
     def _target_relative(self, path):
         """Return a path that is relative to where we're thawing the distribution,
@@ -127,7 +160,7 @@ class DistManager(object):
         """
         return Path.joinpath(self.target_dir, path)
 
-    def _thaw_remote_specs(self, rdef):
+    def _thaw_remote_specs(self, rdef, repo_pref):
         """Thaw a RepoSpec object, which does a clone and then creates the (remaining
         if any) remotes.
 
@@ -138,20 +171,21 @@ class DistManager(object):
             logger.info('creating parent directory: {}'.format(parent))
             parent.mkdir(self.dir_create_mode, parents=True, exist_ok=True)
         try:
-            return RepoSpec.thaw(rdef, self.target_dir, repo_path)
+            return RepoSpec.thaw(rdef, self.target_dir, repo_path, repo_pref)
         except GitCommandError as err:
             logger.warning('couldn\'t create repo {}--skippping: {}'.
                            format(repo_path, err))
 
-    def _thaw_repos(self, struct):
+    def _thaw_repos(self, struct, only_repo_names):
         """Thaw all repo specs defined in ``struct``."""
         rdefs = []
+        repo_pref = struct['repo_pref']
         for rdef in struct['repo_specs']:
             name = rdef['name']
-            if self.only_repo_names is None or name in self.only_repo_names:
+            if only_repo_names is None or name in only_repo_names:
                 rdefs.append(rdef)
         for rdef in rdefs:
-            self._thaw_remote_specs(rdef)
+            self._thaw_remote_specs(rdef, repo_pref)
 
     def _thaw_files(self, struct, zf):
         """Thaw files in the distribution by extracting from the zip file ``zf``.  File
@@ -201,7 +235,7 @@ class DistManager(object):
 
         """
         params = {'os': platform.system().lower()}
-        for link in struct['pattern_links']:
+        for link in struct['links']:
             src = link['source'].format(**params)
             src = self._target_relative(src)
             targ = link['target'].format(**params)
@@ -212,11 +246,11 @@ class DistManager(object):
                     'link source already exists: {}--skipping'.format(src))
             elif not targ.exists():
                 logger.warning(
-                    'link target does not exist: {}--skipping'.format(targ))
+                    f'link target does not exist: {src} -> {targ}--skipping')
             else:
                 src.symlink_to(targ)
 
-    def thaw(self):
+    def thaw(self, only_repo_names):
         """Thaw the distribution, which includes creating git repositories, extracting
         (frozen) files, creating symbolic links, and creating empty directories
         that were captured/configured during the freezing phase.
@@ -229,6 +263,6 @@ class DistManager(object):
                 jstr = f.read().decode('utf-8')
                 struct = json.loads(jstr)
             self._thaw_files(struct, zf)
-            self._thaw_repos(struct)
+            self._thaw_repos(struct, only_repo_names)
             self._thaw_empty_dirs(struct)
             self._thaw_pattern_links(struct)

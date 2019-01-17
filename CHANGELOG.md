@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+### Changed
+- Better symbolic link support.
+- Better CLI integration.
 
 
 ## [0.0.7] - 2018-09-14

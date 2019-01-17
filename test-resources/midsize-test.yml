@@ -1,0 +1,43 @@
+## this file is only available on a freeze, not thaw
+
+discover:
+  # a variable binding used for interpolation later on
+  codedir: ~/code
+  # indicate whether or not to create wheels from dependencies
+  # specify directories to unthaw on the atarget
+  empty_dirs:
+    - ~/tmp
+  # specify repositories, symbol links and files that will (recursively) be
+  # added to the target un unthaw
+  objects:
+    - ~/.profile
+    - ~/.bashrc
+    - ~/.Xdefaults
+    - ~/.xsession
+    - ~/.emacs
+    - ~/.emacs.d
+    - ^{discover.codedir}/home-dir
+    - ^{discover.codedir}/emacs
+  # symbolic links that are string interpolated with the platform's name
+  target:
+    config: ~/opt/etc/grsync.yml
+    links:
+      - link:
+          source: ~/.profile_${os}
+          target: ^{discover.codedir}/home-dir/dot/os/${os}/profile
+  # indicate to create all wheel dependencies (useful for target machine
+  # offline--see docs)
+  wheel:
+    create: false
+  # used to freeze the distribution zip file
+  local:
+    # the default location if the -d flag is not given on the command line
+    dist_dir: ./dist
+    # the directory to add the dependency wheels (if discover.wheel.create is
+    # true)
+    wheels_dir: wheels
+  # used to create the bootstrap script--you probably want to leave this alone
+  bootstrap:
+    inst_dir: ${HOME}/grsync
+    python_dir: ${HOME}/opt/lib/python3
+    wheel_dir: ^{discover.local.wheels_dir}

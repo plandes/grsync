@@ -2,7 +2,7 @@ import logging
 from git import Remote
 from pathlib import Path
 
-logger = logging.getLogger('zensols.grsync.dom')
+logger = logging.getLogger(__name__)
 
 
 class PathUtil(Path):
@@ -32,6 +32,7 @@ class SymbolicLink(object):
 
         """
         self.source = source
+        self.use_count = 0
 
     @property
     def target(self):
@@ -53,6 +54,10 @@ class SymbolicLink(object):
         if not hasattr(self, '_dst'):
             self._dst = PathUtil.relative_to_home(self.target)
         return self._dst
+
+    def increment_use_count(self):
+        """Indicate this symblic link is used (linked) to another target."""
+        self.use_count += 1
 
     def freeze(self):
         """Create and return an object graph as a dict of the link."""

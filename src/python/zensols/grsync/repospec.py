@@ -3,7 +3,7 @@ from pathlib import Path
 from git import Repo
 from zensols.grsync import PathUtil, RemoteSpec
 
-logger = logging.getLogger('zensols.grsync.rspec')
+logger = logging.getLogger(__name__)
 MASTER_SECTION = 'branch "master"'
 
 
@@ -29,21 +29,28 @@ class RepoSpec(object):
         return self._repo
 
     @classmethod
-    def _split_master_remote_defs(clz, rdef):
+    def _split_master_remote_defs(clz, rdef, repo_pref):
         not_masters = []
         master = None
         for rmd in rdef['remotes']:
-            if rmd['is_master']:
+            if rmd['name'] == repo_pref:
                 master = rmd
             else:
                 not_masters.append(rmd)
+        if master is None:
+            not_masters.clear()
+            for rmd in rdef['remotes']:
+                if rmd['is_master']:
+                    master = rmd
+                else:
+                    not_masters.append(rmd)
         if master is None:
             master = not_masters[0]
             not_masters = not_masters[1:]
         return master, not_masters
 
     @classmethod
-    def thaw(clz, rdef, target_dir, repo_path):
+    def thaw(clz, rdef, target_dir, repo_path, repo_pref=None):
         """Thaw a RepoSpec object, which does a clone and then creates the (remaining
         if any) remotes.  This also creates the symbol links that link into
         this repo.  Then return the object represented by the new repo.
@@ -54,7 +61,7 @@ class RepoSpec(object):
                            format(repo_path))
             repo_spec = RepoSpec(repo_path)
         else:
-            master, not_masters = clz._split_master_remote_defs(rdef)
+            master, not_masters = clz._split_master_remote_defs(rdef, repo_pref)
             name = master['name']
             url = master['url']
             logger.info('cloning repo: {} -> {}'.format(url, repo_path))
@@ -103,7 +110,10 @@ class RepoSpec(object):
         return PathUtil.relative_to_home(self.path)
 
     def _is_linked_to(self, link):
-        return str(link.target).startswith(str(self.path))
+        is_linked = str(link.target).startswith(str(self.path))
+        if is_linked:
+            link.increment_use_count()
+        return is_linked
 
     def add_linked(self, links):
         self.links = tuple(filter(lambda l: self._is_linked_to(l), links))

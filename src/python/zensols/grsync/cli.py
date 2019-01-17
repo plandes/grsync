@@ -5,6 +5,39 @@ from zensols.grsync import (
 )
 
 
+class InfoCli(object):
+    def __init__(self, config, fmt=None, repo_names=None):
+        self.config = config
+        self.fmt = fmt
+        self.repo_names = repo_names
+
+    def info(self):
+        dm = DistManager(self.config)
+        dm.discover_info()
+
+    def repos(self):
+        dm = DistManager(self.config)
+        dm.print_repos(self.fmt)
+
+    def repo_info(self):
+        dm = DistManager(self.config)
+        dm.print_repo_info(self.repo_names)
+
+
+class FreezeThawCli(object):
+    def __init__(self, config=None, dist_dir=None, target_dir=None,
+                 only_repo_names=None, wheel_dependency='zensols.grsync'):
+        self.dm = DistManager(config, dist_dir, target_dir)
+        self.wheel_dependency = wheel_dependency
+        self.only_repo_names = only_repo_names
+
+    def freeze(self):
+        self.dm.freeze(self.wheel_dependency)
+
+    def thaw(self):
+        self.dm.thaw(self.only_repo_names)
+
+
 class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
     """Command line entry point.
 
@@ -22,13 +55,31 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                          'default': 'zensols.grsync',
                          'metavar': 'STRING',
                          'help': 'used to create the wheel dep files'}]
+        rp_format_op = ['-f', '--format', False,
+                        {'dest': 'fmt',
+                         'default': '{name}',
+                         'metavar': 'STRING',
+                         'help':
+                         'format string (i.e. {name}: {path} ({remotes}))'}]
+        repo_name_op = ['-n', '--name', False,
+                        {'dest': 'repo_names',
+                         'metavar': 'STRING',
+                         'help': 'comma spearated list of repo names'}]
         cnf = {'executors':
-               [{'name': 'distribution',
-                 'executor': lambda params: DistManager(**params),
+               [{'name': 'info',
+                 'executor': lambda params: InfoCli(**params),
                  'actions': [{'name': 'info',
-                              'meth': 'discover_info',
                               'doc': 'pretty print discovery information'},
-                             {'name': 'freeze',
+                             {'name': 'repos',
+                              'doc': 'output all repository top level info',
+                              'opts': [rp_format_op]},
+                             {'name': 'repoinfo',
+                              'meth': 'repo_info',
+                              'doc': 'get information on repositories',
+                              'opts': [repo_name_op]}]},
+                {'name': 'freezethaw',
+                 'executor': lambda params: FreezeThawCli(**params),
+                 'actions': [{'name': 'freeze',
                               'doc': 'create a distribution',
                               'opts': [dist_dir_op, wheel_dir_op]},
                              {'name': 'thaw',
