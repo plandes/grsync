@@ -2,9 +2,8 @@
 
 PROJ_TYPE=	python
 #ARGS=		-w 2
-#CONFIG=		test-resources/small-test.yml
-#CONFIG=		test-resources/midsize-test.yml
-CONFIG=/Users/landes/opt/etc/grsync.yml
+#ARGS=		-p osx
+CONFIG=		test-resources/small-test.yml
 
 # make build dependencies
 _ :=	$(shell [ ! -d .git ] && git init ; [ ! -d zenbuild ] && \
@@ -18,7 +17,7 @@ discover:
 
 .PHONY:		repos
 repos:
-		make PYTHON_BIN_ARGS='repos -c $(CONFIG) $(ARGS)' run
+		make PYTHON_BIN_ARGS='repos -c $(CONFIG) $(ARGS) ' run
 
 .PHONY:		repoinfo
 repoinfo:

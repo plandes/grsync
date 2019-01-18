@@ -4,6 +4,7 @@ import socket
 import logging
 from pathlib import Path
 from datetime import datetime
+from zensols.actioncli import persisted
 from zensols.grsync import RepoSpec, SymbolicLink
 
 logger = logging.getLogger(__name__)
@@ -18,8 +19,9 @@ class Discoverer(object):
     reconstitute a user home directory later.
 
     """
-    def __init__(self, config):
+    def __init__(self, config, profiles):
         self.config = config
+        self.profiles_override = profiles
 
     def _get_repo_paths(self, paths):
         """Recusively find git repository root directories."""
@@ -46,17 +48,21 @@ class Discoverer(object):
 
         """
         repo_specs = []
-        logger.debug('repo spec paths: {}'.format(paths))
+        logger.debug(f'repo spec paths: {paths}')
         for path in paths:
-            logger.debug('found repo at path {}'.format(path))
+            logger.debug(f'found repo at path {path}')
             repo_spec = RepoSpec(path)
             repo_spec.add_linked(links)
             if len(repo_spec.remotes) == 0:
-                logger.warning('repo at {} has no remotes--skipping...'.
-                               format(repo_spec))
+                logger.warning(f'repo {repo_spec} has no remotes--skipping...')
             else:
                 repo_specs.append(repo_spec)
         return repo_specs
+
+    @property
+    @persisted('_profiles')
+    def profiles(self):
+        return self.config.get_profiles(self.profiles_override)
 
     def get_discoverable_objects(self):
         """Find git repos, files, sym links and directories to reconstitute
@@ -64,15 +70,15 @@ class Discoverer(object):
 
         """
         paths = []
-        logger.info('finding objects to capture...')
-        for fname in self.config.discoverable_objects:
-            logger.debug('file pattern {}'.format(fname))
+        logger.info(f'finding objects to perist for ' +
+                    f'profiles: {", ".join(self.profiles)}')
+        for fname in self.config.get_discoverable_objects(self.profiles):
+            logger.debug(f'file pattern {fname}')
             path = Path(fname)
             bname = path.name
             dname = path.parent.expanduser()
             files = list(dname.glob(bname))
-            logger.debug('expanding {} -> {} / {}: {}'.
-                         format(path, dname, bname, files))
+            logger.debug(f'expanding {path} -> {dname} / {bname}: {files}')
             paths.extend(files)
         return paths
 
@@ -141,8 +147,6 @@ class Discoverer(object):
                 elif c.is_file():
                     files.append(self._create_file(c))
 
-        #logger.debug(f'files: {files}')
-
         # find files that don't belong to git repos
         for path in filter(lambda x: x not in repo_paths, dirs_or_gits):
             logger.debug('dir {}'.format(path))
@@ -151,7 +155,7 @@ class Discoverer(object):
 
         # configurated empty directories are added only if they exist so we can
         # recreate with the correct mode
-        for ed in self.config.empty_dirs:
+        for ed in self.config.get_empty_dirs(self.profiles):
             logger.debug('empty dir: {}'.format(str(ed)))
             empty_dirs.append(self._create_file(ed, no_path_obj=True))
 

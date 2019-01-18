@@ -21,7 +21,7 @@ class DistManager(object):
 
     """
     def __init__(self, config: YamlConfig=None, dist_dir: Path=None,
-                 target_dir=None):
+                 target_dir=None, profiles=None):
         self.config = config
         # config will be missing on thaw
         if config is None:
@@ -41,6 +41,7 @@ class DistManager(object):
         self.defs_file = '{}/dist.json'.format(self.config_dir)
         self.dir_create_mode = 0o755
         self.exec_file_create_mode = 0o755
+        self.profiles = profiles
 
     @property
     def dist_file(self):
@@ -50,12 +51,15 @@ class DistManager(object):
         """
         return Path(self.dist_dir, 'dist.zip')
 
+    def _discoverer(self):
+        return Discoverer(self.config, self.profiles)
+
     def discover_info(self):
         """Proviate information about what's found in the user home directory.  This is
         later used to freeze the data.
 
         """
-        disc = Discoverer(self.config)
+        disc = self._discoverer()
         struct = disc.freeze()
         pprint.PrettyPrinter().pprint(struct)
 
@@ -63,7 +67,7 @@ class DistManager(object):
         return str(Path(Path.home(), path).absolute())
 
     def print_repos(self, fmt='{name}'):
-        disc = Discoverer(self.config)
+        disc = self._discoverer()
         struct = disc.freeze()
         for repo_spec in struct['repo_specs']:
             remotes = map(lambda x: x['name'], repo_spec['remotes'])
@@ -74,7 +78,7 @@ class DistManager(object):
             print(fmt.format(**rs))
 
     def print_repo_info(self, names=None):
-        disc = Discoverer(self.config)
+        disc = self._discoverer()
         struct = disc.freeze()
         specs = {x['name']: x for x in struct['repo_specs']}
         if names is None:
@@ -123,7 +127,7 @@ class DistManager(object):
         if not self.dist_dir.exists():
             self.dist_dir.mkdir(
                 self.dir_create_mode, parents=True, exist_ok=True)
-        disc = Discoverer(self.config)
+        disc = self._discoverer()
         data = disc.freeze()
         with zipfile.ZipFile(dist_file, mode='w') as zf:
             for finfo in data['files']:

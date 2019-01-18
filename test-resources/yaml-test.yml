@@ -10,14 +10,15 @@ discover:
   # specify repositories, symbol links and files that will (recursively) be
   # added to the target un unthaw
   objects:
-    - ~/.profile
-    - ~/.bashrc
-    - ~/.Xdefaults
-    - ~/.xsession
-    - ~/.emacs
-    - ~/.emacs.d
-    - ^{discover.codedir}/home-dir
-    - ^{discover.codedir}/emacs
+    default:
+      - ~/.profile
+      - ~/.bashrc
+      - ~/.Xdefaults
+      - ~/.xsession
+      - ~/.emacs
+      - ~/.emacs.d
+      - ^{discover.codedir}/home-dir
+      - ^{discover.codedir}/emacs
   # symbolic links that are string interpolated with the platform's name
   target:
     - link:
