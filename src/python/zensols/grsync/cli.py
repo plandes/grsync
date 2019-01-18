@@ -59,7 +59,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                          'help': 'used to create the wheel dep files'}]
         rp_format_op = ['-f', '--format', False,
                         {'dest': 'fmt',
-                         'default': '{name}',
+                         'default': '{path}',
                          'metavar': 'STRING',
                          'help':
                          'format string (i.e. {name}: {path} ({remotes}))'}]

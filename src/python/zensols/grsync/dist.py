@@ -66,7 +66,7 @@ class DistManager(object):
     def _to_home_relative(self, path):
         return str(Path(Path.home(), path).absolute())
 
-    def print_repos(self, fmt='{path}'):
+    def print_repos(self, fmt):
         disc = self._discoverer()
         struct = disc.freeze()
         for repo_spec in struct['repo_specs']:
