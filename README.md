@@ -11,7 +11,7 @@ another host.  If I've reinvented the wheel, please let me know :)
 
 More specifically: it persists and creates build out environments in a nascent
 account.  The program *memorizing* a users home directory and building it out
-on another system (see [overview](#overview-process).  This is done by:
+on another system (see [overview](#overview).  This is done by:
 1. Copying files, directories and git repos configuration.
 2. Creating a distribution compressed file.
 3. Uncompress on the destination system and create repos.
@@ -23,11 +23,18 @@ A future release will also synchronize and manage multiple GitHub repositories.
 ## Table of Contents
 
 - [Obtaining](#obtaining)
+- [Overview](#overview)
 - [Usage](#usage)
 	- [Repository Information](#repository-information)
 	- [Command Line Help](#command-line-help)
+- [Configuration](#configuration)
+	- [Variable Substitution](#variable-substitution)
+	- [Links](#links)
+	- [Profiles](#profiles)
+	- [Example Configuration](#example-configuration)
 - [Symbolic Links](#symbolic-links)
 - [Requirements](#requirements)
+- [Planned Future Features](#planned-future-features)
 - [Changelog](#changelog)
 - [License](#license)
 
@@ -43,7 +50,7 @@ pip install zensols.grsync
 
 Binaries are also available on [pypi].
 
-## Overview Process
+## Overview
 
 Not only is the aim to create a repproducable development (or like)
 environment, it is also to create a *clean* environment.  This means we have
@@ -56,8 +63,8 @@ below:
    * Empty directories.
    * Git repository meta data.
    * Locations of files to copy, top level directories of files to recursively
-	 copy, where symlinks are considered files as well (currently not
-	 followed).
+	 copy, where symlinks are considered files as well and currently not
+	 followed.  See [caveat](#symbolic-links).
 
 	 A sub-step of this process is *discover*, which reads the file system as
 	 indicated by the configuration file.  This includes reading git repostiory
@@ -75,14 +82,15 @@ below:
 
 ## Usage
 
-The program has two phases: freeze and thaw.  Git repositories (URLs and
-configuration, not files), symbolic links (see [caveat](#symbolic-links)) and
-files are first *froozen* into a distribution zip.
+The program has two phases: *freeze* and *thaw* (see [overview](#overview)).
+The command line program is used twice: first on the *freeze* on the source
+system and then *thaw* on the target machine.
 
-This distribution file is then copied to the target machine that is to be
-configured with the user's home directory setup.  The distribution also
-includes a bootstrap script that creates a Python virtual environment and then
-invokes the program to *thaw* the distributing.
+First the distribution is created as a configuration file along with saved
+files in a distribution zip file.  This distribution file is then copied to the
+target machine that is to be configured with the user's home directory setup.
+The distribution also includes a bootstrap script that creates a Python virtual
+environment and then invokes the program to *thaw* the distributing.
 
 1. [Install](#obtaining) the `grsync` program.
 2. Decide what you want to transfer to the target system (see
@@ -255,9 +263,7 @@ points to get this integrity.
 
 ## Planned Future Features
 
-When thawing, git repositories are currently cloned as non-recursive (no
-submodule).  The program needs a feature to optionally clone sub modules during
-the thaw process.
+Preserve and restore file and directory timestamps.
 
 
 ## Changelog
