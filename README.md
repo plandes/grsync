@@ -24,8 +24,8 @@ A future release will also synchronize and manage multiple GitHub repositories.
 
 - [Obtaining](#obtaining)
 - [Usage](#usage)
-    - [Repository Information](#repository-information)
-    - [Command Line Help](#command-line-help)
+	- [Repository Information](#repository-information)
+	- [Command Line Help](#command-line-help)
 - [Symbolic Links](#symbolic-links)
 - [Requirements](#requirements)
 - [Changelog](#changelog)
@@ -56,12 +56,12 @@ below:
    * Empty directories.
    * Git repository meta data.
    * Locations of files to copy, top level directories of files to recursively
-     copy, where symlinks are considered files as well (currently not
-     followed).
-	 
+	 copy, where symlinks are considered files as well (currently not
+	 followed).
+
 	 A sub-step of this process is *discover*, which reads the file system as
-     indicated by the configuration file.  This includes reading git repostiory
-     metadata, identifying file metadata (i.e. permissions) etc.
+	 indicated by the configuration file.  This includes reading git repostiory
+	 metadata, identifying file metadata (i.e. permissions) etc.
 1. **Bootstraping**: create an Python virtual environment on the target machine
    that can be loaded with this program and depenedencies.  This is not a
    necessary step as the program is available as a [pip] install.  However, if
@@ -69,7 +69,7 @@ below:
    could futher add/install software with tools such as [Puppet].
 3. **Thaw**: This includes two steps:
   1. **File Extraction**: extracts the files from the distribution zip created
-     in the *freeze* step.
+	 in the *freeze* step.
   2. **Repo Cloning**: this step recursively clones all repositories.
 
 
@@ -95,7 +95,7 @@ invokes the program to *thaw* the distributing.
 6. Call the bootstrapper: `cd ./dist && ./bootstrap.sh /usr/bin ./dist python3.6`
    This attempts to create the Python virtual environment, install the program
    dependencies and *thaw* the distribution.
-   
+
    To do this step manually:
    1. [Install](#obtaining) the `grsync` program.
    2. Thaw the distribution on the target: `grsync thaw -d ./dist`
@@ -120,9 +120,9 @@ Options:
   --version             show program's version number and exit
   -h, --help            show this help message and exit
   -w NUMBER, --whine=NUMBER
-                        add verbosity to logging
+						add verbosity to logging
   -c FILE, --config=FILE
-                        configuration file
+						configuration file
 Actions:
   freeze    Create a distribution
   -d, --distdir <string>                    the location of build out distribution
@@ -160,43 +160,43 @@ substitution](#variable-substitution).  An overview of the structure follows:
   * **objects**: a list of files, directories and repository directories.
   * **empty_dirs**: A list of directories.
   * **target**: contains information used during the *thaw* process on the
-    target host.
-    * **config**: the path to create this configuration file, which is optional
-      and should not be given if already declared in as an **object** file
-      entry.
+	target host.
+	* **config**: the path to create this configuration file, which is optional
+	  and should not be given if already declared in as an **object** file
+	  entry.
 	* **links**: a list of file path pattern symbolic links to create during
-      the **thaw** (see [links](#links)).
+	  the **thaw** (see [links](#links)).
 	  * **link**: a specific link entry.
-	    * **source**: the source path at *thaw* time of the symbolic link.
+		* **source**: the source path at *thaw* time of the symbolic link.
 		* **target**: the target path at *thaw* time of the symbolic link.
 	* **default_profiles**: a comma-separated list of profile names to be used
-      when the command line option (`-p`) is not given.
+	  when the command line option (`-p`) is not given.
 	* **profiles**: contains all profile definitions for this configuration
-      file.
-	    * **`<any valid YAML string>`**: this profile name
+	  file.
+		* **`<any valid YAML string>`**: this profile name
 		  * **objects**: same as top level but pertains only to this profile.
 		  * **empty_dirs**: same as top level but pertains only to this profile.
 	* **repo**: contains information used when thawing repositories.
 	  * **remote_pref**: the remote (and respective URL) to make the primary
-        'master' default repository when thawing the repository.  This is
-        helpful when there are more than one remotes.
+		'master' default repository when thawing the repository.  This is
+		helpful when there are more than one remotes.
   * **wheel**: instructs the program on what/how wheels are created during the
-    *freeze* process.
+	*freeze* process.
 	* **create**: if `true` create wheels.
   * **local**: specifies how to create the distribution during the *freeze*
-    process.
+	process.
 	  * **dist_dir**: the default directory to create the distribution (used
-        when not specified on the command line with `-d`).
+		when not specified on the command line with `-d`).
 	  * **wheels_dir**: the directory of where to create the wheels when wheel
-        creation is turned on.
+		creation is turned on.
   * **bootstrap**: indicates target information used to create the bootstrap
-    script/process.
+	script/process.
 	* **inst_dir**: install directory of the boot strap files on the target on
-      *thaw*.
+	  *thaw*.
 	* **python_dir**: where the virutal environment python directory is
-      created.
+	  created.
 	* **wheel_dir**: location of the wheels directory (if created during
-      *freeze*) to be installed during bootstrap.
+	  *freeze*) to be installed during bootstrap.
 
 
 ### Variable Substitution
@@ -232,7 +232,7 @@ the `discover` level in the [configuration file] with entry `profiles`.
 
 See the [test case yaml file](test-resources/midsize-test.yml) for an example
 of a simple configuration file to capture a set of git repositories and small
-set of files.  Profiles are 
+set of files.  Profiles are
 
 
 ## Symbolic Links
