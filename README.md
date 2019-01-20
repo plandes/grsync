@@ -11,7 +11,7 @@ another host.  If I've reinvented the wheel, please let me know :)
 
 More specifically: it persists and creates build out environments in a nascent
 account.  The program *memorizing* a users home directory and building it out
-on another system.  This is done by:
+on another system (see [overview](#overview-process).  This is done by:
 1. Copying files, directories and git repos configuration.
 2. Creating a distribution compressed file.
 3. Uncompress on the destination system and create repos.
@@ -42,6 +42,35 @@ pip install zensols.grsync
 ```
 
 Binaries are also available on [pypi].
+
+## Overview Process
+
+Not only is the aim to create a repproducable development (or like)
+environment, it is also to create a *clean* environment.  This means we have
+temporary directories we might expect to exist for our process(es), and of
+course repositories cloned in their nascent state.  These steps are summarized
+below:
+
+1. **Freeze**: This process captures the current host's setup and
+   configuration (specified in the [configuration file]) and includes:
+   * Empty directories.
+   * Git repository meta data.
+   * Locations of files to copy, top level directories of files to recursively
+     copy, where symlinks are considered files as well (currently not
+     followed).
+	 
+	 A sub-step of this process is *discover*, which reads the file system as
+     indicated by the configuration file.  This includes reading git repostiory
+     metadata, identifying file metadata (i.e. permissions) etc.
+1. **Bootstraping**: create an Python virtual environment on the target machine
+   that can be loaded with this program and depenedencies.  This is not a
+   necessary step as the program is available as a [pip] install.  However, if
+   this step can be used to help automate new environments, after which, you
+   could futher add/install software with tools such as [Puppet].
+3. **Thaw**: This includes two steps:
+  1. **File Extraction**: extracts the files from the distribution zip created
+     in the *freeze* step.
+  2. **Repo Cloning**: this step recursively clones all repositories.
 
 
 ## Usage
@@ -271,3 +300,5 @@ SOFTWARE.
 [maven profiles]: https://maven.apache.org/guides/introduction/introduction-to-profiles.html
 [configuration file]: test-resources/midsize-test.yml#L29
 [configuration file profile entry]: test-resources/midsize-test.yml#L29
+[pip]: https://docs.python.org/3/installing/index.html
+[Puppet]: https://en.wikipedia.org/wiki/Puppet_(software)
