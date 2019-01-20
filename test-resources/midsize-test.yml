@@ -10,15 +10,14 @@ discover:
   # specify repositories, symbol links and files that will (recursively) be
   # added to the target un unthaw
   objects:
-    default:
-      - ~/.profile
-      - ~/.bashrc
-      - ~/.Xdefaults
-      - ~/.xsession
-      - ~/.emacs
-      - ~/.emacs.d
-      - ^{discover.codedir}/home-dir
-      - ^{discover.codedir}/emacs
+    - ~/.profile
+    - ~/.bashrc
+    - ~/.Xdefaults
+    - ~/.xsession
+    - ~/.emacs
+    - ~/.emacs.d
+    - ^{discover.codedir}/home-dir
+    - ^{discover.codedir}/emacs
   # symbolic links that are string interpolated with the platform's name
   target:
     config: ~/opt/etc/grsync.yml
@@ -26,6 +25,19 @@ discover:
       - link:
           source: ~/.profile_${os}
           target: ^{discover.codedir}/home-dir/dot/os/${os}/profile
+  default_profiles: secure,personal,osx
+  profiles:
+    # personal repos
+    personal:
+      empty_dirs:
+        - ~/mnt/somehost
+      objects:
+        - ~/opt/doc
+        - ^{discover.codedir}/personal-journal-files
+    # ssh data (careful)
+    secure:
+      objects:
+        - ~/.ssh
   # indicate to create all wheel dependencies (useful for target machine
   # offline--see docs)
   wheel:
