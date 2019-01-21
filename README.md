@@ -25,13 +25,14 @@ A future release will also synchronize and manage multiple GitHub repositories.
 - [Obtaining](#obtaining)
 - [Overview](#overview)
 - [Usage](#usage)
-	- [Repository Information](#repository-information)
-	- [Command Line Help](#command-line-help)
+    - [Repository Information](#repository-information)
+    - [Command Line Help](#command-line-help)
 - [Configuration](#configuration)
-	- [Variable Substitution](#variable-substitution)
-	- [Links](#links)
-	- [Profiles](#profiles)
-	- [Example Configuration](#example-configuration)
+    - [Variable Substitution](#variable-substitution)
+    - [Links](#links)
+    - [Profiles](#profiles)
+        - [Excluding Top Level Objects](#excluding-top-level-objects)
+    - [Example Configuration](#example-configuration)
 - [Symbolic Links](#symbolic-links)
 - [Requirements](#requirements)
 - [Planned Future Features](#planned-future-features)
@@ -177,8 +178,9 @@ substitution](#variable-substitution).  An overview of the structure follows:
 	  * **link**: a specific link entry.
 		* **source**: the source path at *thaw* time of the symbolic link.
 		* **target**: the target path at *thaw* time of the symbolic link.
-	* **default_profiles**: a comma-separated list of profile names to be used
-	  when the command line option (`-p`) is not given.
+	* **default_profiles**: a comma-separated list of profile names (including
+	  `nodefault`) to be used when the command line option (`-p`) is not given.
+	  See [profiles](#profiles).
 	* **profiles**: contains all profile definitions for this configuration
 	  file.
 		* **`<any valid YAML string>`**: this profile name
@@ -234,6 +236,24 @@ Profiles allow you to generate a *frozen* distribution of a subset of declared
 repositories and files.  The idea is similar [maven-profiles] with each having
 a top level name in the configuration that mirrors the same structure as under
 the `discover` level in the [configuration file] with entry `profiles`.
+
+Profiles are always given in a comma-separated list to allow more than one
+profile to be added to the list of objects to *freeze*.
+
+The order in which the program decides what profiles to use is (only one of)
+the following:
+1. Command line with option `-p`.
+2. Configuration file.
+3. All profiles.
+
+
+#### Excluding Top Level Objects
+
+The top level objects (i.e. `objects` and `empty_dirs`) are always added to the
+distribution with one exception: by excluding the *default* profile.  The
+*default* profile is a special profile that includes all default objects to the
+distribution.  If you don't want these top level elements, you can specify a
+special `nodefault` keyword.
 
 
 ### Example Configuration

@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Method to exclude the default profile.
+### Changed
+- Much more documentation.
+
+
 ### [0.0.8] - 2019-01-17
+### Added
+- Profiles.
+
 ### Changed
 - Better symbolic link support.
 - Better CLI integration.
@@ -18,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bug fixes and more robust bootstrap install.
 
 
-## [0.0.5] - 2018-09-01
+## [0.0.6] - 2018-09-01
 ### Added
 - Initial version
 

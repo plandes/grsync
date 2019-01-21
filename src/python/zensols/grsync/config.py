@@ -51,7 +51,14 @@ class AppConfig(YamlConfig):
             profiles = self._split_profiles(profile_overide_str)
         if profiles is None:
             profiles = self._find_profiles
-        return ['default'] + list(profiles)
+        profiles = list(profiles)
+        # protect user error
+        if 'default' not in profiles:
+            profiles = ['default'] + list(profiles)
+        if 'nodefault' in profiles:
+            profiles.pop(profiles.index('default'))
+            profiles.pop(profiles.index('nodefault'))
+        return profiles
 
     def _iterate_objects(self, profile):
         if profile == 'default':
