@@ -32,10 +32,10 @@ if [ $# -ge 2 ]; then
     echo "setting python ver: $3"
     PYTHON_VER=$3
 else
-    PYTHON_VER=python3
+    PYTHON_VER=
 fi
 
-PYTHON_DIR=%(python_dir)s
+PYTHON_DIR=${HOME}/opt/lib/python3
 PIP=${PYTHON_DIR}/bin/pip
 VIRTUAL_ENV=${NATIVE_PYTHON_BIN_DIR}/virtualenv
 PYTHON_PAR=`dirname $PYTHON_DIR`
@@ -64,10 +64,17 @@ echo "bootstrapping python env in ${PYTHON_DIR}, wheels: ${WHEELS}"
 
 rm -rf $PYTHON_PAR
 
-mkdir -p $PYTHON_PAR && \\
-    cd $PYTHON_PAR && \\
-    ${VIRTUAL_ENV} -p $PYTHON_VER `basename ${PYTHON_DIR}` && \\
-    cd -
+cmd="${VIRTUAL_ENV}"
+if [ ! -z "$PYTHON_VER" ] ; then
+    cmd="$cmd -p $PYTHON_VER"
+fi
+cmd="$cmd `basename ${PYTHON_DIR}`"
+
+echo "invoke $cmd"
+mkdir -p $PYTHON_PAR && \
+    cd $PYTHON_PAR && \
+    $cmd && \
+    cd - || exit 1
 
 if [ -d ${WHEELS_DIR} ] ; then
     echo "installing from wheel"
