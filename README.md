@@ -320,6 +320,7 @@ SOFTWARE.
 [travis-badge]: https://travis-ci.org/plandes/grsync.svg?branch=master
 [pypi]: https://pypi.org/project/zensols.grsync/
 [pypi-link]: https://pypi.python.org/pypi/zensols.grsync
+[pypi-badge]: https://img.shields.io/pypi/v/zensols.grsync.svg
 
 [Python 3.6]: https://www.python.org
 [PyYAML]: https://pyyaml.org
