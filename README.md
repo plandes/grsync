@@ -1,6 +1,7 @@
 # Persist and create build out environments in a nascent account
 
 [![Travis CI Build Status][travis-badge]][travis-link]
+[![PyPI][pypi-badge]][pypi-link]
 
 This program captures your home directory and synchronize it with another host
 using Git repo metadata, symbolic links and persisted files.
@@ -318,6 +319,7 @@ SOFTWARE.
 [travis-link]: https://travis-ci.org/plandes/grsync
 [travis-badge]: https://travis-ci.org/plandes/grsync.svg?branch=master
 [pypi]: https://pypi.org/project/zensols.grsync/
+[pypi-link]: https://pypi.python.org/pypi/zensols.grsync
 
 [Python 3.6]: https://www.python.org
 [PyYAML]: https://pyyaml.org
