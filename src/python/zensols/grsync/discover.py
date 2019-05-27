@@ -82,18 +82,25 @@ class Discoverer(object):
             paths.extend(files)
         return paths
 
-    def _create_file(self, src, dst=None, no_path_obj=False):
+    def _create_file(self, src, dst=None, no_path_obj=False, robust=False):
         """Return a file object, which has the relative (rel) to home dir path,
         absolute path (abs) used later to zip the file, and mode (mode and
         modestr) information.
 
         """
         dst = src if dst is None else dst
-        mode = src.stat().st_mode
+        if src.exists():
+            mode = src.stat().st_mode
+            modestr = stat.filemode(mode)
+        elif not robust:
+            raise OSError(f'no such file: {src}')
+        else:
+            logger.warning(f'missing file: {src}--robustly skipping')
+            mode, modestr = None, None
         # the mode string is used as documentation and currently there is no
         # way to convert from a mode string to an octal mode, which would be
         # nice to allow modification of the dist.json file.
-        fobj = {'modestr': stat.filemode(mode),
+        fobj = {'modestr': modestr,
                 'mode': mode}
         if no_path_obj:
             fobj['rel'] = str(self._relative_to_home(dst))
@@ -157,7 +164,8 @@ class Discoverer(object):
         # recreate with the correct mode
         for ed in self.config.get_empty_dirs(self.profiles):
             logger.debug('empty dir: {}'.format(str(ed)))
-            empty_dirs.append(self._create_file(ed, no_path_obj=True))
+            empty_dirs.append(self._create_file(
+                ed, no_path_obj=True, robust=True))
 
         # pattern symlinks are special links that can change name based on
         # variables like the platform name so each link points to a

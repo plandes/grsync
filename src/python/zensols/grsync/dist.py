@@ -20,7 +20,7 @@ class DistManager(object):
     links, files and empty directories specified in the configuration.
 
     """
-    def __init__(self, config: YamlConfig=None, dist_dir: Path=None,
+    def __init__(self, config: YamlConfig = None, dist_dir: Path = None,
                  target_dir=None, profiles=None):
         self.config = config
         # config will be missing on thaw

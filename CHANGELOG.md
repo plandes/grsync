@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+### [0.0.9] - 2019-05-27
 ### Added
 - Method to exclude the default profile.
 ### Changed
 - Much more documentation.
+- Skip empty directories during freeze if non-existant.
 
 
 ### [0.0.8] - 2019-01-17

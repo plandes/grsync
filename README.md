@@ -11,7 +11,7 @@ another host.  If I've reinvented the wheel, please let me know :)
 
 More specifically: it persists and creates build out environments in a nascent
 account.  The program *memorizing* a users home directory and building it out
-on another system (see [overview](#overview).  This is done by:
+on another system (see [overview](#overview)).  This is done by:
 1. Copying files, directories and git repos configuration.
 2. Creating a distribution compressed file.
 3. Uncompress on the destination system and create repos.
