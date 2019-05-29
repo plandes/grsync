@@ -39,7 +39,6 @@ class DistManager(object):
         self.file_install_path = 'to_install'
         self.config_dir = 'conf'
         self.defs_file = '{}/dist.json'.format(self.config_dir)
-        self.dir_create_mode = 0o755
         self.exec_file_create_mode = 0o755
         self.profiles = profiles
 
@@ -111,8 +110,7 @@ class DistManager(object):
         logger.info('creating wheels from dependency {} in {}'.format(
             wheel_dependency, wheel_dir))
         if not wheel_dir.exists():
-            wheel_dir.mkdir(
-                self.dir_create_mode, parents=True, exist_ok=True)
+            wheel_dir.mkdir(parents=True, exist_ok=True)
         from pip._internal import main
         pip_cmd = 'wheel --wheel-dir={} --no-cache-dir {}'.format(
             wheel_dir, wheel_dependency)
@@ -125,8 +123,7 @@ class DistManager(object):
         """
         dist_file = self.dist_file
         if not self.dist_dir.exists():
-            self.dist_dir.mkdir(
-                self.dir_create_mode, parents=True, exist_ok=True)
+            self.dist_dir.mkdir(parents=True, exist_ok=True)
         disc = self._discoverer()
         data = disc.freeze()
         with zipfile.ZipFile(dist_file, mode='w') as zf:
@@ -173,7 +170,7 @@ class DistManager(object):
         parent = repo_path.parent
         if not parent.exists():
             logger.info('creating parent directory: {}'.format(parent))
-            parent.mkdir(self.dir_create_mode, parents=True, exist_ok=True)
+            parent.mkdir(parents=True, exist_ok=True)
         try:
             return RepoSpec.thaw(rdef, self.target_dir, repo_path, repo_pref)
         except GitCommandError as err:
@@ -203,8 +200,7 @@ class DistManager(object):
             parent = path.parent
             if not parent.exists():
                 logger.info('creating parent directory: {}'.format(parent))
-                parent.mkdir(mode=self.dir_create_mode,
-                             parents=True, exist_ok=True)
+                parent.mkdir(parents=True, exist_ok=True)
             logger.debug('thawing file: {}'.format(path))
             if path.exists():
                 logger.warning('path already exists: {}--skipping file'.
@@ -231,8 +227,7 @@ class DistManager(object):
                 logger.info('creating path {}'.format(path))
                 # we store the mode of the directory, but we don't want that to
                 # apply to all children dirs that might not exist yet
-                path.mkdir(mode=self.dir_create_mode,
-                           parents=True, exist_ok=True)
+                path.mkdir(parents=True, exist_ok=True)
 
     def _thaw_pattern_links(self, struct):
         """Method to call other thaw methods based on type.
