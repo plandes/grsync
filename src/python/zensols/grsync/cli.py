@@ -27,17 +27,15 @@ class InfoCli(object):
 
 class FreezeThawCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
-                 only_repo_names=None, wheel_dependency='zensols.grsync',
-                 profiles=None):
+                 wheel_dependency='zensols.grsync', profiles=None):
         self.dm = DistManager(config, dist_dir, target_dir, profiles=profiles)
         self.wheel_dependency = wheel_dependency
-        self.only_repo_names = only_repo_names
 
     def freeze(self):
         self.dm.freeze(self.wheel_dependency)
 
     def thaw(self):
-        self.dm.thaw(self.only_repo_names)
+        self.dm.thaw()
 
 
 class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
@@ -69,7 +67,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                          'help': 'comma spearated list of repo names'}]
         profile_op = ['-p', '--profiles', False,
                       {'metavar': 'STRING',
-                       'help': 'comma spearated list of objects to freeze'}]
+                       'help': 'comma spearated list of profiles in config'}]
         cnf = {'executors':
                [{'name': 'info',
                  'executor': lambda params: InfoCli(**params),

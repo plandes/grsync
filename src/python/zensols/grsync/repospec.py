@@ -12,7 +12,7 @@ class RepoSpec(object):
     distribution (usually the user's home directory) that link into it.
 
     """
-    def __init__(self, path: Path, repo: Repo=None):
+    def __init__(self, path: Path, repo: Repo = None):
         """Create with the path to the repo and optionally a git.Repo."""
         self.path = path
         self._repo = repo
@@ -27,61 +27,6 @@ class RepoSpec(object):
         if self._repo is None:
             self._repo = Repo(str(self.path.resolve()))
         return self._repo
-
-    @classmethod
-    def _split_master_remote_defs(clz, rdef, repo_pref):
-        not_masters = []
-        master = None
-        for rmd in rdef['remotes']:
-            if rmd['name'] == repo_pref:
-                master = rmd
-            else:
-                not_masters.append(rmd)
-        if master is None:
-            not_masters.clear()
-            for rmd in rdef['remotes']:
-                if rmd['is_master']:
-                    master = rmd
-                else:
-                    not_masters.append(rmd)
-        if master is None:
-            master = not_masters[0]
-            not_masters = not_masters[1:]
-        return master, not_masters
-
-    @classmethod
-    def thaw(clz, rdef, target_dir, repo_path, repo_pref=None):
-        """Thaw a RepoSpec object, which does a clone and then creates the (remaining
-        if any) remotes.  This also creates the symbol links that link into
-        this repo.  Then return the object represented by the new repo.
-
-        """
-        if repo_path.exists():
-            logger.warning('path already exists: {}--skipping repo clone'.
-                           format(repo_path))
-            repo_spec = RepoSpec(repo_path)
-        else:
-            master, not_masters = clz._split_master_remote_defs(rdef, repo_pref)
-            name = master['name']
-            url = master['url']
-            logger.info('cloning repo: {} -> {}'.format(url, repo_path))
-            repo = Repo.clone_from(url, repo_path, recursive=True)
-            repo.remotes[0].rename(name)
-            for rmd in not_masters:
-                repo.create_remote(rmd['name'], rmd['url'])
-            repo_spec = RepoSpec(repo_path, repo)
-        for link in rdef['links']:
-            src = Path(target_dir, link['source'])
-            targ = Path(target_dir, link['target'])
-            link['source'] = src
-            link['target'] = targ
-            logger.info('thawing link {} -> {}'.format(src, targ))
-            if src.exists():
-                logger.warning('refusing to overwrite link: {}'.format(src))
-            else:
-                src.symlink_to(targ)
-        repo_spec.links = rdef['links']
-        return repo_spec
 
     @property
     def master_remote(self):
@@ -129,4 +74,69 @@ class RepoSpec(object):
         return '{}: {}, r={}'.format(self.name, self.relative_path, remotes)
 
     def __repr__(self):
+        return self.__str__()
+
+
+class FrozenRepo(object):
+    def __init__(self, remotes: list, links: list, target_dir: Path,
+                 path: Path, repo_pref: str):
+        self.remotes = remotes
+        self.links = links
+        self.target_dir = target_dir
+        self.path = path
+        self.repo_pref = repo_pref
+
+    def _split_master_remote_defs(self):
+        not_masters = []
+        master = None
+        for rmd in self.remotes:
+            if rmd['name'] == self.repo_pref:
+                master = rmd
+            else:
+                not_masters.append(rmd)
+        if master is None:
+            not_masters.clear()
+            for rmd in self.remotes:
+                if rmd['is_master']:
+                    master = rmd
+                else:
+                    not_masters.append(rmd)
+        if master is None:
+            master = not_masters[0]
+            not_masters = not_masters[1:]
+        return master, not_masters
+
+    def thaw(self):
+        """Thaw a RepoSpec object, which does a clone and then creates the (remaining
+        if any) remotes.  This also creates the symbol links that link into
+        this repo.  Then return the object represented by the new repo.
+
+        """
+        if self.path.exists():
+            logger.warning('path already exists: {}--skipping repo clone'.
+                           format(self.path))
+            repo_spec = RepoSpec(self.path)
+        else:
+            master, not_masters = self._split_master_remote_defs()
+            name = master['name']
+            url = master['url']
+            logger.info(f'cloning repo: {url} -> {self.path}')
+            repo = Repo.clone_from(url, self.path, recursive=True)
+            repo.remotes[0].rename(name)
+            for rmd in not_masters:
+                repo.create_remote(rmd['name'], rmd['url'])
+            repo_spec = RepoSpec(self.path, repo)
+        for link in self.links:
+            logger.info(f'thawing link {link}')
+            if link.source.exists():
+                logger.warning(f'refusing to overwrite link: {link.source}')
+            else:
+                link.source.symlink_to(link.target)
+        repo_spec.links = self.links
+        return repo_spec
+
+    def __str__(self):
+        return f'{self.path} -> {self.target_dir}: {self.remotes}'
+
+    def __repl__(self):
         return self.__str__()

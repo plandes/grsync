@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+### Changed
+- Removed hard coded mode on thaw when creating directories.
 
 
 ### [0.0.9] - 2019-05-27

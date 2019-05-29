@@ -21,18 +21,18 @@ if [ $# -eq 0 ] ; then
 fi
 NATIVE_PYTHON_BIN_DIR=$1
 
-if [ $# -ge 1 ]; then
+if [ $# -ge 2 ]; then
     echo "setting inst dir: $2"
     GRSYNC_INST_DIR=$2
 else
     GRSYNC_INST_DIR=`pwd`
 fi
 
-if [ $# -ge 2 ]; then
+if [ $# -ge 3 ]; then
     echo "setting python ver: $3"
     PYTHON_VER=$3
 else
-    PYTHON_VER=
+    PYTHON_VER=$NATIVE_PYTHON_BIN_DIR
 fi
 
 PYTHON_DIR=${HOME}/opt/lib/python3
@@ -64,11 +64,7 @@ echo "bootstrapping python env in ${PYTHON_DIR}, wheels: ${WHEELS}"
 
 rm -rf $PYTHON_PAR
 
-cmd="${VIRTUAL_ENV}"
-if [ ! -z "$PYTHON_VER" ] ; then
-    cmd="$cmd -p $PYTHON_VER"
-fi
-cmd="$cmd `basename ${PYTHON_DIR}`"
+cmd="${VIRTUAL_ENV} -p ${PYTHON_VER} `basename ${PYTHON_DIR}`"
 
 echo "invoke $cmd"
 mkdir -p $PYTHON_PAR && \
@@ -87,6 +83,7 @@ fi
 # ${PIP} install ${WHEELS}
 
 rm ${HOME}/.bash* ${HOME}/.profile*
+# echo to thaw the repo: ${PYTHON_DIR}/bin/grsync thaw -d ${GRSYNC_INST_DIR}
 ${PYTHON_DIR}/bin/grsync thaw -d ${GRSYNC_INST_DIR}
 """
     PARAM_PATH = 'discover.bootstrap'

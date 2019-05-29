@@ -5,11 +5,9 @@ PROJ_TYPE=	python
 #ARGS=		-p osx
 CONFIG=		test-resources/small-test.yml
 
-# make build dependencies
-_ :=	$(shell [ ! -d .git ] && git init ; [ ! -d zenbuild ] && \
-	  git submodule add https://github.com/plandes/zenbuild && make gitinit )
+ADD_CLEAN=	dist
 
-include ./zenbuild/main.mk
+include zenbuild/main.mk
 
 .PHONY:		discover
 discover:
