@@ -74,6 +74,9 @@ class TestFreezeThaw(unittest.TestCase):
         self.assertEqual(sorted(c.items()), sorted(res.items()))
 
     def test_thaw(self):
+        def fd(path):
+            return Path(self.freeze_dir, *path.split('/')).absolute()
+
         if self.dist_dir.exists():
             shutil.rmtree(self.dist_dir)
         self.freeze_dm.freeze()
@@ -82,3 +85,16 @@ class TestFreezeThaw(unittest.TestCase):
             self.config, target_dir=self.thaw_dir, dist_dir=self.dist_dir,
             dry_run=False)
         dm.thaw()
+        sl = fd('symlink_to_repo')
+        self.assertTrue(sl.is_symlink())
+        self.assertTrue(fd('view/repo/README.md'), sl.resolve())
+        sl = fd('symlink.txt')
+        self.assertTrue(sl.is_symlink())
+        self.assertEqual(fd('dir_a/file_a.txt'), sl.resolve())
+        self.assertTrue(fd('opt/empty_dir').is_dir())
+        self.assertTrue(fd('dir_a/file_a.txt').is_file())
+        self.assertTrue(fd('dir_a/file_a.txt').is_file())
+        self.assertTrue(fd('dir_a/dir_b').is_dir())
+        self.assertTrue(fd('file_a.txt').is_file())
+        self.assertTrue(fd('view/repo_def/zenbuild').is_dir())
+        self.assertTrue(fd('view/repo_def/.git').is_dir())
