@@ -1,0 +1,48 @@
+## this file is only available on a freeze, not thaw
+
+discover:
+  test_dir: ./target/mock
+  # a variable binding used for interpolation later on
+  view: ^{discover.test_dir}/view
+  # indicate whether or not to create wheels from dependencies
+  # specify directories to unthaw on the atarget
+  empty_dirs:
+    - ^{discover.test_dir}/opt/empty_dir
+  # specify repositories, symbol links and files that will (recursively) be
+  # added to the target un unthaw
+  objects:
+    - ^{discover.view}/repo_def
+    - ^{discover.test_dir}/dir_a
+    - ^{discover.test_dir}/symlink_to_repo
+  # profiles configuration, defined on the next line if none given on the
+  # command line (or empty for using only the default)
+  default_profiles: source
+  profiles:
+    # source and open source repositories
+    source:
+      objects:
+        - ^{discover.view}/repo_src
+  # default remote when thawing repositories
+  repo:
+    remote_pref: github
+  target:
+    links:
+      - link:
+          source: ^{discover.test_dir}/profile_{os}
+          target: ^{discover.test_dir}/newdir/dir_a
+  # indicate to create all wheel dependencies (useful for target machine
+  # offline--see docs)
+  wheel:
+    create: false
+  # used to freeze the distribution zip file
+  local:
+    # the default location if the -d flag is not given on the command line
+    dist_dir: ./dist
+    # the directory to add the dependency wheels (if discover.wheel.create is
+    # true)
+    wheels_dir: wheels
+  # used to create the bootstrap script--you probably want to leave this alone
+  bootstrap:
+    inst_dir: ${HOME}/grsync
+    python_dir: ${HOME}/opt/lib/python3
+    wheel_dir: ^{discover.local.wheels_dir}

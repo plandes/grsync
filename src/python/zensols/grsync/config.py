@@ -87,17 +87,21 @@ class AppConfig(YamlConfig):
                 path = self.EMPTY_DIR_PROFILE_PATH.format(profile)
             opts = self.get_options(path)
             if opts is None:
-                logger.warning(
-                    f'no such profile for objects: {profile} for path {path}' +
-                    '--maybe entries exist in other profiles')
+                ## warnings for missing empty directory entries is worth it
+                # logger.warning(
+                #     f'no such profile for objects: {profile} for path {path}' +
+                #     '--maybe entries exist in other profiles')
+                pass
             else:
                 paths.extend(opts)
-        return map(lambda x: Path(x).expanduser(), paths)
+        return map(lambda x: Path(x).expanduser().absolute(), paths)
+
+    def _get_path(self, name):
+        return Path(self.get_option(name, expect=True)).expanduser().absolute()
 
     @property
     def dist_dir(self):
-        return Path(self.get_option(
-            f'{self.ROOT}.local.dist_dir', expect=True))
+        return self._get_path(f'{self.ROOT}.local.dist_dir')
 
     @dist_dir.setter
     def dist_dir(self, dist_dir):
@@ -107,7 +111,7 @@ class AppConfig(YamlConfig):
 
     @property
     def wheel_dir_name(self):
-        return self.get_option(f'{self.ROOT}.local.wheels_dir', expect=True)
+        return self._get_path(f'{self.ROOT}.local.wheels_dir')
 
     @property
     def bootstrap_script_file(self):

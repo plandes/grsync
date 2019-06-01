@@ -2,10 +2,18 @@ import os
 import stat
 import socket
 import logging
+import json
+import zipfile
 from pathlib import Path
 from datetime import datetime
 from zensols.actioncli import persisted
-from zensols.grsync import RepoSpec, SymbolicLink
+from zensols.grsync import (
+    RepoSpec,
+    SymbolicLink,
+    BootstrapGenerator,
+    PathTranslator,
+    AppConfig,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +27,11 @@ class Discoverer(object):
     reconstitute a user home directory later.
 
     """
-    def __init__(self, config, profiles):
+    def __init__(self, config: AppConfig, profiles: list,
+                 path_translator: PathTranslator):
         self.config = config
         self.profiles_override = profiles
+        self.path_translator = path_translator
 
     def _get_repo_paths(self, paths):
         """Recusively find git repository root directories."""
@@ -34,10 +44,6 @@ class Discoverer(object):
                 if rootpath.name == '.git':
                     git_paths.append(rootpath.parent)
         return git_paths
-
-    def _relative_to_home(self, path):
-        """Return a path that's relative to the user home."""
-        return path.relative_to(Path.home().resolve())
 
     def _discover_repo_specs(self, paths, links):
         """Return a list of RepoSpec objects.
@@ -73,8 +79,8 @@ class Discoverer(object):
         logger.info(f'finding objects to perist for ' +
                     f'profiles: {", ".join(self.profiles)}')
         for fname in self.config.get_discoverable_objects(self.profiles):
-            logger.debug(f'file pattern {fname}')
-            path = Path(fname)
+            path = Path(fname).expanduser().absolute()
+            logger.debug(f'file pattern {fname} -> {path}')
             bname = path.name
             dname = path.parent.expanduser()
             files = list(dname.glob(bname))
@@ -103,21 +109,27 @@ class Discoverer(object):
         fobj = {'modestr': modestr,
                 'mode': mode}
         if no_path_obj:
-            fobj['rel'] = str(self._relative_to_home(dst))
+            fobj['rel'] = str(self.path_translator.relative_to(dst))
         else:
             fobj['abs'] = src
-            fobj['rel'] = self._relative_to_home(dst)
+            fobj['rel'] = self.path_translator.relative_to(dst)
         return fobj
 
-    def discover(self):
+    def discover(self, flatten):
         """Main worker method to capture all the user home information (git repos,
         files, sym links and empty directories per the configuration file).
+
+        :param flatten: if ``True`` then return a data structure appropriate
+                        for pretty printing; this will omit data needed to
+                        create the distrubtion so it shouldn't be used for the
+                        freeze task
 
         """
         files = []
         dirs = []
         empty_dirs = []
         pattern_links = []
+        path_trans = self.path_translator
 
         # find all things to persist (repos, symlinks, files, etc)
         dobjs = self.get_discoverable_objects()
@@ -157,7 +169,7 @@ class Discoverer(object):
         # find files that don't belong to git repos
         for path in filter(lambda x: x not in repo_paths, dirs_or_gits):
             logger.debug('dir {}'.format(path))
-            dirs.append({'abs': path, 'rel': self._relative_to_home(path)})
+            dirs.append({'abs': path, 'rel': path_trans.relative_to(path)})
             gather(path)
 
         # configurated empty directories are added only if they exist so we can
@@ -174,11 +186,11 @@ class Discoverer(object):
         if dec_links is not None:
             for link in map(lambda x: x['link'],
                             filter(lambda x: 'link' in x, dec_links)):
-                src = Path(link['source']).expanduser()
-                targ = Path(link['target']).expanduser()
+                src = Path(link['source']).expanduser().absolute()
+                targ = Path(link['target']).expanduser().absolute()
                 pattern_links.append(
-                    {'source': str(self._relative_to_home(src)),
-                     'target': str(self._relative_to_home(targ))})
+                    {'source': str(path_trans.relative_to(src)),
+                     'target': str(path_trans.relative_to(targ))})
 
         # create data structures for symbolic link integrity
         files_by_name = {f['abs']: f for f in files}
@@ -186,6 +198,9 @@ class Discoverer(object):
             if f['abs'].is_file():
                 dname = f['abs'].parent
                 files_by_name[dname] = dname
+            if flatten:
+                del f['abs']
+                f['rel'] = str(f['rel'])
 
         # unused links pointing to repositories won't get created, so those not
         # used by repos are added explicitly to pattern links
@@ -210,13 +225,18 @@ class Discoverer(object):
                 'files': files,
                 'links': pattern_links}
 
-    def freeze(self):
+    def freeze(self, flatten=False):
         """Main entry point method that creates an object graph of all the data that
         needs to be saved (freeze) in the user home directory to reconstitute
         later (thaw).
 
+        :param flatten: if ``True`` then return a data structure appropriate
+                        for pretty printing; this will omit data needed to
+                        create the distrubtion so it shouldn't be used for the
+                        freeze task
+
         """
-        disc = self.discover()
+        disc = self.discover(flatten)
         repo_specs = tuple(x.freeze() for x in disc['repo_specs'])
         files = disc['files']
         disc.update({'repo_specs': repo_specs,
@@ -226,3 +246,63 @@ class Discoverer(object):
                      'create_date': datetime.now().isoformat(
                          timespec='minutes')})
         return disc
+
+
+class FreezeManager(object):
+    def __init__(self, config, dist_file, defs_file, discoverer):
+        self.config = config
+        self.dist_file = dist_file
+        self.defs_file = defs_file
+        self.discoverer = discoverer
+
+    def _create_wheels(self, wheel_dependency):
+        """Create wheel dependencies on this software so the host doesn't need Internet
+        connectivity.  Currently the YAML dependency breaks this since only
+        binary per host wheels are available for download and the wrong was is
+        given of spanning platforms (i.e. OSX to Linux).
+
+        """
+        wheel_dir_name = self.config.wheel_dir_name
+        wheel_dir = Path(self.dist_dir, wheel_dir_name)
+        logger.info(f'creating wheels from dependency {wheel_dependency} in {wheel_dir}')
+        if not wheel_dir.exists():
+            wheel_dir.mkdir(parents=True, exist_ok=True)
+        from pip._internal import main
+        pip_cmd = f'wheel --wheel-dir={wheel_dir} --no-cache-dir {wheel_dependency}'
+        logger.debug('pip cmd: {}'.format(pip_cmd))
+        main(pip_cmd.split())
+
+    def _freeze_dist(self):
+        """Freeze the distribution (see the class documentation).
+
+        """
+        dist_dir = self.dist_file.parent
+        if not dist_dir.exists():
+            dist_dir.mkdir(parents=True, exist_ok=True)
+        data = self.discoverer.freeze()
+        with zipfile.ZipFile(self.dist_file, mode='w') as zf:
+            for finfo in data['files']:
+                fabs = finfo['abs']
+                frel = str(Path(finfo['rel']))
+                logger.debug(f'adding file: {fabs}')
+                zf.write(fabs, arcname=frel)
+                del finfo['abs']
+                finfo['rel'] = frel
+            logger.info(f'writing distribution defs to {self.defs_file}')
+            zf.writestr(self.defs_file, json.dumps(data, indent=2))
+        logger.info(f'created frozen distribution in {self.dist_file}')
+
+    def freeze(self, wheel_dependency=None):
+        """Freeze the distribution by saving creating a script to thaw along with all
+        artifacts (i.e. repo definitions) in a zip file.
+
+        """
+        self._freeze_dist()
+        script_file = self.config.bootstrap_script_file
+        bg = BootstrapGenerator(self.config)
+        bg.generate(script_file)
+        script_file.chmod(0o755)
+        # wheel creation last since pip clobers/reconfigures logging
+        create_wheel = self.config.get_option('discover.wheel.create')
+        if create_wheel and wheel_dependency is not None:
+            self._create_wheels(wheel_dependency)

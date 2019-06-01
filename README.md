@@ -268,8 +268,8 @@ set of files.  Profiles are
 
 As mentioned in the [usage](#usage) section, symbolic links pointing to any
 file in a repository are *froozen*, which means that integrity at thaw time is
-ensured.  However, links **not** pointing to a repository are currently
-persisted, but the files and directories they point to are not.
+ensured.  However, links **not** pointing to a repository are persisted, but
+the files and directories they point to are not.
 
 A future release might have a *follow symbolic links* type functionality that
 allows this.  However, for now, you must include both the link and the data it

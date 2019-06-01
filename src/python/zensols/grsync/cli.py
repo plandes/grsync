@@ -1,7 +1,9 @@
+import logging
 from zensols.actioncli import OneConfPerActionOptionsCliEnv
 from zensols.grsync import (
     AppConfig,
     DistManager,
+    RepoSpec,
 )
 
 
@@ -9,7 +11,10 @@ class InfoCli(object):
     def __init__(self, config, fmt=None, repo_names=None, profiles=None):
         self.config = config
         self.fmt = fmt
-        self.repo_names = repo_names
+        if repo_names is not None:
+            self.repo_names = repo_names.split(',')
+        else:
+            self.repo_names = repo_names
         self.profiles = profiles
 
     def info(self):
@@ -60,7 +65,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                          'default': '{path}',
                          'metavar': 'STRING',
                          'help':
-                         'format string (i.e. {name}: {path} ({remotes}))'}]
+                         f'format string (i.e. {RepoSpec.DEFAULT_FORMAT})'}]
         repo_name_op = ['-n', '--name', False,
                         {'dest': 'repo_names',
                          'metavar': 'STRING',
@@ -98,6 +103,23 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         super(ConfAppCommandLine, self).__init__(
             cnf, config_env_name='grsyncrc', config_type=AppConfig,
             pkg_dist='zensols.grsync')
+
+    def _config_logging(self, level):
+        root = logging.getLogger()
+        map(root.removeHandler, root.handlers[:])
+        if level == 0:
+            levelno = logging.ERROR
+        elif level == 1:
+            levelno = logging.WARNING
+        elif level == 2:
+            levelno = logging.INFO
+        elif level == 3:
+            levelno = logging.DEBUG
+        if level <= 2:
+            fmt = '%(message)s'
+        else:
+            fmt = '%(levelname)s:%(asctime)-15s %(name)s: %(message)s'
+        logging.basicConfig(format=fmt, level=levelno)
 
 
 def main():

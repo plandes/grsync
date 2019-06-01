@@ -1,6 +1,7 @@
 import logging
 from git import Remote
 from pathlib import Path
+from zensols.actioncli import persisted
 
 logger = logging.getLogger(__name__)
 
@@ -8,15 +9,39 @@ logger = logging.getLogger(__name__)
 class PathUtil(Path):
     """Utility class around helping with paths."""
 
-    @classmethod
-    def relative_to_home(clz, path):
+    @staticmethod
+    def relative_to_home(path):
         """Return a path that's relative to the user's home directory."""
         return path.relative_to(Path.home().resolve())
 
-    @classmethod
-    def expand_home(clz, path):
+    @staticmethod
+    def to_home_relative(path):
+        return str(Path(Path.home(), path).absolute())
+
+    @staticmethod
+    def expand_home(path):
         """Return the user's home directory as a ``pathlib.Path`` object."""
         return Path.joinpath(Path.home(), path)
+
+
+class PathTranslator(object):
+    """
+    Utility class around helping with paths.
+
+    """
+    def __init__(self, target_path):
+        self.target_path = target_path
+
+    def relative_to(self, path):
+        """Return a path that's relative to the user's home directory."""
+        return path.relative_to(self.target_path.resolve())
+
+    def to_relative(self, path):
+        return str(Path(self.target_path, path).absolute())
+
+    def expand(self, path):
+        """Return the user's home directory as a ``pathlib.Path`` object."""
+        return Path.joinpath(self.target_path, path)
 
 
 class SymbolicLink(object):
@@ -69,6 +94,77 @@ class SymbolicLink(object):
 
     def __repr__(self):
         return self.__str__()
+
+
+class FileEntry(object):
+    def __init__(self, dist, finfo: dict):
+        self.dist = dist
+        self.finfo = finfo
+
+    def _str_to_path(self, pathstr: str):
+        return Path(pathstr)
+
+    def _target_relative(self, path):
+        return self.dist._target_relative(path)
+
+    @property
+    @persisted('_rel')
+    def relative(self):
+        return Path(self._str_to_path(self.finfo['rel']))
+
+    @property
+    @persisted('_path')
+    def path(self):
+        return self._target_relative(self.relative)
+
+    @property
+    @persisted('_mode')
+    def mode(self):
+        return self.finfo['mode']
+
+    @property
+    @persisted('_modestr')
+    def modestr(self):
+        return self.finfo['modestr']
+
+    def __str__(self):
+        return f'{self.relative} -> {self.path}: {self.mode} ({self.modestr})'
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class LinkEntry(FileEntry):
+    def __init__(self, dist, finfo: dict, target_dir=None):
+        super(LinkEntry, self).__init__(dist, finfo)
+        self.target_dir = target_dir
+
+    def _str_to_path(self, pathstr: str):
+        return Path(pathstr.format(**self.dist.params))
+
+    def _target_relative(self, path):
+        if self.target_dir is not None:
+            return Path(self.target_dir, path)
+        else:
+            return super(LinkEntry, self)._target_relative(path)
+
+    @property
+    @persisted('_rel')
+    def relative(self):
+        return Path(self._str_to_path(self.finfo['source']))
+
+    @property
+    def source(self):
+        return self.path
+
+    @property
+    def target(self):
+        rel_path = Path(self._str_to_path(self.finfo['target']))
+        rel_path = self._target_relative(rel_path)
+        return rel_path
+
+    def __str__(self):
+        return f'{self.source} -> {self.target}'
 
 
 class RemoteSpec(object):

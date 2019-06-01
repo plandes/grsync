@@ -3,7 +3,8 @@
 PROJ_TYPE=	python
 #ARGS=		-w 2
 #ARGS=		-p osx
-CONFIG=		test-resources/small-test.yml
+#CONFIG=		test-resources/small-test.yml
+CONFIG=		$(GRSYNCRC)
 
 ADD_CLEAN=	dist
 
@@ -47,3 +48,7 @@ rethaw:		clean freeze thaw
 .PHONY:		delete
 delete:
 		make PYTHON_BIN_ARGS='delete --dryrun -t $(MTARG)/t -c $(CONFIG) $(ARGS)' run
+
+.PHONY:		testfreeze
+testfreeze:
+		make PY_SRC_TEST_PKGS=test_freeze.TestFreeze test

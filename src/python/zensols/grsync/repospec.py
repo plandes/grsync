@@ -1,6 +1,8 @@
 import logging
+import sys
 from pathlib import Path
 from git import Repo
+from zensols.actioncli import persisted
 from zensols.grsync import PathUtil, RemoteSpec
 
 logger = logging.getLogger(__name__)
@@ -12,6 +14,9 @@ class RepoSpec(object):
     distribution (usually the user's home directory) that link into it.
 
     """
+    DEFAULT_FORMAT = '{name}: {path}, remotes={remotes}, dirty={dirty}'
+    SHORT_FORMAT = '{name}: {path} ({remotes})'
+
     def __init__(self, path: Path, repo: Repo = None):
         """Create with the path to the repo and optionally a git.Repo."""
         self.path = path
@@ -50,10 +55,6 @@ class RepoSpec(object):
             remotes.append(RemoteSpec(remote, is_master))
         return remotes
 
-    @property
-    def relative_path(self):
-        return PathUtil.relative_to_home(self.path)
-
     def _is_linked_to(self, link):
         is_linked = str(link.target).startswith(str(self.path))
         if is_linked:
@@ -65,13 +66,48 @@ class RepoSpec(object):
 
     def freeze(self):
         return {'name': self.name,
-                'path': str(self.relative_path),
+                'path': str(PathUtil.relative_to_home(self.path)),
                 'links': [l.freeze() for l in self.links],
                 'remotes': [r.freeze() for r in self.remotes]}
 
+    def format(self, fmt=None, writer=sys.stdout):
+        if fmt is None:
+            fmt = self.DEFAULT_FORMAT
+        remotes = map(lambda x: x.name, self.remotes)
+        remotes = ' '.join(sorted(remotes))
+        rs = {'name': self.name,
+              'path': PathUtil.to_home_relative(self.path),
+              'dirty': str(self.repo.is_dirty()).lower(),
+              'remotes': remotes}
+        return fmt.format(**rs)
+
+    def write(self, writer=sys.stdout):
+        path = PathUtil.to_home_relative(self.path)
+        untracked = self.repo.untracked_files
+        diffs = self.repo.index.diff(None)
+        writer.write(f'{self.name}:\n')
+        writer.write(f'  path: {path}\n')
+        writer.write(f'  dirty: {str(self.repo.is_dirty()).lower()}\n')
+        writer.write('  remotes:\n')
+        for r in self.remotes:
+            writer.write(f'    {r.name}: {r.url}\n')
+        if len(self.links) > 0:
+            writer.write('  links:\n')
+            for l in self.links:
+                source = PathUtil.to_home_relative(l.source)
+                target = PathUtil.to_home_relative(l.target)
+                writer.write(f'    {source} -> {target}\n')
+        if len(diffs) > 0:
+            writer.write('  diffs:\n')
+            for d in diffs:
+                writer.write(f'    {d.a_path}\n')
+        if len(untracked) > 0:
+            writer.write('  untracked:\n')
+            for f in untracked:
+                writer.write(f'    {f}\n')
+
     def __str__(self):
-        remotes = ', '.join(('({})'.format(x) for x in self.remotes))
-        return '{}: {}, r={}'.format(self.name, self.relative_path, remotes)
+        return self.format()
 
     def __repr__(self):
         return self.__str__()
@@ -80,11 +116,22 @@ class RepoSpec(object):
 class FrozenRepo(object):
     def __init__(self, remotes: list, links: list, target_dir: Path,
                  path: Path, repo_pref: str):
+        """Initialize.
+
+        :type links: list of LinkEntry (circular dependency with thaw.py for
+        now)
+
+        """
         self.remotes = remotes
         self.links = links
         self.target_dir = target_dir
         self.path = path
         self.repo_pref = repo_pref
+
+    @property
+    @persisted('_repo_spec')
+    def repo_spec(self):
+        return RepoSpec(self.path)
 
     def _split_master_remote_defs(self):
         not_masters = []
@@ -138,5 +185,5 @@ class FrozenRepo(object):
     def __str__(self):
         return f'{self.path} -> {self.target_dir}: {self.remotes}'
 
-    def __repl__(self):
+    def __repr__(self):
         return self.__str__()
