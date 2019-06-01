@@ -6,24 +6,6 @@ from zensols.actioncli import persisted
 logger = logging.getLogger(__name__)
 
 
-class PathUtilX(Path):
-    """Utility class around helping with paths."""
-
-    @staticmethod
-    def relative_to_home(path):
-        """Return a path that's relative to the user's home directory."""
-        return path.relative_to(Path.home().resolve())
-
-    @staticmethod
-    def to_home_relative(path):
-        return str(Path(Path.home(), path).absolute())
-
-    @staticmethod
-    def expand_home(path):
-        """Return the user's home directory as a ``pathlib.Path`` object."""
-        return Path.joinpath(Path.home(), path)
-
-
 class PathTranslator(object):
     """
     Utility class around helping with paths.

@@ -27,7 +27,8 @@ class DistManager(object):
 
     """
     def __init__(self, config: YamlConfig, dist_dir: Path = None,
-                 target_dir: Path = None, profiles: list = None):
+                 target_dir: Path = None, profiles: list = None,
+                 dry_run: bool = False):
         """Initialize.
 
         :param config: the app config
@@ -48,12 +49,14 @@ class DistManager(object):
                 self.config.dist_dir = dist_dir
             self.dist_dir = self.config.dist_dir
         if target_dir is not None:
-            self.target_dir = Path(target_dir).expanduser()
+            self.target_dir = Path(target_dir).expanduser().absolute()
         else:
-            self.target_dir = Path.home()
+            self.target_dir = Path.home().absolute()
+        self.dry_run = dry_run
         self.config_dir = 'conf'
         self.defs_file = '{}/dist.json'.format(self.config_dir)
         self.profiles = profiles
+        self.path_translator = PathTranslator(self.target_dir)
 
     @property
     @persisted('_dist_file')
@@ -67,8 +70,7 @@ class DistManager(object):
     @property
     @persisted('_discoverer')
     def discoverer(self):
-        pt = PathTranslator(self.target_dir)
-        return Discoverer(self.config, self.profiles, pt)
+        return Discoverer(self.config, self.profiles, self.path_translator)
 
     def discover_info(self):
         """Proviate information about what's found in the user home directory.  This is
@@ -98,7 +100,9 @@ class DistManager(object):
         fmng.freeze(wheel_dependency)
 
     def thaw(self):
-        tmng = ThawManager(self.dist_file, self.target_dir, self.defs_file)
+        tmng = ThawManager(
+            self.dist_file, self.target_dir, self.defs_file,
+            self.path_translator, self.dry_run)
         tmng.thaw()
 
     def tmp(self, dst_path=None, force_repo=False, force_dirs=False, dry_run=True):

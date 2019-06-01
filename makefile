@@ -51,4 +51,4 @@ delete:
 
 .PHONY:		testfreeze
 testfreeze:
-		make PY_SRC_TEST_PKGS=test_freeze.TestFreeze test
+		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw test

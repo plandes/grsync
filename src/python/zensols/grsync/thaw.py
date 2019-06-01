@@ -8,16 +8,20 @@ import platform
 from zensols.actioncli import persisted
 from zensols.grsync import (
     FrozenRepo,
-    FileEntry, LinkEntry,
+    FileEntry,
+    LinkEntry,
+    PathTranslator,
 )
 
 logger = logging.getLogger(__name__)
 
 
 class Distribution(object):
-    def __init__(self, struct: list, target_dir: Path):
+    def __init__(self, struct: list, target_dir: Path,
+                 path_translator: PathTranslator):
         self.struct = struct
         self.target_dir = target_dir
+        self.path_translator = path_translator
         self.params = {'os': platform.system().lower()}
 
     def _target_relative(self, path):
@@ -51,17 +55,19 @@ class Distribution(object):
             links = tuple(map(lambda fi: LinkEntry(self, fi),
                               rdef['links']))
             repo = FrozenRepo(rdef['remotes'], links, self.target_dir,
-                              self._target_relative(rdef['path']), repo_pref)
+                              self._target_relative(rdef['path']), repo_pref,
+                              self.path_translator)
             repos.append(repo)
         return repos
 
 
 class ThawManager(object):
     def __init__(self, dist_file: Path, target_dir: Path, defs_file: Path,
-                 dry_run=bool):
+                 path_translator: PathTranslator, dry_run=bool):
         self.dist_file = dist_file
         self.target_dir = target_dir
         self.defs_file = defs_file
+        self.path_translator = path_translator
         self.dry_run = dry_run
 
     def _thaw_empty_dirs(self, dist: Distribution):
@@ -89,19 +95,21 @@ class ThawManager(object):
             parent = path.parent
             if not parent.exists():
                 logger.info(f'creating parent directory: {parent}')
-                parent.mkdir(parents=True)
+                if not self.dry_run:
+                    parent.mkdir(parents=True)
             logger.debug(f'thawing file: {path}')
             if path.exists():
                 logger.warning(f'path already exists: {path}')
             else:
-                logger.info('{path} ({entry.modestr})')
+                logger.info(f'{path} ({entry.modestr})')
                 if not self.dry_run:
                     with zf.open(str(entry.relative)) as fin:
                         with open(str(path), 'wb') as fout:
                             shutil.copyfileobj(fin, fout)
                 logger.debug(f'setting mode of {path} to {entry.mode} ' +
                              f'({entry.modestr})')
-                path.chmod(entry.mode)
+                if not self.dry_run:
+                    path.chmod(entry.mode)
 
     def _thaw_repos(self, dist: Distribution):
         """Thaw repositories in the config, which does a clone and then creates the
@@ -150,7 +158,7 @@ class ThawManager(object):
             with zf.open(self.defs_file) as f:
                 jstr = f.read().decode('utf-8')
                 struct = json.loads(jstr)
-            dist = Distribution(struct, self.target_dir)
+            dist = Distribution(struct, self.target_dir, self.path_translator)
             self._thaw_files(dist, zf)
             self._thaw_repos(dist)
             self._thaw_empty_dirs(dist)
