@@ -20,11 +20,12 @@ class TestFreezeThaw(unittest.TestCase):
         logger.info('setting up')
         self.targ_dir = Path('target')
         freeze_dir = Path(self.targ_dir / 'mock')
+        self.repo_path = Path('.').absolute()
         if not freeze_dir.exists():
             vpath = freeze_dir / 'view'
             vpath.mkdir(parents=True)
             rpath = vpath / 'repo_def'
-            Repo.clone_from('https://github.com/plandes/zenbuild', rpath)
+            Repo.clone_from(str(self.repo_path), rpath)
             shutil.copytree(rpath, vpath / 'repo_src')
             emp_path = freeze_dir / 'dir_a' / 'dir_b'
             Path(emp_path).mkdir(parents=True)
@@ -48,6 +49,7 @@ class TestFreezeThaw(unittest.TestCase):
         dm = self.freeze_dm
         #dm.discover_info()
         res = dm.discoverer.freeze(flatten=True)
+        repo_path = str(self.repo_path)
         for n in 'create_date source'.split():
             del res[n]
         c = {'empty_dirs': [{'mode': 16877, 'modestr': 'drwxr-xr-x', 'rel': 'opt/empty_dir'}],
@@ -61,14 +63,14 @@ class TestFreezeThaw(unittest.TestCase):
                              'path': 'view/repo_def',
                              'remotes': [{'is_master': True,
                                           'name': 'origin',
-                                          'url': 'https://github.com/plandes/zenbuild'}]},
+                                          'url': repo_path}]},
                             {'links': [{'source': 'symlink_to_repo',
                                         'target': 'view/repo_src/README.md'}],
                              'name': 'repo_src',
                              'path': 'view/repo_src',
                              'remotes': [{'is_master': True,
                                           'name': 'origin',
-                                          'url': 'https://github.com/plandes/zenbuild'}]}),}
+                                          'url': repo_path}]}),}
         self.assertEqual(sorted(c.items()), sorted(res.items()))
 
     def test_thaw(self):
