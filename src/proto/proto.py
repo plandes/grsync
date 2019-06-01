@@ -13,8 +13,8 @@ def create_config():
 
 
 def tmp():
-    dm = ClassImporter('zensols.grsync.dist.DistManager').instance(
-        create_config(), target_dir='~/tmp/grsync')
+    dm = ClassImporter('zensols.grsync.distmng.DistManager').instance(
+        create_config(), dist_dir='target/dist', target_dir='target/mock')
     logging.getLogger('zensols.grsync.dist').setLevel(logging.INFO)
     dm.tmp()
 

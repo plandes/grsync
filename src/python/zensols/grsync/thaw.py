@@ -4,77 +4,27 @@ import zipfile
 import shutil
 from git.exc import GitCommandError
 from pathlib import Path
-import platform
-from zensols.actioncli import persisted
 from zensols.grsync import (
-    FrozenRepo,
-    FileEntry,
-    LinkEntry,
     PathTranslator,
+    Distribution,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class Distribution(object):
-    def __init__(self, struct: list, target_dir: Path,
-                 path_translator: PathTranslator):
-        self.struct = struct
-        self.target_dir = target_dir
-        self.path_translator = path_translator
-        self.params = {'os': platform.system().lower()}
-
-    def _target_relative(self, path):
-        """Return a path that is relative to where we're thawing the distribution,
-        which is usually the user's home directory.
-
-        """
-        return Path.joinpath(self.target_dir, path)
-
-    @property
-    @persisted('_files')
-    def files(self) -> list:
-        return map(lambda fi: FileEntry(self, fi), self.struct['files'])
-
-    @property
-    @persisted('_empty_dirs')
-    def empty_dirs(self) -> list:
-        return map(lambda fi: FileEntry(self, fi), self.struct['empty_dirs'])
-
-    @property
-    @persisted('_links')
-    def links(self) -> list:
-        return map(lambda fi: LinkEntry(self, fi), self.struct['links'])
-
-    @property
-    @persisted('_repos')
-    def repos(self) -> list:
-        repos = []
-        repo_pref = self.struct['repo_pref']
-        for rdef in self.struct['repo_specs']:
-            links = tuple(map(lambda fi: LinkEntry(self, fi),
-                              rdef['links']))
-            repo = FrozenRepo(rdef['remotes'], links, self.target_dir,
-                              self._target_relative(rdef['path']), repo_pref,
-                              self.path_translator)
-            repos.append(repo)
-        return repos
-
-
 class ThawManager(object):
-    def __init__(self, dist_file: Path, target_dir: Path, defs_file: Path,
+    def __init__(self, dist: Distribution, defs_file: Path,
                  path_translator: PathTranslator, dry_run=bool):
-        self.dist_file = dist_file
-        self.target_dir = target_dir
+        self.dist = dist
         self.defs_file = defs_file
         self.path_translator = path_translator
         self.dry_run = dry_run
 
-    def _thaw_empty_dirs(self, dist: Distribution):
+    def _thaw_empty_dirs(self):
         """Create empty directories on the file system.
 
         """
-        for entry in dist.empty_dirs:
+        for entry in self.dist.empty_dirs:
             path = entry.path
             if path.exists():
                 logger.warning(f'path already exists: {path}')
@@ -85,12 +35,12 @@ class ThawManager(object):
                     # apply to all children dirs that might not exist yet
                     path.mkdir(mode=entry.mode, parents=True, exist_ok=True)
 
-    def _thaw_files(self, dist: Distribution, zf):
+    def _thaw_files(self, zf):
         """Thaw files in the distribution by extracting from the zip file ``zf``.  File
         definitions are found in ``struct``.
 
         """
-        for entry in dist.files:
+        for entry in self.dist.files:
             path = entry.path
             parent = path.parent
             if not parent.exists():
@@ -111,12 +61,12 @@ class ThawManager(object):
                 if not self.dry_run:
                     path.chmod(entry.mode)
 
-    def _thaw_repos(self, dist: Distribution):
+    def _thaw_repos(self):
         """Thaw repositories in the config, which does a clone and then creates the
         (remaining if any) remotes.
 
         """
-        for repo in dist.repos:
+        for repo in self.dist.repos:
             repo_path = repo.path
             parent = repo_path.parent
             logger.info(f'thawing repo: {repo}')
@@ -131,11 +81,11 @@ class ThawManager(object):
             except GitCommandError as err:
                 logger.warning(f'couldn\'t create repo {repo_path}--skippping: {err}')
 
-    def _thaw_pattern_links(self, dist):
+    def _thaw_pattern_links(self):
         """Method to call other thaw methods based on type.
 
         """
-        for link in dist.links:
+        for link in self.dist.links:
             if link.source.exists():
                 logger.warning(f'link source already exists: {link.source}')
             elif not link.target.exists():
@@ -152,14 +102,9 @@ class ThawManager(object):
         that were captured/configured during the freezing phase.
 
         """
-        dist_file = self.dist_file
-        logger.info(f'expanding distribution in {dist_file}')
-        with zipfile.ZipFile(str(dist_file.resolve())) as zf:
-            with zf.open(self.defs_file) as f:
-                jstr = f.read().decode('utf-8')
-                struct = json.loads(jstr)
-            dist = Distribution(struct, self.target_dir, self.path_translator)
-            self._thaw_files(dist, zf)
-            self._thaw_repos(dist)
-            self._thaw_empty_dirs(dist)
-            self._thaw_pattern_links(dist)
+        logger.info(f'expanding distribution in {self.dist.path}')
+        with zipfile.ZipFile(str(self.dist.path.resolve())) as zf:
+            self._thaw_files(zf)
+            self._thaw_repos()
+            self._thaw_empty_dirs()
+            self._thaw_pattern_links()

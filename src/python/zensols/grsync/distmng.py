@@ -52,25 +52,31 @@ class DistManager(object):
             self.target_dir = Path(target_dir).expanduser().absolute()
         else:
             self.target_dir = Path.home().absolute()
-        self.dry_run = dry_run
-        self.config_dir = 'conf'
-        self.defs_file = '{}/dist.json'.format(self.config_dir)
         self.profiles = profiles
+        self.dry_run = dry_run
+        # configuration directory in the zip distribution
+        self.config_dir = 'conf'
+        # definitions file contains all the metadata (files, links etc)
+        self.defs_file = '{}/dist.json'.format(self.config_dir)
+        # the main distribution compressed file that will have the
+        # configuration needed to thaw, all saved files and symbolic links.
+        self.dist_file = Path(self.dist_dir, 'dist.zip')
+        # resovle path to and from the target directory
         self.path_translator = PathTranslator(self.target_dir)
-
-    @property
-    @persisted('_dist_file')
-    def dist_file(self):
-        """Return the main distribution compressed file that will have the
-        configuration needed to thaw, all saved files and symbolic links.
-
-        """
-        return Path(self.dist_dir, 'dist.zip')
 
     @property
     @persisted('_discoverer')
     def discoverer(self):
         return Discoverer(self.config, self.profiles, self.path_translator)
+
+    @property
+    def distribution(self):
+        with zipfile.ZipFile(str(self.dist_file.resolve())) as zf:
+            with zf.open(self.defs_file) as f:
+                jstr = f.read().decode('utf-8')
+                struct = json.loads(jstr)
+        return Distribution(
+            self.dist_file, struct, self.target_dir, self.path_translator)
 
     def discover_info(self):
         """Proviate information about what's found in the user home directory.  This is
@@ -101,11 +107,11 @@ class DistManager(object):
 
     def thaw(self):
         tmng = ThawManager(
-            self.dist_file, self.target_dir, self.defs_file,
+            self.distribution, self.defs_file,
             self.path_translator, self.dry_run)
         tmng.thaw()
 
-    def tmp(self, dst_path=None, force_repo=False, force_dirs=False, dry_run=True):
+    def tmp(self, dst_path=None, force_repo=False, force_dirs=False):
         if dst_path is None:
             dst_path = Path('old_dist_1')
         if dst_path.exists():
@@ -123,7 +129,7 @@ class DistManager(object):
             with zf.open(self.defs_file) as f:
                 jstr = f.read().decode('utf-8')
                 struct = json.loads(jstr)
-        dist = Distribution(struct, self.target_dir)
+        dist = Distribution(struct, self.target_dir, self.path_translator)
         objs = (dist.repos, dist.files, dist.empty_dirs, dist.links)
         paths = it.chain(map(lambda x: (x.path, x), it.chain(*objs)),
                          map(lambda l: (l.path, l),
@@ -148,7 +154,4 @@ class DistManager(object):
                         continue
                 print(src, obj, fcnt)
             dst = dst_path / src.relative_to(self.target_dir)
-            #logger.info(f'{src} => {dst}')
-
-    def tmp(self):
-        self.freeze()
+            logger.info(f'{src} => {dst}')

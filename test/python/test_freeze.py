@@ -98,3 +98,5 @@ class TestFreezeThaw(unittest.TestCase):
         self.assertTrue(fd('file_a.txt').is_file())
         self.assertTrue(fd('view/repo_def/zenbuild').is_dir())
         self.assertTrue(fd('view/repo_def/.git').is_dir())
+        self.assertTrue(fd('view/repo_src/zenbuild').is_dir())
+        self.assertTrue(fd('view/repo_src/.git').is_dir())
