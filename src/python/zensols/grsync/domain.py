@@ -6,7 +6,7 @@ from zensols.actioncli import persisted
 logger = logging.getLogger(__name__)
 
 
-class PathUtil(Path):
+class PathUtilX(Path):
     """Utility class around helping with paths."""
 
     @staticmethod
@@ -49,7 +49,7 @@ class SymbolicLink(object):
     created symbol links.
 
     """
-    def __init__(self, source):
+    def __init__(self, source: Path, path_translator: PathTranslator):
         """Create.
 
         :param source: The pathlib.Path that points to the symbolic link on the
@@ -57,6 +57,7 @@ class SymbolicLink(object):
 
         """
         self.source = source
+        self.path_translator = path_translator
         self.use_count = 0
 
     @property
@@ -68,7 +69,7 @@ class SymbolicLink(object):
     def source_relative(self):
         """The relative location source (to the user's home)."""
         if not hasattr(self, '_src'):
-            self._src = PathUtil.relative_to_home(self.source)
+            self._src = self.path_translator.relative_to(self.source)
         return self._src
 
     @property
@@ -77,7 +78,7 @@ class SymbolicLink(object):
 
         """
         if not hasattr(self, '_dst'):
-            self._dst = PathUtil.relative_to_home(self.target)
+            self._dst = self.path_translator.relative_to(self.target)
         return self._dst
 
     def increment_use_count(self):

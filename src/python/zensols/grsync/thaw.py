@@ -57,10 +57,12 @@ class Distribution(object):
 
 
 class ThawManager(object):
-    def __init__(self, dist_file: Path, target_dir: Path, defs_file: Path):
+    def __init__(self, dist_file: Path, target_dir: Path, defs_file: Path,
+                 dry_run=bool):
         self.dist_file = dist_file
         self.target_dir = target_dir
         self.defs_file = defs_file
+        self.dry_run = dry_run
 
     def _thaw_empty_dirs(self, dist: Distribution):
         """Create empty directories on the file system.
@@ -72,9 +74,10 @@ class ThawManager(object):
                 logger.warning(f'path already exists: {path}')
             else:
                 logger.info(f'creating path {path}')
-                # we store the mode of the directory, but we don't want that to
-                # apply to all children dirs that might not exist yet
-                path.mkdir(mode=entry.mode, parents=True, exist_ok=True)
+                if not self.dry_run:
+                    # we store the mode of the directory, but we don't want that to
+                    # apply to all children dirs that might not exist yet
+                    path.mkdir(mode=entry.mode, parents=True, exist_ok=True)
 
     def _thaw_files(self, dist: Distribution, zf):
         """Thaw files in the distribution by extracting from the zip file ``zf``.  File
@@ -91,9 +94,11 @@ class ThawManager(object):
             if path.exists():
                 logger.warning(f'path already exists: {path}')
             else:
-                with zf.open(str(entry.relative)) as fin:
-                    with open(str(path), 'wb') as fout:
-                        shutil.copyfileobj(fin, fout)
+                logger.info('{path} ({entry.modestr})')
+                if not self.dry_run:
+                    with zf.open(str(entry.relative)) as fin:
+                        with open(str(path), 'wb') as fout:
+                            shutil.copyfileobj(fin, fout)
                 logger.debug(f'setting mode of {path} to {entry.mode} ' +
                              f'({entry.modestr})')
                 path.chmod(entry.mode)
@@ -106,13 +111,15 @@ class ThawManager(object):
         for repo in dist.repos:
             repo_path = repo.path
             parent = repo_path.parent
-            logger.debug(f'thawing repo: {repo}')
+            logger.info(f'thawing repo: {repo}')
             if not parent.exists():
                 logger.info(f'creating parent directory: {parent}')
-                parent.mkdir(parents=True, exist_ok=True)
+                if not self.dry_run:
+                    parent.mkdir(parents=True, exist_ok=True)
             try:
-                thawed = repo.thaw()
-                logger.debug(f'thawed: {thawed}')
+                if not self.dry_run:
+                    thawed = repo.thaw()
+                    logger.debug(f'thawed: {thawed}')
             except GitCommandError as err:
                 logger.warning(f'couldn\'t create repo {repo_path}--skippping: {err}')
 
@@ -128,7 +135,8 @@ class ThawManager(object):
                     f'link target does not exist: {link}--skipping')
             else:
                 logger.info(f'linking: {link}')
-                link.source.symlink_to(link.target)
+                if not self.dry_run:
+                    link.source.symlink_to(link.target)
 
     def thaw(self):
         """Thaw the distribution, which includes creating git repositories, extracting

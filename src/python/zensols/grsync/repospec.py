@@ -3,7 +3,10 @@ import sys
 from pathlib import Path
 from git import Repo
 from zensols.actioncli import persisted
-from zensols.grsync import PathUtil, RemoteSpec
+from zensols.grsync import (
+    RemoteSpec,
+    PathTranslator
+)
 
 logger = logging.getLogger(__name__)
 MASTER_SECTION = 'branch "master"'
@@ -17,9 +20,11 @@ class RepoSpec(object):
     DEFAULT_FORMAT = '{name}: {path}, remotes={remotes}, dirty={dirty}'
     SHORT_FORMAT = '{name}: {path} ({remotes})'
 
-    def __init__(self, path: Path, repo: Repo = None):
+    def __init__(self, path: Path, path_translator: PathTranslator,
+                 repo: Repo = None):
         """Create with the path to the repo and optionally a git.Repo."""
         self.path = path
+        self.path_translator = path_translator
         self._repo = repo
         self.links = ()
 
@@ -66,7 +71,7 @@ class RepoSpec(object):
 
     def freeze(self):
         return {'name': self.name,
-                'path': str(PathUtil.relative_to_home(self.path)),
+                'path': str(self.path_translator.relative_to(self.path)),
                 'links': [l.freeze() for l in self.links],
                 'remotes': [r.freeze() for r in self.remotes]}
 
@@ -76,13 +81,13 @@ class RepoSpec(object):
         remotes = map(lambda x: x.name, self.remotes)
         remotes = ' '.join(sorted(remotes))
         rs = {'name': self.name,
-              'path': PathUtil.to_home_relative(self.path),
+              'path': self.path_translator.to_relative(self.path),
               'dirty': str(self.repo.is_dirty()).lower(),
               'remotes': remotes}
         return fmt.format(**rs)
 
     def write(self, writer=sys.stdout):
-        path = PathUtil.to_home_relative(self.path)
+        path = self.path_translator.to_relative(self.path)
         untracked = self.repo.untracked_files
         diffs = self.repo.index.diff(None)
         writer.write(f'{self.name}:\n')
@@ -94,8 +99,8 @@ class RepoSpec(object):
         if len(self.links) > 0:
             writer.write('  links:\n')
             for l in self.links:
-                source = PathUtil.to_home_relative(l.source)
-                target = PathUtil.to_home_relative(l.target)
+                source = self.path_translator.to_relative(l.source)
+                target = self.path_translator.to_relative(l.target)
                 writer.write(f'    {source} -> {target}\n')
         if len(diffs) > 0:
             writer.write('  diffs:\n')
@@ -115,7 +120,7 @@ class RepoSpec(object):
 
 class FrozenRepo(object):
     def __init__(self, remotes: list, links: list, target_dir: Path,
-                 path: Path, repo_pref: str):
+                 path: Path, repo_pref: str, path_translator: PathTranslator):
         """Initialize.
 
         :type links: list of LinkEntry (circular dependency with thaw.py for
@@ -127,11 +132,12 @@ class FrozenRepo(object):
         self.target_dir = target_dir
         self.path = path
         self.repo_pref = repo_pref
+        self.path_translator = path_translator
 
     @property
     @persisted('_repo_spec')
     def repo_spec(self):
-        return RepoSpec(self.path)
+        return RepoSpec(self.path, self.path_translator)
 
     def _split_master_remote_defs(self):
         not_masters = []
@@ -162,7 +168,7 @@ class FrozenRepo(object):
         if self.path.exists():
             logger.warning('path already exists: {}--skipping repo clone'.
                            format(self.path))
-            repo_spec = RepoSpec(self.path)
+            repo_spec = RepoSpec(self.path, self.path_translator)
         else:
             master, not_masters = self._split_master_remote_defs()
             name = master['name']
@@ -172,7 +178,7 @@ class FrozenRepo(object):
             repo.remotes[0].rename(name)
             for rmd in not_masters:
                 repo.create_remote(rmd['name'], rmd['url'])
-            repo_spec = RepoSpec(self.path, repo)
+            repo_spec = RepoSpec(self.path, self.path_translator, repo)
         for link in self.links:
             logger.info(f'thawing link {link}')
             if link.source.exists():

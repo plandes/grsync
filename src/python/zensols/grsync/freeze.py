@@ -57,7 +57,7 @@ class Discoverer(object):
         logger.debug(f'repo spec paths: {paths}')
         for path in paths:
             logger.debug(f'found repo at path {path}')
-            repo_spec = RepoSpec(path)
+            repo_spec = RepoSpec(path, self.path_translator)
             repo_spec.add_linked(links)
             if len(repo_spec.remotes) == 0:
                 logger.warning(f'repo {repo_spec} has no remotes--skipping...')
@@ -140,7 +140,7 @@ class Discoverer(object):
         # find the directories that have git repos in them (recursively)
         git_paths = self._get_repo_paths(dirs_or_gits)
         # create symbolic link objects from those objects that are links
-        links = tuple(map(lambda l: SymbolicLink(l),
+        links = tuple(map(lambda l: SymbolicLink(l, self.path_translator),
                           filter(lambda x: x.is_symlink(), dobjs)))
         #logger.debug(f'links: {links}')
         # normal files are kept track of so we can compress them later
