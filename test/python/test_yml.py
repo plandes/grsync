@@ -35,6 +35,6 @@ class TestConfig(unittest.TestCase):
 
     def test_set_dist(self):
         config = AppConfig('test-resources/midsize-test.yml')
-        self.assertEqual(Path('./dist'), config.dist_dir)
+        self.assertEqual(Path('./dist').absolute(), config.dist_dir)
         config.dist_dir = Path('./anewdir')
-        self.assertEqual(Path('./anewdir'), config.dist_dir)
+        self.assertEqual(Path('./anewdir').absolute(), config.dist_dir)
