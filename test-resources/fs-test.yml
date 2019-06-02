@@ -14,6 +14,8 @@ discover:
     - ^{discover.view}/repo_def
     - ^{discover.test_dir}/dir_a
     - ^{discover.test_dir}/symlink_to_repo
+    - ^{discover.test_dir}/symlink.txt
+    - ^{discover.test_dir}/file_0.txt
   # profiles configuration, defined on the next line if none given on the
   # command line (or empty for using only the default)
   default_profiles: source
@@ -29,7 +31,7 @@ discover:
     links:
       - link:
           source: ^{discover.test_dir}/profile_{os}
-          target: ^{discover.test_dir}/newdir/dir_a
+          target: ^{discover.test_dir}/dir_a/dir_b/file_b.txt
   # indicate to create all wheel dependencies (useful for target machine
   # offline--see docs)
   wheel:

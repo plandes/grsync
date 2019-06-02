@@ -3,6 +3,7 @@ import itertools as it
 import re
 import json
 import zipfile
+import shutil
 from pathlib import Path
 from zensols.actioncli import YamlConfig, persisted
 from zensols.grsync import (
@@ -17,6 +18,67 @@ from zensols.grsync import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class DistributionMover(object):
+    def __init__(self, dist: Distribution, target_dir=None,
+                 destination_dir: Path = None,
+                 force_repo=False, force_dirs=False, dry_run=False):
+        self.dist = dist
+        self.target_dir = target_dir
+        if destination_dir is None:
+            destination_dir = Path('old_dist')
+        if destination_dir.exists():
+            m = re.match(r'^(.+)_(\d+)$', str(destination_dir))
+            if m:
+                n = int(m.group(2)) + 1
+                destination_dir = Path(f'{m.group(1)}_{n}')
+        self.destination_dir = destination_dir
+        self.force_repo = force_repo
+        self.force_dirs = force_dirs
+        self.dry_run = dry_run
+
+    def _get_moves(self):
+        dist = self.dist
+        objs = (dist.links, dist.repos, dist.files, dist.empty_dirs)
+        paths = it.chain(map(lambda x: (x.path, x), it.chain(*objs)),
+                         map(lambda l: (l.path, l),
+                             it.chain(*map(lambda r: r.links, dist.repos))))
+        paths = sorted(paths, key=lambda x: len(x[0].parts), reverse=True)
+        logger.info(f'moving installed distribution to {self.destination_dir}')
+        for src, obj in paths:
+            if not src.exists() and not src.is_symlink():
+                logger.warning(f'no longer exists: {src}')
+            else:
+                if isinstance(obj, FrozenRepo):
+                    if obj.repo_spec.repo.is_dirty():
+                        name = obj.repo_spec.format(RepoSpec.SHORT_FORMAT)
+                        if self.force_repo:
+                            logger.warning(f'repo is dirty: {name}; moving anyway')
+                        else:
+                            logger.warning(f'repo is dirty: {name}--skipping')
+                            continue
+                elif isinstance(obj, FileEntry) and src.is_dir() and not src.is_symlink():
+                    fcnt = sum(map(lambda x: 1, src.iterdir()))
+                    if fcnt > 0:
+                        if self.force_dirs:
+                            logger.warning(f'directory not empty: {src}; ' +
+                                           'moving anyway')
+                        else:
+                            logger.warning(f'directory not empty: {src}--skipping')
+                            continue
+                dst = self.destination_dir / src.relative_to(self.target_dir)
+                yield (src, dst.absolute())
+
+    def move(self):
+        for src, dst in self._get_moves():
+            logger.info(f'{src} => {dst}')
+            if not self.dry_run:
+                if src.exists() or src.is_symlink():
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.move(str(src), str(dst))
+                else:
+                    logger.warning(f'no longer exists: {src}')
 
 
 class DistManager(object):
@@ -111,47 +173,8 @@ class DistManager(object):
             self.path_translator, self.dry_run)
         tmng.thaw()
 
-    def tmp(self, dst_path=None, force_repo=False, force_dirs=False):
-        if dst_path is None:
-            dst_path = Path('old_dist_1')
-        if dst_path.exists():
-            m = re.match(r'^old_dst_(\d+)$')
-            if m:
-                n = int(m.groups(1))
-            else:
-                n = 1
-            dst_path = Path(f'old_dist_{n}')
-        #dst_path = dst_path.absolute()
-        #self.freeze()
-        dist_file = self.dist_file
-        logger.info(f'moving installed distribution in {dist_file}')
-        with zipfile.ZipFile(str(dist_file.resolve())) as zf:
-            with zf.open(self.defs_file) as f:
-                jstr = f.read().decode('utf-8')
-                struct = json.loads(jstr)
-        dist = Distribution(struct, self.target_dir, self.path_translator)
-        objs = (dist.repos, dist.files, dist.empty_dirs, dist.links)
-        paths = it.chain(map(lambda x: (x.path, x), it.chain(*objs)),
-                         map(lambda l: (l.path, l),
-                             it.chain(*map(lambda r: r.links, dist.repos))))
-        paths = sorted(paths, key=lambda x: len(x[0].parts), reverse=True)
-        for src, obj in paths:
-            if isinstance(obj, FrozenRepo):
-                if obj.repo_spec.repo.is_dirty():
-                    name = obj.repo_spec.format(RepoSpec.SHORT_FORMAT)
-                    if force_repo:
-                        logger.warning(f'repo is dirty: {name}; moving anyway')
-                    else:
-                        logger.warning(f'repo is dirty: {name}--skipping')
-                        continue
-            elif isinstance(obj, FileEntry) and src.is_dir() and not src.is_symlink():
-                fcnt = sum(map(lambda x: 1, src.iterdir()))
-                if fcnt > 0:
-                    if force_dirs:
-                        logger.warning(f'directory not empty: {src}; moving anyway')
-                    else:
-                        logger.warning(f'directory not empty: {src}--skipping')
-                        continue
-                print(src, obj, fcnt)
-            dst = dst_path / src.relative_to(self.target_dir)
-            logger.info(f'{src} => {dst}')
+    def move(self, destination_path):
+        mv = DistributionMover(
+            self.distribution, self.target_dir,
+            destination_path, dry_run=self.dry_run)
+        mv.move()
