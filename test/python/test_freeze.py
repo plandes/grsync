@@ -51,7 +51,7 @@ class TestFreezeThaw(unittest.TestCase):
             self.config, target_dir=self.thaw_dir, dist_dir=self.dist_dir,
             dry_run=False)
 
-    def test_freeze_struct(self):
+    def test_freeze(self):
         logging.info('testing freeze')
         dm = self.freeze_dm
         # dm.discover_info()
@@ -127,6 +127,8 @@ class TestFreezeThaw(unittest.TestCase):
             self.freeze_dm.freeze()
         if not self.thaw_dm.target_dir.exists():
             self.thaw_dm.thaw()
+        if self.move_path.exists():
+            shutil.rmtree(self.move_path)
         dm = self.thaw_dm
         # dm.dry_run = True
         dm.move(self.move_path)

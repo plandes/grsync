@@ -49,6 +49,11 @@ rethaw:		clean freeze thaw
 delete:
 		make PYTHON_BIN_ARGS='delete --dryrun -t $(MTARG)/t -c $(CONFIG) $(ARGS)' run
 
+.PHONY:		testfreezethaw
+testfreezethaw:
+		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_freeze test
+		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_thaw test
+
 .PHONY:		testmove
 testmove:
 		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_move test

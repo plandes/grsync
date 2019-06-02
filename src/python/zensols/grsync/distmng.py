@@ -27,26 +27,25 @@ class DistributionMover(object):
         self.dist = dist
         self.target_dir = target_dir
         if destination_dir is None:
-            destination_dir = Path('old_dist')
-        if destination_dir.exists():
-            m = re.match(r'^(.+)_(\d+)$', str(destination_dir))
-            if m:
-                n = int(m.group(2)) + 1
-                destination_dir = Path(f'{m.group(1)}_{n}')
+            destination_dir = Path('old_dist').absolute()
         self.destination_dir = destination_dir
         self.force_repo = force_repo
         self.force_dirs = force_dirs
         self.dry_run = dry_run
 
-    def _get_moves(self):
+    def _get_paths(self):
         dist = self.dist
         objs = (dist.links, dist.repos, dist.files, dist.empty_dirs)
         paths = it.chain(map(lambda x: (x.path, x), it.chain(*objs)),
                          map(lambda l: (l.path, l),
                              it.chain(*map(lambda r: r.links, dist.repos))))
-        paths = sorted(paths, key=lambda x: len(x[0].parts), reverse=True)
-        logger.info(f'moving installed distribution to {self.destination_dir}')
-        for src, obj in paths:
+        return sorted(paths, key=lambda x: len(x[0].parts), reverse=True)
+
+    def _dir_empty(self, path):
+        return sum(map(lambda x: 1, path.iterdir())) == 0
+
+    def _get_moves(self):
+        for src, obj in self._get_paths():
             if not src.exists() and not src.is_symlink():
                 logger.warning(f'no longer exists: {src}')
             else:
@@ -59,8 +58,7 @@ class DistributionMover(object):
                             logger.warning(f'repo is dirty: {name}--skipping')
                             continue
                 elif isinstance(obj, FileEntry) and src.is_dir() and not src.is_symlink():
-                    fcnt = sum(map(lambda x: 1, src.iterdir()))
-                    if fcnt > 0:
+                    if not self._dir_empty(src):
                         if self.force_dirs:
                             logger.warning(f'directory not empty: {src}; ' +
                                            'moving anyway')
@@ -71,6 +69,10 @@ class DistributionMover(object):
                 yield (src, dst.absolute())
 
     def move(self):
+        if self.destination_dir.exists():
+            m = f'destination directory already exists: {self.destination_dir}'
+            raise ValueError(m)
+        logger.info(f'moving installed distribution to {self.destination_dir}')
         for src, dst in self._get_moves():
             logger.info(f'{src} => {dst}')
             if not self.dry_run:
@@ -79,6 +81,21 @@ class DistributionMover(object):
                     shutil.move(str(src), str(dst))
                 else:
                     logger.warning(f'no longer exists: {src}')
+
+    def dir_reduce(self, parent=None):
+        if parent is None:
+            parent = self.target_dir
+        for child in parent.iterdir():
+            logger.debug(f'descending: {child}')
+            if child.is_dir() and not child.is_symlink():
+                self.dir_reduce(child)
+        if parent != self.target_dir and parent.is_dir():
+            if self._dir_empty(parent):
+                logger.info(f'deleting empty directory: {parent}')
+                if not self.dry_run:
+                    parent.rmdir()
+            else:
+                logger.info(f'skipping non-empty directory delete: {parent}')
 
 
 class DistManager(object):
@@ -173,8 +190,19 @@ class DistManager(object):
             self.path_translator, self.dry_run)
         tmng.thaw()
 
-    def move(self, destination_path):
+    def move(self, destination_path, dir_reduce=True):
+        if destination_path is not None:
+            destination_path = Path(destination_path).expanduser().absolute()
         mv = DistributionMover(
             self.distribution, self.target_dir,
             destination_path, dry_run=self.dry_run)
         mv.move()
+        if dir_reduce:
+            mv.dir_reduce()
+
+    def tmp(self):
+        destination_path = Path('target/thaw').absolute()
+        mv = DistributionMover(
+            self.distribution, self.target_dir,
+            destination_path, dry_run=self.dry_run)
+        mv.dir_reduce()

@@ -30,9 +30,10 @@ class InfoCli(object):
         dm.print_repo_info(self.repo_names)
 
 
-class FreezeThawCli(object):
+class DistManagerCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
-                 wheel_dependency='zensols.grsync', profiles=None):
+                 move_dir=None, wheel_dependency='zensols.grsync', profiles=None):
+        self.move_dir = move_dir
         self.dm = DistManager(config, dist_dir, target_dir, profiles=profiles)
         self.wheel_dependency = wheel_dependency
 
@@ -41,6 +42,9 @@ class FreezeThawCli(object):
 
     def thaw(self):
         self.dm.thaw()
+
+    def move(self):
+        self.dm.move(self.move_dir)
 
 
 class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
@@ -55,6 +59,9 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         target_dir_op = ['-t', '--targetdir', False,
                          {'dest': 'target_dir', 'metavar': 'DIRECTORY',
                           'help': 'the location of build out target dir'}]
+        move_dir_op = ['-m', '--movedir', False,
+                       {'dest': 'move_dir', 'metavar': 'DIRECTORY',
+                        'help': 'the location of build out move dir'}]
         wheel_dir_op = [None, '--wheeldep', False,
                         {'dest': 'wheel_dependency',
                          'default': 'zensols.grsync',
@@ -85,15 +92,19 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                               'meth': 'repo_info',
                               'doc': 'get information on repositories',
                               'opts': [repo_name_op, profile_op]}]},
-                {'name': 'freezethaw',
-                 'executor': lambda params: FreezeThawCli(**params),
+                {'name': 'dist',
+                 'executor': lambda params: DistManagerCli(**params),
                  'actions': [{'name': 'freeze',
                               'doc': 'create a distribution',
                               'opts': [dist_dir_op, wheel_dir_op, profile_op]},
                              {'name': 'thaw',
                               'doc': 'build out a distribution',
                               'opts': [dist_dir_op, target_dir_op,
-                                       profile_op]}]}],
+                                       profile_op]},
+                             {'name': 'move',
+                              'doc': 'move a distribution to another root (easy to delete)',
+                              'opts': [dist_dir_op, target_dir_op,
+                                       move_dir_op, profile_op]}]}],
                'config_option': {'name': 'config',
                                  'expect': False,
                                  'opt': ['-c', '--config', False,
