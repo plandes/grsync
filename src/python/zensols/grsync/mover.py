@@ -13,9 +13,28 @@ logger = logging.getLogger(__name__)
 
 
 class DistributionMover(object):
+    """This class moves thawed files that are defined in a distribution zip.  If
+    the file is not defined in the distribution then it doesn't move it.
+
+    In situations where you've already deleted the distribution zip, you'll
+    have to create a new distribution by freezing what you have.  For this
+    reason it is recommended that you always include the original `grsync.yml`
+    configuration file in your distribution so it *migrates* along with each of
+    your freeze/thaw iterations.
+
+    """
     def __init__(self, dist: Distribution, target_dir=None,
                  destination_dir: Path = None,
                  force_repo=False, force_dirs=False, dry_run=False):
+        """Initialize.
+
+        :param dist: the distrbution that represent the distribution zip
+        :param target_dir: the directory with the thawed files
+        :param destination_dir: where the thawed files/repos will be moved
+        :param force_repo: if ``True`` move repositories even if they're dirty
+        :param force_dirs: if ``True`` move directories even if they're not empty
+        :param dry_run: don't actually do anything, but log like we are
+        """
         self.dist = dist
         self.target_dir = target_dir
         if destination_dir is None:
@@ -61,12 +80,13 @@ class DistributionMover(object):
                 yield (src, dst.absolute())
 
     def move(self):
+        "Move the files over."
         if self.destination_dir.exists():
             m = f'destination directory already exists: {self.destination_dir}'
             raise ValueError(m)
         logger.info(f'moving installed distribution to {self.destination_dir}')
         for src, dst in self._get_moves():
-            logger.info(f'{src} => {dst}')
+            logger.info(f'move {src} -> {dst}')
             if not self.dry_run:
                 if src.exists() or src.is_symlink():
                     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -75,6 +95,7 @@ class DistributionMover(object):
                     logger.warning(f'no longer exists: {src}')
 
     def dir_reduce(self, parent=None):
+        "Remove empty directories recursively starting at ``parent``."
         if parent is None:
             parent = self.target_dir
         for child in parent.iterdir():

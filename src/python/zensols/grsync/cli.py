@@ -32,9 +32,11 @@ class InfoCli(object):
 
 class DistManagerCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
-                 move_dir=None, wheel_dependency='zensols.grsync', profiles=None):
+                 move_dir=None, wheel_dependency='zensols.grsync',
+                 profiles=None, dry_run=None):
         self.move_dir = move_dir
-        self.dm = DistManager(config, dist_dir, target_dir, profiles=profiles)
+        self.dm = DistManager(config, dist_dir, target_dir,
+                              profiles=profiles, dry_run=dry_run)
         self.wheel_dependency = wheel_dependency
 
     def freeze(self):
@@ -80,6 +82,10 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         profile_op = ['-p', '--profiles', False,
                       {'metavar': 'STRING',
                        'help': 'comma spearated list of profiles in config'}]
+        dry_run_op = ['-d', '--dryrun', False,
+                      {'dest': 'dry_run',
+                       'action': 'store_true', 'default': False,
+                       'help': 'dry run to not actually connect, but act like it'}]
         cnf = {'executors':
                [{'name': 'info',
                  'executor': lambda params: InfoCli(**params),
@@ -100,11 +106,11 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                              {'name': 'thaw',
                               'doc': 'build out a distribution',
                               'opts': [dist_dir_op, target_dir_op,
-                                       profile_op]},
+                                       profile_op, dry_run_op]},
                              {'name': 'move',
                               'doc': 'move a distribution to another root (easy to delete)',
                               'opts': [dist_dir_op, target_dir_op,
-                                       move_dir_op, profile_op]}]}],
+                                       move_dir_op, profile_op, dry_run_op]}]}],
                'config_option': {'name': 'config',
                                  'expect': False,
                                  'opt': ['-c', '--config', False,
@@ -131,10 +137,6 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         else:
             fmt = '%(levelname)s:%(asctime)-15s %(name)s: %(message)s'
         logging.basicConfig(format=fmt, level=levelno)
-        # for i in 'freeze thaw mover distmng'.split():
-        #     lgr = logging.getLogger(f'zensols.grsync.{i}')
-        #     if lgr.level < logging.INFO:
-        #         lgr.setLevel(logging.INFO)
 
 
 def main():

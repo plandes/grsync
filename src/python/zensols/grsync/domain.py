@@ -80,6 +80,9 @@ class SymbolicLink(object):
 
 
 class FileEntry(object):
+    """Represents a file based entry in the frozen version of the distribution zip.
+
+    """
     def __init__(self, dist, finfo: dict):
         self.dist = dist
         self.finfo = finfo
@@ -93,21 +96,25 @@ class FileEntry(object):
     @property
     @persisted('_rel')
     def relative(self):
+        "Return the relative path of the file."""
         return Path(self._str_to_path(self.finfo['rel']))
 
     @property
     @persisted('_path')
     def path(self):
+        "Return the absolute path of the file."""
         return self._target_relative(self.relative)
 
     @property
     @persisted('_mode')
     def mode(self):
+        "Return the numeric mode of the file"
         return self.finfo['mode']
 
     @property
     @persisted('_modestr')
     def modestr(self):
+        "Return a human readable string of the mode of the file."
         return self.finfo['modestr']
 
     def __str__(self):
@@ -118,6 +125,9 @@ class FileEntry(object):
 
 
 class LinkEntry(FileEntry):
+    """Represents a symbolic link in the frozen version of the distribution zip.
+
+    """
     def __init__(self, dist, finfo: dict, target_dir=None):
         super(LinkEntry, self).__init__(dist, finfo)
         self.target_dir = target_dir

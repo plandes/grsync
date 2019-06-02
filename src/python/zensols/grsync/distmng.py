@@ -97,17 +97,27 @@ class DistManager(object):
             specs[name].write()
 
     def freeze(self, wheel_dependency=None):
+        """Freeze the current configuration and file set to the distribution zip.
+
+        """
         fmng = FreezeManager(
             self.config, self.dist_file, self.defs_file, self.discoverer)
         fmng.freeze(wheel_dependency)
 
     def thaw(self):
+        """Expand the distribution zip on to the file system.
+
+        """
         tmng = ThawManager(
             self.distribution, self.defs_file,
             self.path_translator, self.dry_run)
         tmng.thaw()
 
     def move(self, destination_path, dir_reduce=True):
+        """Move a thawed file set to ``destination_path``.  If ``dir_reduce`` is
+        ``True`` then recursively remove directories.
+
+        """
         if destination_path is not None:
             destination_path = Path(destination_path).expanduser().absolute()
         mv = DistributionMover(

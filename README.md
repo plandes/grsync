@@ -27,6 +27,7 @@ A future release will also synchronize and manage multiple GitHub repositories.
 - [Overview](#overview)
 - [Usage](#usage)
     - [Repository Information](#repository-information)
+    - [Moving/Deleting Distributions](#movingdeleting-distributions)
     - [Command Line Help](#command-line-help)
 - [Configuration](#configuration)
     - [Variable Substitution](#variable-substitution)
@@ -113,10 +114,29 @@ environment and then invokes the program to *thaw* the distributing.
 
 ### Repository Information
 
-As you build your `grsync.yml` configuration file, it's helpful to see what
-repositories it's finding.  This is you can do this with the `repos` and
-`repoinfo`, which show repositories, remotes, and indexed symbol links to or
-within the repositories.
+As you build your `grsync.yml` [configuration file] (see the
+[configuration](#configuration section)), it's helpful to see what repositories
+it's finding.  This is you can do this with the `repos` and `repoinfo`, which
+show repositories, remotes, and indexed symbol links to or within the
+repositories.
+
+
+### Moving/Deleting Distributions
+
+A common usecase is migrate a distribution several times to a target host after
+the original host has changed.  However, the thaw process does not clobber file
+system objects that already exist, which implies that for each file set change
+and thaw the target host's files won't update.
+
+This use case is covered by moving thawed files that are defined in a
+distribution zip.  If the file is not defined in the distribution then it
+doesn't move it.
+
+In situations where you've already deleted the distribution zip, you'll have to
+create a new distribution by freezing what you have.  For this reason it is
+recommended that you always include the original `grsync.yml` [configuration
+file] (see the [configuration](#configuration section)) in your distribution
+so it *migrates* along with each of your freeze/thaw iterations.
 
 
 ### Command Line Help
@@ -261,7 +281,8 @@ special `nodefault` keyword.
 
 See the [test case yaml file](test-resources/midsize-test.yml) for an example
 of a simple configuration file to capture a set of git repositories and small
-set of files.  Profiles are
+set of files.  The freeze/thaw/move test case uses [this configuration
+file](test-resources/fs-test.yml), which is more comprehensive and up to date.
 
 
 ## Symbolic Links
