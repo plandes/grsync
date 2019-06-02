@@ -1,9 +1,6 @@
 import logging
-import itertools as it
-import re
 import json
 import zipfile
-import shutil
 from pathlib import Path
 from zensols.actioncli import YamlConfig, persisted
 from zensols.grsync import (
@@ -11,91 +8,11 @@ from zensols.grsync import (
     Distribution,
     FreezeManager,
     ThawManager,
-    RepoSpec,
-    FileEntry,
-    FrozenRepo,
     PathTranslator,
+    DistributionMover,
 )
 
 logger = logging.getLogger(__name__)
-
-
-class DistributionMover(object):
-    def __init__(self, dist: Distribution, target_dir=None,
-                 destination_dir: Path = None,
-                 force_repo=False, force_dirs=False, dry_run=False):
-        self.dist = dist
-        self.target_dir = target_dir
-        if destination_dir is None:
-            destination_dir = Path('old_dist').absolute()
-        self.destination_dir = destination_dir
-        self.force_repo = force_repo
-        self.force_dirs = force_dirs
-        self.dry_run = dry_run
-
-    def _get_paths(self):
-        dist = self.dist
-        objs = (dist.links, dist.repos, dist.files, dist.empty_dirs)
-        paths = it.chain(map(lambda x: (x.path, x), it.chain(*objs)),
-                         map(lambda l: (l.path, l),
-                             it.chain(*map(lambda r: r.links, dist.repos))))
-        return sorted(paths, key=lambda x: len(x[0].parts), reverse=True)
-
-    def _dir_empty(self, path):
-        return sum(map(lambda x: 1, path.iterdir())) == 0
-
-    def _get_moves(self):
-        for src, obj in self._get_paths():
-            if not src.exists() and not src.is_symlink():
-                logger.warning(f'no longer exists: {src}')
-            else:
-                if isinstance(obj, FrozenRepo):
-                    if obj.repo_spec.repo.is_dirty():
-                        name = obj.repo_spec.format(RepoSpec.SHORT_FORMAT)
-                        if self.force_repo:
-                            logger.warning(f'repo is dirty: {name}; moving anyway')
-                        else:
-                            logger.warning(f'repo is dirty: {name}--skipping')
-                            continue
-                elif isinstance(obj, FileEntry) and src.is_dir() and not src.is_symlink():
-                    if not self._dir_empty(src):
-                        if self.force_dirs:
-                            logger.warning(f'directory not empty: {src}; ' +
-                                           'moving anyway')
-                        else:
-                            logger.warning(f'directory not empty: {src}--skipping')
-                            continue
-                dst = self.destination_dir / src.relative_to(self.target_dir)
-                yield (src, dst.absolute())
-
-    def move(self):
-        if self.destination_dir.exists():
-            m = f'destination directory already exists: {self.destination_dir}'
-            raise ValueError(m)
-        logger.info(f'moving installed distribution to {self.destination_dir}')
-        for src, dst in self._get_moves():
-            logger.info(f'{src} => {dst}')
-            if not self.dry_run:
-                if src.exists() or src.is_symlink():
-                    dst.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.move(str(src), str(dst))
-                else:
-                    logger.warning(f'no longer exists: {src}')
-
-    def dir_reduce(self, parent=None):
-        if parent is None:
-            parent = self.target_dir
-        for child in parent.iterdir():
-            logger.debug(f'descending: {child}')
-            if child.is_dir() and not child.is_symlink():
-                self.dir_reduce(child)
-        if parent != self.target_dir and parent.is_dir():
-            if self._dir_empty(parent):
-                logger.info(f'deleting empty directory: {parent}')
-                if not self.dry_run:
-                    parent.rmdir()
-            else:
-                logger.info(f'skipping non-empty directory delete: {parent}')
 
 
 class DistManager(object):

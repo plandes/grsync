@@ -5,5 +5,6 @@ from zensols.grsync.bootstrap import *
 from zensols.grsync.distribution import *
 from zensols.grsync.freeze import *
 from zensols.grsync.thaw import *
+from zensols.grsync.mover import *
 from zensols.grsync.distmng import *
 from zensols.grsync.cli import *

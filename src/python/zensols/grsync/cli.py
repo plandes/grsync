@@ -131,6 +131,10 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         else:
             fmt = '%(levelname)s:%(asctime)-15s %(name)s: %(message)s'
         logging.basicConfig(format=fmt, level=levelno)
+        # for i in 'freeze thaw mover distmng'.split():
+        #     lgr = logging.getLogger(f'zensols.grsync.{i}')
+        #     if lgr.level < logging.INFO:
+        #         lgr.setLevel(logging.INFO)
 
 
 def main():

@@ -10,7 +10,7 @@ from zensols.grsync import (
 
 logger = logging.getLogger('zensols.grsync.test_freeze')
 logging.basicConfig(level=logging.INFO)
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
 #logging.getLogger('zensols.grsync.thaw').setLevel(logging.DEBUG)
 
 
