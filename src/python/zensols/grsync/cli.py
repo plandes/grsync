@@ -16,18 +16,16 @@ class InfoCli(object):
         else:
             self.repo_names = repo_names
         self.profiles = profiles
+        self.dm = DistManager(self.config, profiles=self.profiles)
 
     def info(self):
-        dm = DistManager(self.config, profiles=self.profiles)
-        dm.discover_info()
+        self.dm.discover_info()
 
     def repos(self):
-        dm = DistManager(self.config, profiles=self.profiles)
-        dm.print_repos(self.fmt)
+        self.dm.print_repos(self.fmt)
 
     def repo_info(self):
-        dm = DistManager(self.config, profiles=self.profiles)
-        dm.print_repo_info(self.repo_names)
+        self.dm.print_repo_info(self.repo_names)
 
 
 class DistManagerCli(object):
