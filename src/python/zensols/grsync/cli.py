@@ -80,7 +80,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         profile_op = ['-p', '--profiles', False,
                       {'metavar': 'STRING',
                        'help': 'comma spearated list of profiles in config'}]
-        dry_run_op = ['-d', '--dryrun', False,
+        dry_run_op = [None, '--dryrun', False,
                       {'dest': 'dry_run',
                        'action': 'store_true', 'default': False,
                        'help': 'dry run to not actually connect, but act like it'}]
