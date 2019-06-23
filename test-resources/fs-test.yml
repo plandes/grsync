@@ -15,6 +15,9 @@ discover:
     - ^{discover.test_dir}/dir_a
     - ^{discover.test_dir}/symlink_to_repo
     - ^{discover.test_dir}/symlink.txt
+    - ^{discover.test_dir}/no_dst_symlink_to_a_dir
+    - ^{discover.test_dir}/no_dst_symlink_to_a_file.txt
+    - ^{discover.test_dir}/dir_w_symlinks/*
     - ^{discover.test_dir}/file_0.txt
   # profiles configuration, defined on the next line if none given on the
   # command line (or empty for using only the default)

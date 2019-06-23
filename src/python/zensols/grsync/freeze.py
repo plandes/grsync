@@ -218,7 +218,8 @@ class Discoverer(object):
                     # follow links enhancement picks up here
                     logger.debug(f'source {link.source} -> {dst}')
                 else:
-                    logger.warning(f'found link with no persisted target: {link}')
+                    logger.warning(f'hanging link with no target: {link}--' +
+                                   'proceeding anyway')
 
         return {'repo_specs': repo_specs,
                 'empty_dirs': empty_dirs,

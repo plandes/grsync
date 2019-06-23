@@ -52,7 +52,7 @@ delete:
 .PHONY:		testfreezethaw
 testfreezethaw:
 		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_freeze test
-		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_thaw test
+#		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_thaw test
 
 .PHONY:		testmove
 testmove:

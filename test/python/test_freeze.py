@@ -41,6 +41,19 @@ class TestFreezeThaw(unittest.TestCase):
             s_src.symlink_to(Path('.') / 'view' / 'repo_src' / 'README.md')
             s_src = freeze_dir / 'profile_darwin'
             s_src.symlink_to(Path('.') / 'newdir' / 'dir_a')
+            emp_path = freeze_dir / 'dir_s' / 'dir_y'
+            Path(emp_path).mkdir(parents=True)
+            s_src = freeze_dir / 'no_dst_symlink_to_a_dir'
+            s_src.symlink_to(Path('.') / 'dir_s' / 'dir_y')
+            emp_path = freeze_dir / 'dir_x'
+            Path(emp_path).mkdir(parents=True)
+            shutil.copy('README.md', freeze_dir / 'dir_x' / 'no_dst_file.txt')
+            s_src = freeze_dir / 'no_dst_symlink_to_a_file.txt'
+            s_src.symlink_to(Path('.') / 'dir_x' / 'no_dst_file.txt')
+            emp_path = freeze_dir / 'dir_w_symlinks'
+            Path(emp_path).mkdir(parents=True)
+            s_src = freeze_dir / 'dir_w_symlinks' / 'nd_symlink_to_a_file.txt'
+            s_src.symlink_to(Path('.') / 'dir_w_symlinks' / 'no_dst_file.txt')
         self.config = AppConfig(Path('test-resources/fs-test.yml').expanduser())
         self.freeze_dir = freeze_dir
         self.thaw_dir = Path(self.targ_dir / 'thaw')
@@ -70,7 +83,11 @@ class TestFreezeThaw(unittest.TestCase):
                         'modestr': '-rw-r--r--',
                         'rel': 'dir_a/dir_b/file_b.txt'}],
              'links': [{'source': 'profile_{os}', 'target': 'dir_a/dir_b/file_b.txt'},
-                       {'source': 'symlink.txt', 'target': 'dir_a/file_a.txt'}],
+                       {'source': 'symlink.txt', 'target': 'dir_a/file_a.txt'},
+                       {'source': 'no_dst_symlink_to_a_dir', 'target': 'dir_s/dir_y'},
+                       {'source': 'no_dst_symlink_to_a_file.txt', 'target': 'dir_x/no_dst_file.txt'},
+                       {'source': 'dir_w_symlinks/nd_symlink_to_a_file.txt',
+                        'target': 'dir_w_symlinks/dir_w_symlinks/no_dst_file.txt'}],
              'repo_pref': 'github',
              'repo_specs': ({'links': [],
                              'name': 'repo_def',
