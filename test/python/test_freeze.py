@@ -15,6 +15,16 @@ logging.basicConfig(level=logging.INFO)
 #logging.getLogger('zensols.grsync.thaw').setLevel(logging.DEBUG)
 
 
+def rec_sort(x):
+    if isinstance(x, list) or isinstance(x, tuple):
+        x = sorted(list(map(rec_sort, x)))
+    elif isinstance(x, dict):
+        for k, v in x.items():
+            x[k] = rec_sort(v)
+        x = sorted(x.items())
+    return x
+
+
 class TestFreezeThaw(unittest.TestCase):
     def setUp(self):
         self.maxDiff = 10 ** 8
@@ -84,10 +94,10 @@ class TestFreezeThaw(unittest.TestCase):
                         'rel': 'file_0.txt'},
                        {'mode': 33204,
                         'modestr': '-rw-rw-r--',
-                        'rel': 'dir_a/file_a.txt'},
+                        'rel': 'dir_a/dir_b/file_b.txt'},
                        {'mode': 33204,
                         'modestr': '-rw-rw-r--',
-                        'rel': 'dir_a/dir_b/file_b.txt'}],
+                        'rel': 'dir_a/file_a.txt'}],
              'links': [{'source': 'profile_{os}', 'target': 'dir_a/dir_b/file_b.txt'},
                        {'source': 'symlink.txt', 'target': 'dir_a/file_a.txt'},
                        {'source': 'no_dst_symlink_to_a_dir', 'target': 'dir_s/dir_y'},
@@ -108,7 +118,7 @@ class TestFreezeThaw(unittest.TestCase):
                              'remotes': [{'is_master': True,
                                           'name': 'origin',
                                           'url': repo_path}]}),}
-        self.assertEqual(sorted(c.items()), sorted(res.items()))
+        self.assertEqual(rec_sort(c), rec_sort(res))
 
     def _check_dist(self, root, test_link_resolves):
         def fd(path):
