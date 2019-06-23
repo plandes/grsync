@@ -83,7 +83,7 @@ class DistManager(object):
         pprint(self.discoverer.freeze(flatten=True))
 
     def print_repos(self, fmt=None):
-        for repo_spec in self.discoverer.discover()['repo_specs']:
+        for repo_spec in self.discoverer.discover(False)['repo_specs']:
             print(repo_spec.format(fmt=fmt))
 
     def print_repo_info(self, names=None):
