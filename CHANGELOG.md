@@ -6,18 +6,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+
+
+## [0.0.11] - 2019-06-23
+### Added
+- Move/delete thawed distributions allows you to remove an installed thawed
+  distribution.
+- Thaw directory is now configurable and no longer pinned to the user home
+  directory.
+- More tests, much better docs, refactored classes and containing source files.
+
+
 ### Changed
 - Removed hard coded mode on thaw when creating directories.
-### Added
-- Move/delete thawed distributions.
 
 
 ### [0.0.9] - 2019-05-27
 ### Added
 - Method to exclude the default profile.
+
 ### Changed
 - Much more documentation.
-- Skip empty directories during freeze if non-existant.
+- Skip empty directories during freeze if non-existent.
 
 
 ### [0.0.8] - 2019-01-17
@@ -39,7 +49,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.10...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.10
 [0.0.9]: https://github.com/plandes/grsync/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/plandes/grsync/compare/v0.0.7...v0.0.8
