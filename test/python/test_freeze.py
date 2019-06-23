@@ -1,4 +1,5 @@
 import logging
+import os
 import unittest
 from pathlib import Path
 import shutil
@@ -24,16 +25,20 @@ class TestFreezeThaw(unittest.TestCase):
         freeze_dir = Path(self.targ_dir / 'mock')
         if not freeze_dir.exists():
             vpath = freeze_dir / 'view'
-            vpath.mkdir(parents=True)
+            vpath.mkdir(0o755, parents=True)
             rpath = vpath / 'repo_def'
             Repo.clone_from(str(self.repo_path), rpath)
             shutil.copytree(rpath, vpath / 'repo_src')
             emp_path = freeze_dir / 'dir_a' / 'dir_b'
-            Path(emp_path).mkdir(parents=True)
+            Path(emp_path).mkdir(0o755, parents=True)
             shutil.copy('README.md', emp_path / 'file_b.txt')
+            os.chmod(str(emp_path / 'file_b.txt'), 0o664)
             shutil.copy('README.md', freeze_dir / 'file_a.txt')
+            os.chmod(str(freeze_dir / 'file_a.txt'), 0o664)
             shutil.copy('README.md', freeze_dir / 'dir_a' / 'file_a.txt')
+            os.chmod(str(freeze_dir / 'dir_a' / 'file_a.txt'), 0o664)
             shutil.copy('README.md', freeze_dir / 'file_0.txt')
+            os.chmod(str(freeze_dir / 'file_0.txt'), 0o664)
             Path(freeze_dir).joinpath('opt', 'empty_dir').mkdir(0o755, parents=True)
             s_src = freeze_dir / 'symlink.txt'
             s_src.symlink_to(Path('.').joinpath('dir_a', 'file_a.txt'))
@@ -42,16 +47,17 @@ class TestFreezeThaw(unittest.TestCase):
             s_src = freeze_dir / 'profile_darwin'
             s_src.symlink_to(Path('.') / 'newdir' / 'dir_a')
             emp_path = freeze_dir / 'dir_s' / 'dir_y'
-            Path(emp_path).mkdir(parents=True)
+            Path(emp_path).mkdir(0o755, parents=True)
             s_src = freeze_dir / 'no_dst_symlink_to_a_dir'
             s_src.symlink_to(Path('.') / 'dir_s' / 'dir_y')
             emp_path = freeze_dir / 'dir_x'
-            Path(emp_path).mkdir(parents=True)
+            Path(emp_path).mkdir(0o755, parents=True)
             shutil.copy('README.md', freeze_dir / 'dir_x' / 'no_dst_file.txt')
+            os.chmod(str(freeze_dir / 'dir_x' / 'no_dst_file.txt'), 0o664)
             s_src = freeze_dir / 'no_dst_symlink_to_a_file.txt'
             s_src.symlink_to(Path('.') / 'dir_x' / 'no_dst_file.txt')
             emp_path = freeze_dir / 'dir_w_symlinks'
-            Path(emp_path).mkdir(parents=True)
+            Path(emp_path).mkdir(0o755, parents=True)
             s_src = freeze_dir / 'dir_w_symlinks' / 'nd_symlink_to_a_file.txt'
             s_src.symlink_to(Path('.') / 'dir_w_symlinks' / 'no_dst_file.txt')
         self.config = AppConfig(Path('test-resources/fs-test.yml').expanduser())
@@ -73,14 +79,14 @@ class TestFreezeThaw(unittest.TestCase):
         for n in 'create_date source'.split():
             del res[n]
         c = {'empty_dirs': [{'mode': 16877, 'modestr': 'drwxr-xr-x', 'rel': 'opt/empty_dir'}],
-             'files': [{'mode': 33188,
-                        'modestr': '-rw-r--r--',
+             'files': [{'mode': 33204,
+                        'modestr': '-rw-rw-r--',
                         'rel': 'file_0.txt'},
-                       {'mode': 33188,
-                        'modestr': '-rw-r--r--',
+                       {'mode': 33204,
+                        'modestr': '-rw-rw-r--',
                         'rel': 'dir_a/file_a.txt'},
-                       {'mode': 33188,
-                        'modestr': '-rw-r--r--',
+                       {'mode': 33204,
+                        'modestr': '-rw-rw-r--',
                         'rel': 'dir_a/dir_b/file_b.txt'}],
              'links': [{'source': 'profile_{os}', 'target': 'dir_a/dir_b/file_b.txt'},
                        {'source': 'symlink.txt', 'target': 'dir_a/file_a.txt'},
