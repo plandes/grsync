@@ -29,7 +29,12 @@ class TestFreezeThaw(unittest.TestCase):
     def setUp(self):
         self.maxDiff = 10 ** 8
         logger.info('setting up')
+
         self.targ_dir = Path('target')
+        if self.targ_dir.exists():
+            shutil.rmtree(str(self.targ_dir.absolute()))
+            self.targ_dir.mkdir(parents=True)
+
         self.repo_path = Path('.').absolute()
         self.move_path = Path(self.targ_dir / 'move')
         freeze_dir = Path(self.targ_dir / 'mock')
