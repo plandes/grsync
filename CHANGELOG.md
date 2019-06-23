@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.12] - 2019-06-23
+### Changed
+- CLI conflicting short option bug.
+
+
 ## [0.0.11] - 2019-06-23
 ### Added
 - Move/delete thawed distributions allows you to remove an installed thawed
@@ -49,7 +54,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.11...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.12...HEAD
+[0.0.12]: https://github.com/plandes/grsync/compare/v0.0.11...v0.0.12
 [0.0.11]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.10
 [0.0.9]: https://github.com/plandes/grsync/compare/v0.0.8...v0.0.9
