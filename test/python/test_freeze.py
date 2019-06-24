@@ -93,6 +93,9 @@ class TestFreezeThaw(unittest.TestCase):
         repo_path = str(self.repo_path)
         for n in 'create_date source'.split():
             del res[n]
+        for rs in res['repo_specs']:
+            for r in rs['remotes']:
+                r['is_master'] = True
         c = {'empty_dirs': [{'mode': 16877, 'modestr': 'drwxr-xr-x', 'rel': 'opt/empty_dir'}],
              'files': [{'mode': 33204,
                         'modestr': '-rw-rw-r--',
