@@ -76,8 +76,12 @@ class ThawManager(object):
                     parent.mkdir(parents=True, exist_ok=True)
             try:
                 if not self.dry_run:
-                    thawed = repo.thaw()
-                    logger.debug(f'thawed: {thawed}')
+                    try:
+                        thawed = repo.thaw()
+                        logger.debug(f'thawed: {thawed}')
+                    except Exception as e:
+                        # robust
+                        logger.error(f'could not thaw {repo}: {e}')
             except GitCommandError as err:
                 logger.warning(f'couldn\'t create repo {repo_path}--skippping: {err}')
 

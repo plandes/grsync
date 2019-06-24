@@ -68,6 +68,8 @@ class Discoverer(object):
     @property
     @persisted('_profiles')
     def profiles(self):
+        if self.config is None:
+            raise ValueError('no configuration given; use the --help option')
         return self.config.get_profiles(self.profiles_override)
 
     def get_discoverable_objects(self):
@@ -76,8 +78,7 @@ class Discoverer(object):
 
         """
         paths = []
-        logger.info(f'finding objects to perist for ' +
-                    f'profiles: {", ".join(self.profiles)}')
+        logger.info(f'finding objects to perist for {self.config}')
         for fname in self.config.get_discoverable_objects(self.profiles):
             path = Path(fname).expanduser().absolute()
             logger.debug(f'file pattern {fname} -> {path}')

@@ -81,9 +81,9 @@ class DistributionMover(object):
 
     def move(self):
         "Move the files over."
-        if self.destination_dir.exists():
-            m = f'destination directory already exists: {self.destination_dir}'
-            raise ValueError(m)
+        # if self.destination_dir.exists():
+        #     m = f'destination directory already exists: {self.destination_dir}'
+        #     raise ValueError(m)
         logger.info(f'moving installed distribution to {self.destination_dir}')
         for src, dst in self._get_moves():
             logger.info(f'move {src} -> {dst}')
@@ -96,16 +96,20 @@ class DistributionMover(object):
 
     def dir_reduce(self, parent=None):
         "Remove empty directories recursively starting at ``parent``."
-        if parent is None:
-            parent = self.target_dir
-        for child in parent.iterdir():
-            logger.debug(f'descending: {child}')
-            if child.is_dir() and not child.is_symlink():
-                self.dir_reduce(child)
-        if parent != self.target_dir and parent.is_dir():
-            if self._dir_empty(parent):
-                logger.info(f'deleting empty directory: {parent}')
-                if not self.dry_run:
-                    parent.rmdir()
-            else:
-                logger.info(f'skipping non-empty directory delete: {parent}')
+        try:
+            if parent is None:
+                parent = self.target_dir
+            for child in parent.iterdir():
+                logger.debug(f'descending: {child}')
+                if child.is_dir() and not child.is_symlink():
+                    self.dir_reduce(child)
+            if parent != self.target_dir and parent.is_dir():
+                if self._dir_empty(parent):
+                    logger.info(f'deleting empty directory: {parent}')
+                    if not self.dry_run:
+                        parent.rmdir()
+                else:
+                    logger.info(f'skipping non-empty directory delete: {parent}')
+        except Exception as e:
+            # be robust
+            logger.error(f"couldn't delete {parent}: {e}")
