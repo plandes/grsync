@@ -81,9 +81,6 @@ class DistributionMover(object):
 
     def move(self):
         "Move the files over."
-        # if self.destination_dir.exists():
-        #     m = f'destination directory already exists: {self.destination_dir}'
-        #     raise ValueError(m)
         logger.info(f'moving installed distribution to {self.destination_dir}')
         for src, dst in self._get_moves():
             logger.info(f'move {src} -> {dst}')

@@ -31,11 +31,12 @@ class InfoCli(object):
 class DistManagerCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
                  move_dir=None, wheel_dependency='zensols.grsync',
-                 profiles=None, dry_run=None):
+                 profiles=None, dry_run=None, dir_reduce=False):
         self.move_dir = move_dir
         self.dm = DistManager(config, dist_dir, target_dir,
                               profiles=profiles, dry_run=dry_run)
         self.wheel_dependency = wheel_dependency
+        self.dir_reduce = dir_reduce
 
     def freeze(self):
         self.dm.freeze(self.wheel_dependency)
@@ -44,7 +45,7 @@ class DistManagerCli(object):
         self.dm.thaw()
 
     def move(self):
-        self.dm.move(self.move_dir)
+        self.dm.move(self.move_dir, self.dir_reduce)
 
 
 class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
@@ -84,6 +85,10 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                       {'dest': 'dry_run',
                        'action': 'store_true', 'default': False,
                        'help': 'dry run to not actually connect, but act like it'}]
+        dir_reduce_op = [None, '--reduce', False,
+                         {'dest': 'dir_reduce',
+                          'action': 'store_true', 'default': False,
+                          'help': 'remove empty directories'}]
         cnf = {'executors':
                [{'name': 'info',
                  'executor': lambda params: InfoCli(**params),
@@ -108,7 +113,8 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                              {'name': 'move',
                               'doc': 'move a distribution to another root (easy to delete)',
                               'opts': [dist_dir_op, target_dir_op,
-                                       move_dir_op, profile_op, dry_run_op]}]}],
+                                       move_dir_op, profile_op, dir_reduce_op,
+                                       dry_run_op]}]}],
                'config_option': {'name': 'config',
                                  'expect': False,
                                  'opt': ['-c', '--config', False,

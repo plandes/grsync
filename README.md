@@ -27,7 +27,7 @@ A future release will also synchronize and manage multiple GitHub repositories.
 - [Overview](#overview)
 - [Usage](#usage)
     - [Repository Information](#repository-information)
-    - [Moving/Deleting Distributions](#movingdeleting-distributions)
+    - [Moving or Deleting Distributions](#moving-or-deleting-distributions)
     - [Command Line Help](#command-line-help)
 - [Configuration](#configuration)
     - [Variable Substitution](#variable-substitution)
@@ -121,22 +121,29 @@ show repositories, remotes, and indexed symbol links to or within the
 repositories.
 
 
-### Moving/Deleting Distributions
+### Moving or Deleting Distributions
 
 A common usecase is migrate a distribution several times to a target host after
 the original host has changed.  However, the thaw process does not clobber file
 system objects that already exist, which implies that for each file set change
 and thaw the target host's files won't update.
 
-This use case is covered by moving thawed files that are defined in a
-distribution zip.  If the file is not defined in the distribution then it
-doesn't move it.
+Only files specified in the [configuration file] are moved to a directory with
+the same directory structure by moving files.  If a directory is specified, the
+directory itself is moved.  If a file is specified for which there is no
+directory in the target, the directory is created.
 
-In situations where you've already deleted the distribution zip, you'll have to
-create a new distribution by freezing what you have.  For this reason it is
-recommended that you always include the original `grsync.yml` [configuration
-file] (see the [configuration](#configuration section)) in your distribution
-so it *migrates* along with each of your freeze/thaw iterations.
+After everything is moved, a process called *directory reduction* occurs by
+which empty directories are removed.  This is an optional step given to the
+`move` action.
+
+Because the action works with a distribution file (ideally the original) you
+must specify where to find the `dist.zip`.  In situations where you've already
+deleted the original distribution zip, you'll have to create a new distribution
+by freezing what you have.  For this reason it is recommended that you always
+include the original `grsync.yml` [configuration file] (see the
+[configuration](#configuration section)) in your distribution so it *migrates*
+along with each of your freeze/thaw iterations.
 
 
 ### Command Line Help
@@ -315,7 +322,7 @@ An extensive changelog is available [here](CHANGELOG.md).
 
 ## License
 
-Copyright (c) 2018 Paul Landes
+Copyright (c) 2018-2019 Paul Landes
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
