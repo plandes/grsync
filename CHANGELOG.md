@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.13] - 2019-06-24
+### Added
+- Reduce directory on move option for the CLI.
+
+### Changed
+- Protection around file system operations on thaw for robustness.
+
+
 ## [0.0.12] - 2019-06-23
 ### Changed
 - CLI conflicting short option bug.
@@ -20,7 +28,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Thaw directory is now configurable and no longer pinned to the user home
   directory.
 - More tests, much better docs, refactored classes and containing source files.
-
 
 ### Changed
 - Removed hard coded mode on thaw when creating directories.
@@ -54,7 +61,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.12...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.13...HEAD
+[0.0.13]: https://github.com/plandes/grsync/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/plandes/grsync/compare/v0.0.11...v0.0.12
 [0.0.11]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.10
