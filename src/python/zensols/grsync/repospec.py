@@ -184,6 +184,10 @@ class FrozenRepo(object):
             if link.source.exists():
                 logger.warning(f'refusing to overwrite link: {link.source}')
             else:
+                par = link.source.parent
+                if not par.exists():
+                    logger.info('creating link directory: {par}')
+                    par.mkdir(parents=True)
                 link.source.symlink_to(link.target)
         repo_spec.links = self.links
         return repo_spec

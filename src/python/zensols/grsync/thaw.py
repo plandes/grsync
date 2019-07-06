@@ -1,5 +1,5 @@
 import logging
-import json
+import traceback
 import zipfile
 import shutil
 from git.exc import GitCommandError
@@ -81,6 +81,7 @@ class ThawManager(object):
                         logger.debug(f'thawed: {thawed}')
                     except Exception as e:
                         # robust
+                        traceback.print_exc()
                         logger.error(f'could not thaw {repo}: {e}')
             except GitCommandError as err:
                 logger.warning(f'couldn\'t create repo {repo_path}--skippping: {err}')
@@ -98,6 +99,10 @@ class ThawManager(object):
             else:
                 logger.info(f'linking: {link}')
                 if not self.dry_run:
+                    par = link.source.parent
+                    if not par.exists():
+                        logger.info(f'creating link directory: {par}')
+                        par.mkdir(parents=True)
                     link.source.symlink_to(link.target)
 
     def thaw(self):
@@ -108,7 +113,7 @@ class ThawManager(object):
         """
         logger.info(f'expanding distribution in {self.dist.path}')
         with zipfile.ZipFile(str(self.dist.path.resolve())) as zf:
-            self._thaw_files(zf)
-            self._thaw_repos()
             self._thaw_empty_dirs()
+            self._thaw_repos()
+            self._thaw_files(zf)
             self._thaw_pattern_links()

@@ -61,7 +61,13 @@ class DistributionMover(object):
                 logger.warning(f'no longer exists: {src}')
             else:
                 if isinstance(obj, FrozenRepo):
-                    if obj.repo_spec.repo.is_dirty():
+                    try:
+                        grepo = obj.repo_spec.repo
+                    except Exception as e:
+                        # git.exc.InvalidGitRepositoryError
+                        logger.error(f'invalid repository: {obj}--skipping')
+                        continue
+                    if grepo.is_dirty():
                         name = obj.repo_spec.format(RepoSpec.SHORT_FORMAT)
                         if self.force_repo:
                             logger.warning(f'repo is dirty: {name}; moving anyway')
