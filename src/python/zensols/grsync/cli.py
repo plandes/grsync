@@ -84,7 +84,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         dry_run_op = [None, '--dryrun', False,
                       {'dest': 'dry_run',
                        'action': 'store_true', 'default': False,
-                       'help': 'dry run to not actually connect, but act like it'}]
+                       'help': 'do not do anything, just act like it'}]
         dir_reduce_op = [None, '--reduce', False,
                          {'dest': 'dir_reduce',
                           'action': 'store_true', 'default': False,
@@ -141,6 +141,9 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         else:
             fmt = '%(levelname)s:%(asctime)-15s %(name)s: %(message)s'
         logging.basicConfig(format=fmt, level=levelno)
+
+    def _init_executor(self, executor, config, args):
+        executor.dm.app_version = self.version
 
 
 def main():

@@ -91,7 +91,7 @@ class FileEntry(object):
         return Path(pathstr)
 
     def _target_relative(self, path):
-        return self.dist._target_relative(path)
+        return self.dist.path_translator.expand(path)
 
     @property
     @persisted('_rel')

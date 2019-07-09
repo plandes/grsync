@@ -251,11 +251,12 @@ class Discoverer(object):
 
 
 class FreezeManager(object):
-    def __init__(self, config, dist_file, defs_file, discoverer):
+    def __init__(self, config, dist_file, defs_file, discoverer, app_version):
         self.config = config
         self.dist_file = dist_file
         self.defs_file = defs_file
         self.discoverer = discoverer
+        self.app_version = app_version
 
     def _create_wheels(self, wheel_dependency):
         """Create wheel dependencies on this software so the host doesn't need Internet
@@ -282,6 +283,7 @@ class FreezeManager(object):
         if not dist_dir.exists():
             dist_dir.mkdir(parents=True, exist_ok=True)
         data = self.discoverer.freeze()
+        data['app_version'] = self.app_version
         with zipfile.ZipFile(self.dist_file, mode='w') as zf:
             for finfo in data['files']:
                 fabs = finfo['abs']

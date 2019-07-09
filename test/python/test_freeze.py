@@ -81,9 +81,11 @@ class TestFreezeThaw(unittest.TestCase):
         self.dist_dir = self.targ_dir / 'dist'
         self.freeze_dm = DistManager(
             self.config, target_dir=self.freeze_dir, dist_dir=self.dist_dir)
+        self.freeze_dm.app_version = 'test_run'
         self.thaw_dm = DistManager(
             self.config, target_dir=self.thaw_dir, dist_dir=self.dist_dir,
             dry_run=False)
+        self.thaw_dm.app_version = 'test_run'
 
     def test_freeze(self):
         logging.info('testing freeze')

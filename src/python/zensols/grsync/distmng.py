@@ -59,6 +59,15 @@ class DistManager(object):
         self.dist_file = Path(self.dist_dir, 'dist.zip')
         # resovle path to and from the target directory
         self.path_translator = PathTranslator(self.target_dir)
+        self._app_version = None
+
+    @property
+    def app_version(self):
+        return self._app_version
+
+    @app_version.setter
+    def app_version(self, app_version):
+        self._app_version = app_version
 
     @property
     @persisted('_discoverer')
@@ -67,12 +76,8 @@ class DistManager(object):
 
     @property
     def distribution(self):
-        with zipfile.ZipFile(str(self.dist_file.resolve())) as zf:
-            with zf.open(self.defs_file) as f:
-                jstr = f.read().decode('utf-8')
-                struct = json.loads(jstr)
         return Distribution(
-            self.dist_file, struct, self.target_dir, self.path_translator)
+            self.dist_file, self.defs_file, self.target_dir, self.path_translator)
 
     def discover_info(self):
         """Proviate information about what's found in the user home directory.  This is
@@ -101,7 +106,8 @@ class DistManager(object):
 
         """
         fmng = FreezeManager(
-            self.config, self.dist_file, self.defs_file, self.discoverer)
+            self.config, self.dist_file, self.defs_file, self.discoverer,
+            self.app_version)
         fmng.freeze(wheel_dependency)
 
     def thaw(self):
@@ -110,7 +116,7 @@ class DistManager(object):
         """
         tmng = ThawManager(
             self.distribution, self.defs_file,
-            self.path_translator, self.dry_run)
+            self.path_translator, self.app_version, self.dry_run)
         tmng.thaw()
 
     def move(self, destination_path, dir_reduce=True):

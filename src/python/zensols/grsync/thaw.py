@@ -14,11 +14,22 @@ logger = logging.getLogger(__name__)
 
 class ThawManager(object):
     def __init__(self, dist: Distribution, defs_file: Path,
-                 path_translator: PathTranslator, dry_run=bool):
+                 path_translator: PathTranslator, app_version, dry_run=bool):
         self.dist = dist
         self.defs_file = defs_file
         self.path_translator = path_translator
+        self.app_version = app_version
         self.dry_run = dry_run
+
+    def assert_version(self):
+        logger.info(f'app version: {self.app_version} =? {self.dist.version}')
+        if self.app_version is None:
+            raise ValueError('could not determine the application version')
+        if self.dist.version is None:
+            raise ValueError('distribution has incompatable version')
+        if self.app_version != self.dist.version:
+            raise ValueError('distribution has incompatable version: ' +
+                             self.dist.version)
 
     def _thaw_empty_dirs(self):
         """Create empty directories on the file system.
@@ -112,6 +123,7 @@ class ThawManager(object):
 
         """
         logger.info(f'expanding distribution in {self.dist.path}')
+        self.assert_version()
         with zipfile.ZipFile(str(self.dist.path.resolve())) as zf:
             self._thaw_empty_dirs()
             self._thaw_repos()

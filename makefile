@@ -1,14 +1,15 @@
 ## makefile automates the build and deployment for python projects
 
 PROJ_TYPE=	python
-#ARGS=		-w 2
-#ARGS=		-p osx
-#CONFIG=		test-resources/small-test.yml
-CONFIG=		$(GRSYNCRC)
-
+#CONFIG=		$(GRSYNCRC)
+CONFIG=		test-resources/small-test.yml
 ADD_CLEAN=	dist
 
 include zenbuild/main.mk
+
+.PHONY:		version
+version:
+		make PYTHON_BIN_ARGS='--version' run
 
 .PHONY:		discover
 discover:
