@@ -1,5 +1,6 @@
 import logging
 import traceback
+import os
 import zipfile
 import shutil
 from git.exc import GitCommandError
@@ -62,15 +63,18 @@ class ThawManager(object):
             if path.exists():
                 logger.warning(f'path already exists: {path}')
             else:
-                logger.info(f'{path} ({entry.modestr})')
+                logger.info(f'{path}: mode={entry.modestr}, ' +
+                            f'time={entry.modify_time}')
                 if not self.dry_run:
                     with zf.open(str(entry.relative)) as fin:
                         with open(str(path), 'wb') as fout:
                             shutil.copyfileobj(fin, fout)
                 logger.debug(f'setting mode of {path} to {entry.mode} ' +
-                             f'({entry.modestr})')
+                             f'({entry.modestr}, {entry.modify_time})')
                 if not self.dry_run:
                     path.chmod(entry.mode)
+                    if entry.modify_time is not None:
+                        os.utime(path, (entry.modify_time, entry.modify_time))
 
     def _thaw_repos(self):
         """Thaw repositories in the config, which does a clone and then creates the

@@ -117,6 +117,12 @@ class FileEntry(object):
         "Return a human readable string of the mode of the file."
         return self.finfo['modestr']
 
+    @property
+    @persisted('_modify_time')
+    def modify_time(self):
+        "Return the numeric modify time of the file"
+        return self.finfo['modify_time']
+
     def __str__(self):
         return f'{self.relative} -> {self.path}: {self.mode} ({self.modestr})'
 

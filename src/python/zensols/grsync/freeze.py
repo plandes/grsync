@@ -99,16 +99,20 @@ class Discoverer(object):
         if src.exists():
             mode = src.stat().st_mode
             modestr = stat.filemode(mode)
+            modify_time = os.path.getmtime(src)
+            create_time = os.path.getctime(src)
         elif not robust:
             raise OSError(f'no such file: {src}')
         else:
             logger.warning(f'missing file: {src}--robustly skipping')
-            mode, modestr = None, None
+            mode, modestr, create_time, modify_time = None, None
         # the mode string is used as documentation and currently there is no
         # way to convert from a mode string to an octal mode, which would be
         # nice to allow modification of the dist.json file.
         fobj = {'modestr': modestr,
-                'mode': mode}
+                'mode': mode,
+                'create_time': create_time,
+                'modify_time': modify_time}
         if no_path_obj:
             fobj['rel'] = str(self.path_translator.relative_to(dst))
         else:
