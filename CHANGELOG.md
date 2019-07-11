@@ -8,9 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
-## [0.0.13] - 2019-06-24
+## [0.0.13] - 2019-07-10
 ### Added
 - Reduce directory on move option for the CLI.
+- Version check on distribution.
+- Fix thawing links on non-existent directories (usually repos not yet
+  unfrozen).
+- Refactored path translation.
+- Add restore modification time on files.
+- Added command line option for repository preference which sets master on
+  thaw.
 
 ### Changed
 - Protection around file system operations on thaw for robustness.

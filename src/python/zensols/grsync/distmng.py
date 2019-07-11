@@ -24,7 +24,7 @@ class DistManager(object):
     """
     def __init__(self, config: YamlConfig, dist_dir: Path = None,
                  target_dir: Path = None, profiles: list = None,
-                 dry_run: bool = False):
+                 repo_preference: str = None, dry_run: bool = False):
         """Initialize.
 
         :param config: the app config
@@ -32,6 +32,8 @@ class DistManager(object):
         :param target_dir: the location of the distrbution to freeze or where
                            to exapand (default to the user home)
         :param profiles: the (maven like) profiles that define what to freeze
+        :param repo_preference: the repository to make master on thaw (default
+                                to configuration file)
 
         """
         self.config = config
@@ -49,6 +51,7 @@ class DistManager(object):
         else:
             self.target_dir = Path.home().absolute()
         self.profiles = profiles
+        self.repo_preference = repo_preference
         self.dry_run = dry_run
         # configuration directory in the zip distribution
         self.config_dir = 'conf'
@@ -72,12 +75,15 @@ class DistManager(object):
     @property
     @persisted('_discoverer')
     def discoverer(self):
-        return Discoverer(self.config, self.profiles, self.path_translator)
+        return Discoverer(
+            self.config, self.profiles, self.path_translator,
+            self.repo_preference)
 
     @property
     def distribution(self):
         return Distribution(
-            self.dist_file, self.defs_file, self.target_dir, self.path_translator)
+            self.dist_file, self.defs_file, self.target_dir,
+            self.path_translator)
 
     def discover_info(self):
         """Proviate information about what's found in the user home directory.  This is

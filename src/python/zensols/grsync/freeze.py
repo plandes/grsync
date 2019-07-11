@@ -28,10 +28,11 @@ class Discoverer(object):
 
     """
     def __init__(self, config: AppConfig, profiles: list,
-                 path_translator: PathTranslator):
+                 path_translator: PathTranslator, repo_preference: str):
         self.config = config
         self.profiles_override = profiles
         self.path_translator = path_translator
+        self._repo_preference = repo_preference
 
     def _get_repo_paths(self, paths):
         """Recusively find git repository root directories."""
@@ -231,6 +232,12 @@ class Discoverer(object):
                 'files': files,
                 'links': pattern_links}
 
+    @property
+    def repo_preference(self):
+        """Return the preference for which repo to make primary on thaw
+        """
+        return self._repo_preference or self.config.get_option(self.REPO_PREF)
+
     def freeze(self, flatten=False):
         """Main entry point method that creates an object graph of all the data that
         needs to be saved (freeze) in the user home directory to reconstitute
@@ -245,8 +252,10 @@ class Discoverer(object):
         disc = self.discover(flatten)
         repo_specs = tuple(x.freeze() for x in disc['repo_specs'])
         files = disc['files']
+        logger.info('freezing with git repository preference: ' +
+                    self.repo_preference)
         disc.update({'repo_specs': repo_specs,
-                     'repo_pref': self.config.get_option(self.REPO_PREF),
+                     'repo_pref': self.repo_preference,
                      'files': files,
                      'source': socket.gethostname(),
                      'create_date': datetime.now().isoformat(

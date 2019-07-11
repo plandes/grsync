@@ -130,6 +130,6 @@ class ThawManager(object):
         self.assert_version()
         with zipfile.ZipFile(str(self.dist.path.resolve())) as zf:
             self._thaw_empty_dirs()
-            self._thaw_repos()
             self._thaw_files(zf)
+            self._thaw_repos()
             self._thaw_pattern_links()

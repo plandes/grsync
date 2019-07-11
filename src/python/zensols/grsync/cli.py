@@ -31,10 +31,11 @@ class InfoCli(object):
 class DistManagerCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
                  move_dir=None, wheel_dependency='zensols.grsync',
-                 profiles=None, dry_run=None, dir_reduce=False):
+                 profiles=None, dir_reduce=False, repopref=None, dry_run=None):
         self.move_dir = move_dir
         self.dm = DistManager(config, dist_dir, target_dir,
-                              profiles=profiles, dry_run=dry_run)
+                              profiles=profiles, repo_preference=repopref,
+                              dry_run=dry_run)
         self.wheel_dependency = wheel_dependency
         self.dir_reduce = dir_reduce
 
@@ -81,6 +82,9 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
         profile_op = ['-p', '--profiles', False,
                       {'metavar': 'STRING',
                        'help': 'comma spearated list of profiles in config'}]
+        repopref_op = ['-r', '--repopref', False,
+                       {'metavar': 'STRING',
+                        'help': 'the repository to make primary on thaw'}]
         dry_run_op = [None, '--dryrun', False,
                       {'dest': 'dry_run',
                        'action': 'store_true', 'default': False,
@@ -105,7 +109,8 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                  'executor': lambda params: DistManagerCli(**params),
                  'actions': [{'name': 'freeze',
                               'doc': 'create a distribution',
-                              'opts': [dist_dir_op, wheel_dir_op, profile_op]},
+                              'opts': [dist_dir_op, wheel_dir_op, repopref_op,
+                                       profile_op]},
                              {'name': 'thaw',
                               'doc': 'build out a distribution',
                               'opts': [dist_dir_op, target_dir_op,
