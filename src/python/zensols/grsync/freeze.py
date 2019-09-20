@@ -106,7 +106,7 @@ class Discoverer(object):
             raise OSError(f'no such file: {src}')
         else:
             logger.warning(f'missing file: {src}--robustly skipping')
-            mode, modestr, create_time, modify_time = None, None
+            mode, modestr, create_time, modify_time = None, None, None, None
         # the mode string is used as documentation and currently there is no
         # way to convert from a mode string to an octal mode, which would be
         # nice to allow modification of the dist.json file.
