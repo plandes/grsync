@@ -132,7 +132,7 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
 
     def _config_logging(self, level):
         root = logging.getLogger()
-        map(root.removeHandler, root.handlers[:])
+        tuple(map(root.removeHandler, root.handlers[:]))
         if level == 0:
             levelno = logging.ERROR
         elif level == 1:
