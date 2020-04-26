@@ -1,7 +1,7 @@
 import logging
 import unittest
 from pathlib import Path
-from zensols.actioncli import YamlConfig
+from zensols.config import YamlConfig
 from zensols.grsync import AppConfig
 
 logger = logging.getLogger('zensols.grsync.test_yaml')

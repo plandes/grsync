@@ -1,5 +1,5 @@
 import logging
-from zensols.actioncli import OneConfPerActionOptionsCliEnv
+from zensols.cli import OneConfPerActionOptionsCliEnv
 from zensols.grsync import (
     AppConfig,
     DistManager,

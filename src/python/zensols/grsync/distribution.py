@@ -3,7 +3,7 @@ from pathlib import Path
 import platform
 import zipfile
 import json
-from zensols.actioncli import persisted
+from zensols.persist import persisted
 from zensols.grsync import (
     FrozenRepo,
     FileEntry,

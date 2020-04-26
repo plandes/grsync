@@ -6,7 +6,7 @@ import json
 import zipfile
 from pathlib import Path
 from datetime import datetime
-from zensols.actioncli import persisted
+from zensols.persist import persisted
 from zensols.grsync import (
     RepoSpec,
     SymbolicLink,

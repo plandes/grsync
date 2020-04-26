@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 import itertools as it
 import re
-from zensols.actioncli import YamlConfig
+from zensols.config import YamlConfig
 
 logger = logging.getLogger(__name__)
 

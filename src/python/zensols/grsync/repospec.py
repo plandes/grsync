@@ -2,7 +2,7 @@ import logging
 import sys
 from pathlib import Path
 from git import Repo
-from zensols.actioncli import persisted
+from zensols.persist import persisted
 from zensols.grsync import (
     RemoteSpec,
     PathTranslator

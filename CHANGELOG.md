@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.14] - 2020-04-24
+### Changed
+- Fix run-time freeze bug.
+- Logging configuration fix.
+- Upgrade to [zensols.util] from ``zensols.actioncli``.
+
+
 ## [0.0.13] - 2019-07-10
 ### Added
 - Reduce directory on move option for the CLI.
@@ -68,7 +75,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.13...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/plandes/grsync/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/plandes/grsync/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/plandes/grsync/compare/v0.0.11...v0.0.12
 [0.0.11]: https://github.com/plandes/grsync/compare/v0.0.10...v0.0.11
@@ -77,3 +85,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [0.0.8]: https://github.com/plandes/grsync/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/plandes/grsync/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/plandes/grsync/compare/v0.0.5...v0.0.6
+
+
+<!-- links -->
+[zensols.util]: https://github.com/plandes/util

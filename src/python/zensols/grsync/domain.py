@@ -1,7 +1,7 @@
 import logging
 from git import Remote
 from pathlib import Path
-from zensols.actioncli import persisted
+from zensols.persist import persisted
 
 logger = logging.getLogger(__name__)
 
