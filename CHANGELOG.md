@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix run-time freeze bug.
 - Logging configuration fix.
 - Upgrade to [zensols.util] from ``zensols.actioncli``.
+### Removed
+- Support for Python 3.6.
 
 
 ## [0.0.13] - 2019-07-10

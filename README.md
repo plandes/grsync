@@ -103,7 +103,7 @@ environment and then invokes the program to *thaw* the distributing.
 4. Copy the distribution zip file to the host, for example: `scp -r ./dist
    ~/<somehost>`
 5. Log into that host: `slogin <host>`
-6. Call the bootstrapper: `cd ./dist && ./bootstrap.sh /usr/bin ./dist python3.6`
+6. Call the bootstrapper: `cd ./dist && ./bootstrap.sh /usr/bin ./dist python3.7`
    This attempts to create the Python virtual environment, install the program
    dependencies and *thaw* the distribution.
 
@@ -306,7 +306,7 @@ points to get this integrity.
 
 ## Requirements
 
-* At least [Python 3.6]
+* At least [Python 3.7]
 * A system that supports [PyYAML]
 
 
@@ -350,7 +350,7 @@ SOFTWARE.
 [pypi-link]: https://pypi.python.org/pypi/zensols.grsync
 [pypi-badge]: https://img.shields.io/pypi/v/zensols.grsync.svg
 
-[Python 3.6]: https://www.python.org
+[Python 3.7]: https://www.python.org
 [PyYAML]: https://pyyaml.org
 [test configuration]: test-resources/grsync-test.yml
 
