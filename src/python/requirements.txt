@@ -1,3 +1,3 @@
-zensols.actioncli>=1.0.17
+zensols.util>=1.2.0
 gitpython==2.1.11
 gitdb2==2.0.3
