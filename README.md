@@ -22,7 +22,8 @@ A future release will also synchronize and manage multiple GitHub repositories.
 
 ## Documentation
 
-See the [full documentation](https://plandes.github.io/grsync/index.html).
+See the [full documentation](https://plandes.github.io/grsync/index.html).  The
+[API reference](https://plandes.github.io/grsync/api.html) is also available.
 
 
 ## Obtaining
