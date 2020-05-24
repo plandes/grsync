@@ -1,7 +1,7 @@
 ## makefile automates the build and deployment for python projects
 
 PROJ_TYPE=	python
-#CONFIG=		$(GRSYNCRC)
+PROJ_MODULES=	git python-doc
 CONFIG=		test-resources/small-test.yml
 ADD_CLEAN=	dist
 

@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.15] - 2020-05-24
+### Added
+- Sphinx documentation, which includes API docs.
+- Upgrade to [zensols.util] 1.2.5.
+
+
 ## [0.0.14] - 2020-04-24
 ### Changed
 - Fix run-time freeze bug.
@@ -77,7 +83,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.14...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.15...HEAD
+[0.0.15]: https://github.com/plandes/grsync/compare/v0.0.14...v0.0.15
 [0.0.14]: https://github.com/plandes/grsync/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/plandes/grsync/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/plandes/grsync/compare/v0.0.11...v0.0.12
