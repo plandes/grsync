@@ -97,7 +97,7 @@ class DistManager(object):
             print(repo_spec.format(fmt=fmt))
 
     def print_repo_info(self, names=None):
-        struct = self.discoverer.discover()
+        struct = self.discoverer.discover(flatten=True)
         specs = {x.name: x for x in struct['repo_specs']}
         if names is None:
             names = sorted(specs.keys())
