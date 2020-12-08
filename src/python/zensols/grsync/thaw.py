@@ -43,9 +43,15 @@ class ThawManager(object):
             else:
                 logger.info(f'creating path {path}')
                 if not self.dry_run:
-                    # we store the mode of the directory, but we don't want that to
-                    # apply to all children dirs that might not exist yet
-                    path.mkdir(mode=entry.mode, parents=True, exist_ok=True)
+                    # we store the mode of the directory, but we don't want
+                    # that to apply to all children dirs that might not exist
+                    # yet
+                    if entry.mode is None:
+                        # use the default mode for missing directories during
+                        # the freeze phase
+                        path.mkdir(parents=True, exist_ok=True)
+                    else:
+                        path.mkdir(mode=entry.mode, parents=True, exist_ok=True)
 
     def _thaw_files(self, zf):
         """Thaw files in the distribution by extracting from the zip file ``zf``.  File
