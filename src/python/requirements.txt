@@ -1,3 +1,3 @@
-zensols.util>=1.2.5
+zensols.util>=1.3.0
 gitpython==2.1.11
 gitdb2==2.0.3
