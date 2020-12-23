@@ -7,8 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class PathTranslator(object):
-    """
-    Utility class around helping with paths.
+    """Utility class around helping with paths.
 
     """
     def __init__(self, target_path):
@@ -34,8 +33,8 @@ class SymbolicLink(object):
     def __init__(self, source: Path, path_translator: PathTranslator):
         """Create.
 
-        :param source: The pathlib.Path that points to the symbolic link on the
-        local file system.
+        :param source: the :class:`.Path` that points to the symbolic link on
+                       the local file system.
 
         """
         self.source = source
@@ -44,12 +43,16 @@ class SymbolicLink(object):
 
     @property
     def target(self):
-        """The target (where it point to)."""
+        """The target (where it point to).
+
+        """
         return self.source.resolve()
 
     @property
     def source_relative(self):
-        """The relative location source (to the user's home)."""
+        """The relative location source (to the user's home).
+
+        """
         if not hasattr(self, '_src'):
             self._src = self.path_translator.relative_to(self.source)
         return self._src
@@ -64,11 +67,15 @@ class SymbolicLink(object):
         return self._dst
 
     def increment_use_count(self):
-        """Indicate this symblic link is used (linked) to another target."""
+        """Indicate this symblic link is used (linked) to another target.
+
+        """
         self.use_count += 1
 
     def freeze(self):
-        """Create and return an object graph as a dict of the link."""
+        """Create and return an object graph as a dict of the link.
+
+        """
         return {'source': str(self.source_relative),
                 'target': str(self.target_relative)}
 
@@ -96,31 +103,41 @@ class FileEntry(object):
     @property
     @persisted('_rel')
     def relative(self):
-        "Return the relative path of the file."""
+        """Return the relative path of the file.
+
+        """
         return Path(self._str_to_path(self.finfo['rel']))
 
     @property
     @persisted('_path')
     def path(self):
-        "Return the absolute path of the file."""
+        """Return the absolute path of the file.
+
+        """
         return self._target_relative(self.relative)
 
     @property
     @persisted('_mode')
     def mode(self):
-        "Return the numeric mode of the file"
+        """Return the numeric mode of the file
+
+        """
         return self.finfo['mode']
 
     @property
     @persisted('_modestr')
     def modestr(self):
-        "Return a human readable string of the mode of the file."
+        """Return a human readable string of the mode of the file.
+
+        """
         return self.finfo['modestr']
 
     @property
     @persisted('_modify_time')
     def modify_time(self):
-        "Return the numeric modify time of the file"
+        """Return the numeric modify time of the file
+
+        """
         return self.finfo['modify_time']
 
     def __str__(self):
@@ -168,13 +185,15 @@ class LinkEntry(FileEntry):
 
 class RemoteSpec(object):
     """This class represents a remote for a git repo.
+
     """
     def __init__(self, remote: Remote, is_master=None):
-        """Initialize
+        """Initialize.
 
-        :param remote: The a remote object from the git repo
-        :param is_master: Whether or not the remote is the primary (upstream)
-        remote
+        :param remote: a remote object from the git repo
+
+        :param is_master: whether or not the remote is the primary (upstream)
+                          remote
 
         """
         self.remote = remote
@@ -184,12 +203,14 @@ class RemoteSpec(object):
 
     @property
     def name(self):
-        "Return the remote's name."
+        """Return the remote's name.
+
+        """
         return self.remote.name
 
     def rename(self, name, url=None):
-        """Rename the remote in the git repository itself (along with the class
-        instance).
+        """Rename the remote in the git repository itself, along with the class
+        instance.
 
         """
         remote = self.remote
