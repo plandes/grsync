@@ -1,7 +1,9 @@
 # GRSync: Persist create build out environments
 
-[![Travis CI Build Status][travis-badge]][travis-link]
 [![PyPI][pypi-badge]][pypi-link]
+[![Python 3.7][python37-badge]][python37-link]
+[![Python 3.8][python38-badge]][python38-link]
+[![Build Status][build-badge]][build-link]
 
 This program captures your home directory and synchronize it with another host
 using Git repo metadata, symbolic links and persisted files.
@@ -123,11 +125,17 @@ Copyright (c) 2020 Paul Landes
 
 
 <!-- links -->
-[travis-link]: https://travis-ci.org/plandes/grsync
-[travis-badge]: https://travis-ci.org/plandes/grsync.svg?branch=master
 [pypi]: https://pypi.org/project/zensols.grsync/
 [pypi-link]: https://pypi.python.org/pypi/zensols.grsync
 [pypi-badge]: https://img.shields.io/pypi/v/zensols.grsync.svg
+[python37-badge]: https://img.shields.io/badge/python-3.7-blue.svg
+[python38-badge]: https://img.shields.io/badge/python-3.8-blue.svg
+[python37-link]: https://www.python.org/downloads/release/python-370
+[python38-link]: https://www.python.org/downloads/release/python-380
+[build-badge]: https://github.com/plandes/grsync/workflows/CI/badge.svg
+[build-link]: https://github.com/plandes/grsync/actions
+
+
 
 [Python 3.7]: https://www.python.org
 [PyYAML]: https://pyyaml.org

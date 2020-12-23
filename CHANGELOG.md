@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## Changed
+- Switched from Travis to GitHub workflows.
+- Upgraded [zenbuild] documentation system.
+- Upgrade to [zensols.util] 1.2.5.
+
+
 ## [0.0.15] - 2020-05-24
 ### Added
 - Sphinx documentation, which includes API docs.
@@ -98,3 +104,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 <!-- links -->
 [zensols.util]: https://github.com/plandes/util
+[zenbuild]: https://github.com/plandes/zenbuild
+
