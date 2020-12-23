@@ -72,7 +72,7 @@ class RepoSpec(object):
     def freeze(self):
         return {'name': self.name,
                 'path': str(self.path_translator.relative_to(self.path)),
-                'links': [l.freeze() for l in self.links],
+                'links': [lk.freeze() for lk in self.links],
                 'remotes': [r.freeze() for r in self.remotes]}
 
     def format(self, fmt=None, writer=sys.stdout):
@@ -98,9 +98,9 @@ class RepoSpec(object):
             writer.write(f'    {r.name}: {r.url}\n')
         if len(self.links) > 0:
             writer.write('  links:\n')
-            for l in self.links:
-                source = self.path_translator.to_relative(l.source)
-                target = self.path_translator.to_relative(l.target)
+            for lk in self.links:
+                source = self.path_translator.to_relative(lk.source)
+                target = self.path_translator.to_relative(lk.target)
                 writer.write(f'    {source} -> {target}\n')
         if len(diffs) > 0:
             writer.write('  diffs:\n')
