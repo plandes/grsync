@@ -1,3 +1,4 @@
+from typing import Set
 import logging
 from pathlib import Path
 import itertools as it
@@ -32,6 +33,10 @@ class AppConfig(YamlConfig):
         if opts is None:
             opts = ()
         return opts
+
+    @property
+    def all_profiles(self) -> Set[str]:
+        return set(self._find_profiles.keys())
 
     @staticmethod
     def _split_profiles(profile_str):
