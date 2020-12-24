@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.0.17] - 2020-12-23
+### Changed
+- Added a method to get all profiles from the configuration.
+- Fixed documentation strings.
+
+
 ## [0.0.16] - 2020-12-22
 ## Changed
 - Switched from Travis to GitHub workflows.
@@ -90,7 +96,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.16...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.17...HEAD
+[0.0.17]: https://github.com/plandes/grsync/compare/v0.0.16...v0.0.17
 [0.0.16]: https://github.com/plandes/grsync/compare/v0.0.15...v0.0.16
 [0.0.15]: https://github.com/plandes/grsync/compare/v0.0.14...v0.0.15
 [0.0.14]: https://github.com/plandes/grsync/compare/v0.0.13...v0.0.14
