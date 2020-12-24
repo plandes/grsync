@@ -180,6 +180,7 @@ class Discoverer(object):
 
         # configurated empty directories are added only if they exist so we can
         # recreate with the correct mode
+        logger.info(f'using profiles: {", ".join(self.profiles)}')
         for ed in self.config.get_empty_dirs(self.profiles):
             logger.debug('empty dir: {}'.format(str(ed)))
             empty_dirs.append(self._create_file(
