@@ -9,10 +9,14 @@ from zensols.grsync import (
     DistManager,
 )
 
-logger = logging.getLogger('zensols.grsync.test_freeze')
-logging.basicConfig(level=logging.INFO)
-#logger.setLevel(logging.DEBUG)
-#logging.getLogger('zensols.grsync.thaw').setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+if 1:
+    logging.basicConfig(level=logging.ERROR)
+else:
+    logging.basicConfig(level=logging.INFO)
+    logger.setLevel(logging.DEBUG)
+    logging.getLogger('zensols.grsync.thaw').setLevel(logging.DEBUG)
 
 
 def rec_sort(x):

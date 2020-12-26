@@ -2,7 +2,7 @@
 
 PROJ_TYPE=	python
 PROJ_MODULES=	git python-doc python-doc-deploy
-CONFIG=		test-resources/small-test.yml
+CONFIG=		test-resources/midsize-test.yml
 ADD_CLEAN=	dist
 
 include zenbuild/main.mk
