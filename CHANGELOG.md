@@ -9,8 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.0.17] - 2020-12-23
+### Added
+- Feature to copy a local distribution to somewhere else on the file system.
+
 ### Changed
 - Added a method to get all profiles from the configuration.
+- More documentation and modernization.
 - Fixed documentation strings.
 
 
