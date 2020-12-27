@@ -47,25 +47,33 @@ class Distribution(object):
 
     @classmethod
     def from_struct(cls: type, struct: Dict[str, Any],
-                    target_path: Path) -> Distribution:
+                    target_dir: Path) -> Distribution:
         """Return a distrbution directly from the data structure created from
         :class:`.Discoverer`.
 
         :param struct: the data structure given by :meth:`.Discoverer.freeze`
                        using ``flatten=True``
 
-        :param target_path: where the distribution will be *thawed*
+        :param target_dir: where the distribution will be *thawed*
 
         """
-        self = cls(None, None, None, PathTranslator(target_path))
+        self = cls(None, None, target_dir, PathTranslator(target_dir))
         self._struct = PersistedWork('_struct', self, initial_value=struct)
         return self
 
     @classmethod
     def from_discoverer(cls: type, discoverer: Discoverer,
-                        target_path: Path) -> Distribution:
+                        target_dir: Path) -> Distribution:
+        """Return a distrbution directly from the data structure created from
+        :class:`.Discoverer`.
+
+        :param discoverer: a discoverer instance created by the *freeze* state
+
+        :param target_dir: where the distribution will be *thawed*
+
+        """
         fspec = discoverer.freeze(True)
-        return cls.from_struct(fspec, target_path)
+        return cls.from_struct(fspec, target_dir)
 
     @property
     @persisted('_struct')
