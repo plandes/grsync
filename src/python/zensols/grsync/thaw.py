@@ -8,18 +8,17 @@ import traceback
 import os
 import zipfile
 import shutil
-from git.exc import GitCommandError
 from pathlib import Path
+from git.exc import GitCommandError
 from zensols.grsync import PathTranslator, Distribution
 
 logger = logging.getLogger(__name__)
 
 
 class ThawManager(object):
-    def __init__(self, dist: Distribution, defs_file: Path,
-                 path_translator: PathTranslator, app_version, dry_run=bool):
+    def __init__(self, dist: Distribution, path_translator: PathTranslator,
+                 app_version: str, dry_run: bool = False):
         self.dist = dist
-        self.defs_file = defs_file
         self.path_translator = path_translator
         self.app_version = app_version
         self.dry_run = dry_run
@@ -135,9 +134,40 @@ class ThawManager(object):
 
         """
         logger.info(f'expanding distribution in {self.dist.path}')
-        self.assert_version()
         with zipfile.ZipFile(str(self.dist.path.resolve())) as zf:
             self._thaw_empty_dirs()
             self._thaw_files(zf)
             self._thaw_repos()
             self._thaw_pattern_links()
+
+    def _thaw_files_from_local(self, local_dir: Path):
+        """Thaw files by copying from the local file system.
+
+        """
+        for entry in self.dist.files:
+            path = entry.path
+            parent = path.parent
+            if not parent.exists():
+                logger.info(f'creating parent directory: {parent}')
+                if not self.dry_run:
+                    parent.mkdir(parents=True)
+            logger.debug(f'copying file: {path}')
+            if path.exists():
+                logger.warning(f'path already exists: {path}')
+            else:
+                src = local_dir / entry.relative
+                logger.info(f'{src} -> {path}: mode={entry.modestr}, ' +
+                            f'time={entry.modify_time}')
+                if not self.dry_run:
+                    shutil.copy2(src, path, follow_symlinks=False)
+
+    def thaw_from_in_memory(self, source_dir: Path):
+        """Copy a local distribution to a different directory on the local file system.
+
+        :param source_dir: the distribution directory from where to copy files
+
+        """
+        self._thaw_empty_dirs()
+        self._thaw_files_from_local(source_dir)
+        self._thaw_repos()
+        self._thaw_pattern_links()

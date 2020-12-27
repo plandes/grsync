@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from zensols.cli import OneConfPerActionOptionsCliEnv
 from zensols.grsync import (
     AppConfig,
@@ -32,12 +33,15 @@ class DistManagerCli(object):
     def __init__(self, config=None, dist_dir=None, target_dir=None,
                  move_dir=None, wheel_dependency='zensols.grsync',
                  profiles=None, dir_reduce=False, repopref=None, dry_run=None):
-        self.move_dir = move_dir
         self.dm = DistManager(config, dist_dir, target_dir,
                               profiles=profiles, repo_preference=repopref,
                               dry_run=dry_run)
         self.wheel_dependency = wheel_dependency
         self.dir_reduce = dir_reduce
+        if move_dir is None:
+            self.move_dir = None
+        else:
+            self.move_dir = Path(move_dir).expanduser().absolute()
 
     def freeze(self):
         self.dm.freeze(self.wheel_dependency)
@@ -47,6 +51,9 @@ class DistManagerCli(object):
 
     def move(self):
         self.dm.move(self.move_dir, self.dir_reduce)
+
+    def copy(self):
+        self.dm.copy()
 
 
 class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
@@ -114,6 +121,10 @@ class ConfAppCommandLine(OneConfPerActionOptionsCliEnv):
                              {'name': 'thaw',
                               'doc': 'build out a distribution',
                               'opts': [dist_dir_op, target_dir_op,
+                                       profile_op, dry_run_op]},
+                             {'name': 'copy',
+                              'doc': 'copy a distribution to a local file system',
+                              'opts': [dist_dir_op, repopref_op, target_dir_op,
                                        profile_op, dry_run_op]},
                              {'name': 'move',
                               'doc': 'move a distribution to another root (easy to delete)',

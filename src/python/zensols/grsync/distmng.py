@@ -119,9 +119,8 @@ class DistManager(object):
         """Expand the distribution zip on to the file system.
 
         """
-        tmng = ThawManager(
-            self.distribution, self.defs_file,
-            self.path_translator, self.app_version, self.dry_run)
+        tmng = ThawManager(self.distribution, self.path_translator,
+                           self.app_version, self.dry_run)
         tmng.thaw()
 
     def move(self, destination_path, dir_reduce=True):
@@ -129,14 +128,23 @@ class DistManager(object):
         ``True`` then recursively remove directories.
 
         """
-        if destination_path is not None:
-            destination_path = Path(destination_path).expanduser().absolute()
         mv = DistributionMover(
             self.distribution, self.target_dir,
             destination_path, dry_run=self.dry_run)
         mv.move()
         if dir_reduce:
             mv.dir_reduce()
+
+    def copy(self):
+        """Copy a local distribution to a different directory on the local file
+        system.
+
+        """
+        disc = self.discoverer
+        dist = Distribution.from_discoverer(disc, self.dist_dir)
+        tmng = ThawManager(dist, self.path_translator,
+                           self.app_version, self.dry_run)
+        tmng.thaw_from_in_memory(self.target_dir)
 
     def tmp(self):
         destination_path = Path('target/thaw').absolute()
