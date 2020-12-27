@@ -1,14 +1,23 @@
+from __future__ import annotations
+
+""""Contains the class needed to thaw the distribution.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import Dict, Any, Iterable
 import logging
 from pathlib import Path
 import platform
 import zipfile
 import json
-from zensols.persist import persisted
+from zensols.persist import persisted, PersistedWork
 from zensols.grsync import (
     FrozenRepo,
     FileEntry,
     LinkEntry,
     PathTranslator,
+    Discoverer,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,9 +45,31 @@ class Distribution(object):
         self.path_translator = path_translator
         self.params = {'os': platform.system().lower()}
 
+    @classmethod
+    def from_struct(cls: type, struct: Dict[str, Any],
+                    target_path: Path) -> Distribution:
+        """Return a distrbution directly from the data structure created from
+        :class:`.Discoverer`.
+
+        :param struct: the data structure given by :meth:`.Discoverer.freeze`
+                       using ``flatten=True``
+
+        :param target_path: where the distribution will be *thawed*
+
+        """
+        self = cls(None, None, None, PathTranslator(target_path))
+        self._struct = PersistedWork('_struct', self, initial_value=struct)
+        return self
+
+    @classmethod
+    def from_discoverer(cls: type, discoverer: Discoverer,
+                        target_path: Path) -> Distribution:
+        fspec = discoverer.freeze(True)
+        return cls.from_struct(fspec, target_path)
+
     @property
     @persisted('_struct')
-    def struct(self):
+    def struct(self) -> Dict[str, Any]:
         """Return the JSON deserialized (meta data) of the distribution.
 
         """
@@ -49,7 +80,7 @@ class Distribution(object):
         return struct
 
     @property
-    def version(self):
+    def version(self) -> str:
         """Get the distribution format version, which for now, is just the application
         version.
 
@@ -59,7 +90,7 @@ class Distribution(object):
 
     @property
     @persisted('_files')
-    def files(self) -> list:
+    def files(self) -> Iterable[FileEntry]:
         """Get the files in the distribution.
 
         """
@@ -67,14 +98,14 @@ class Distribution(object):
 
     @property
     @persisted('_empty_dirs')
-    def empty_dirs(self) -> list:
+    def empty_dirs(self) -> Iterable[FileEntry]:
         """Get empty directories defined in the dist configuration.
         """
         return map(lambda fi: FileEntry(self, fi), self.struct['empty_dirs'])
 
     @property
     @persisted('_links')
-    def links(self) -> list:
+    def links(self) -> Iterable[LinkEntry]:
         """Pattern links and symbolic links not pointing to repositories.
 
         """
@@ -82,7 +113,7 @@ class Distribution(object):
 
     @property
     @persisted('_repos')
-    def repos(self) -> list:
+    def repos(self) -> Iterable[FrozenRepo]:
         """Repository specifications.
 
         """
