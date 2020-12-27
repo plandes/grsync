@@ -1,3 +1,10 @@
+"""Includes classes that read the configuration and traverse the file system to
+find matching objects to use to freeze the distribution.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import Dict, Any
 import os
 import stat
 import socket
@@ -19,14 +26,14 @@ logger = logging.getLogger(__name__)
 
 
 class Discoverer(object):
-    CONF_TARG_KEY = 'discover.target.config'
-    TARG_LINKS = 'discover.target.links'
-    REPO_PREF = 'discover.repo.remote_pref'
-
     """Discover git repositories, links, files and directories to save to
     reconstitute a user home directory later.
 
     """
+    CONF_TARG_KEY = 'discover.target.config'
+    TARG_LINKS = 'discover.target.links'
+    REPO_PREF = 'discover.repo.remote_pref'
+
     def __init__(self, config: AppConfig, profiles: list,
                  path_translator: PathTranslator, repo_preference: str):
         self.config = config
@@ -121,7 +128,7 @@ class Discoverer(object):
             fobj['rel'] = self.path_translator.relative_to(dst)
         return fobj
 
-    def discover(self, flatten):
+    def discover(self, flatten) -> Dict[str, Any]:
         """Main worker method to capture all the user home information (git repos,
         files, sym links and empty directories per the configuration file).
 
@@ -236,6 +243,7 @@ class Discoverer(object):
     @property
     def repo_preference(self):
         """Return the preference for which repo to make primary on thaw
+
         """
         return self._repo_preference or self.config.get_option(self.REPO_PREF)
 
@@ -253,8 +261,8 @@ class Discoverer(object):
         disc = self.discover(flatten)
         repo_specs = tuple(x.freeze() for x in disc['repo_specs'])
         files = disc['files']
-        logger.info('freezing with git repository preference: ' +
-                    self.repo_preference)
+        logger.info('freeezing with git repository ' +
+                    f'preference: {self.repo_preference}')
         disc.update({'repo_specs': repo_specs,
                      'repo_pref': self.repo_preference,
                      'files': files,
@@ -265,6 +273,9 @@ class Discoverer(object):
 
 
 class FreezeManager(object):
+    """Invoked by a client to create *frozen* distribution .
+
+    """
     def __init__(self, config, dist_file, defs_file, discoverer, app_version):
         self.config = config
         self.dist_file = dist_file

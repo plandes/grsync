@@ -23,8 +23,12 @@ class Distribution(object):
         """Initialize the distribution instance.
 
         :param path: points to the distribution file itself
-        :param target_dir: points to the directory where we thaw the distribution
+
+        :param target_dir: points to the directory where we thaw the
+                           distribution
+
         :param path_translator: translates relative paths to the thaw directory
+
         """
         self.path = path
         self.defs_file = defs_file

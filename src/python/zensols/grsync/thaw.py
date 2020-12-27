@@ -1,3 +1,8 @@
+"""Contains utility classes used to *thaw* distributions.
+
+"""
+__author__ = 'Paul Landes'
+
 import logging
 import traceback
 import os
@@ -5,10 +10,7 @@ import zipfile
 import shutil
 from git.exc import GitCommandError
 from pathlib import Path
-from zensols.grsync import (
-    PathTranslator,
-    Distribution,
-)
+from zensols.grsync import PathTranslator, Distribution
 
 logger = logging.getLogger(__name__)
 

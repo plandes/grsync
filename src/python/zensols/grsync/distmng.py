@@ -64,16 +64,16 @@ class DistManager(object):
         self._app_version = None
 
     @property
-    def app_version(self):
+    def app_version(self) -> str:
         return self._app_version
 
     @app_version.setter
-    def app_version(self, app_version):
+    def app_version(self, app_version: str):
         self._app_version = app_version
 
     @property
     @persisted('_discoverer')
-    def discoverer(self):
+    def discoverer(self) -> Discoverer:
         return Discoverer(
             self.config, self.profiles, self.path_translator,
             self.repo_preference)

@@ -1,3 +1,9 @@
+"""This module includes repository domain classes.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import List, Dict, Any
 import logging
 import sys
 from pathlib import Path
@@ -29,17 +35,17 @@ class RepoSpec(object):
         self.links = ()
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.path.name
 
     @property
-    def repo(self):
+    def repo(self) -> Repo:
         if self._repo is None:
             self._repo = Repo(str(self.path.resolve()))
         return self._repo
 
     @property
-    def master_remote(self):
+    def master_remote(self) -> str:
         if not hasattr(self, '_master_remote'):
             config = self.repo.config_reader()
             if config.has_section(MASTER_SECTION) and \
@@ -52,7 +58,7 @@ class RepoSpec(object):
         return self._master_remote
 
     @property
-    def remotes(self):
+    def remotes(self) -> List[RemoteSpec]:
         remotes = []
         master_remote = self.master_remote
         for remote in self.repo.remotes:
@@ -69,7 +75,7 @@ class RepoSpec(object):
     def add_linked(self, links):
         self.links = tuple(filter(lambda l: self._is_linked_to(l), links))
 
-    def freeze(self):
+    def freeze(self) -> Dict[str, Any]:
         return {'name': self.name,
                 'path': str(self.path_translator.relative_to(self.path)),
                 'links': [lk.freeze() for lk in self.links],
