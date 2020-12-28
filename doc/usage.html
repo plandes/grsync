@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; GRSync: Persist create build out environments 0.0.17 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../top.html" class="icon icon-home" alt="Documentation Home"> GRSync: Persist create build out environments
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.17
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#repository-information">Repository Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-or-deleting-distributions">Moving or Deleting Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-help">Command Line Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../top.html">GRSync: Persist create build out environments</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../top.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/doc/usage.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>The program has two phases: <em>freeze</em> and <em>thaw</em> (see <a class="reference external" href="#overview">overview</a>).
+The command line program is used twice: first on the <em>freeze</em> on the source
+system and then <em>thaw</em> on the target machine.</p>
+<p>First the distribution is created as a configuration file along with saved
+files in a distribution zip file.  This distribution file is then copied to the
+target machine that is to be configured with the user’s home directory setup.
+The distribution also includes a bootstrap script that creates a Python virtual
+environment and then invokes the program to <em>thaw</em> the distributing.</p>
+<ol class="simple">
+<li><p>Install the <code class="docutils literal notranslate"><span class="pre">grsync</span></code> program (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">zensols.grsync</span></code>).</p></li>
+<li><p>Decide what you want to transfer to the target system (see
+<a class="reference external" href="#configuration">configuration</a>).  This file explains each section of the
+file with inline comments and should be sufficient to munge your own.</p></li>
+<li><p>Create the distribution, for example: <code class="docutils literal notranslate"><span class="pre">grsync</span> <span class="pre">freeze</span> <span class="pre">-c</span> <span class="pre">grsync.yml</span> <span class="pre">-d</span> <span class="pre">./dist</span></code>.</p></li>
+<li><p>Copy the distribution zip file to the host, for example: <code class="docutils literal notranslate"><span class="pre">scp</span> <span class="pre">-r</span> <span class="pre">./dist</span> <span class="pre">~/&lt;somehost&gt;</span></code></p></li>
+<li><p>Log into that host: <code class="docutils literal notranslate"><span class="pre">slogin</span> <span class="pre">&lt;host&gt;</span></code></p></li>
+<li><p>Call the bootstrapper: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">./dist</span> <span class="pre">&amp;&amp;</span> <span class="pre">./bootstrap.sh</span> <span class="pre">/usr/bin</span> <span class="pre">./dist</span> <span class="pre">python3.7</span></code>
+This attempts to create the Python virtual environment, install the program
+dependencies and <em>thaw</em> the distribution.</p></li>
+</ol>
+<p>To do this step manually:</p>
+<ol class="simple">
+<li><p>Install the <code class="docutils literal notranslate"><span class="pre">grsync</span></code> program (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">zensols.grsync</span></code>).</p></li>
+<li><p>Thaw the distribution on the target: <code class="docutils literal notranslate"><span class="pre">grsync</span> <span class="pre">thaw</span> <span class="pre">-d</span> <span class="pre">./dist</span></code></p></li>
+</ol>
+<div class="section" id="repository-information">
+<h2>Repository Information<a class="headerlink" href="#repository-information" title="Permalink to this headline">¶</a></h2>
+<p>As you build your <code class="docutils literal notranslate"><span class="pre">grsync.yml</span></code> [configuration file] (see the
+[configuration](#configuration section)), it’s helpful to see what repositories
+it’s finding.  This is you can do this with the <code class="docutils literal notranslate"><span class="pre">repos</span></code> and <code class="docutils literal notranslate"><span class="pre">repoinfo</span></code>, which
+show repositories, remotes, and indexed symbol links to or within the
+repositories.</p>
+</div>
+<div class="section" id="moving-or-deleting-distributions">
+<h2>Moving or Deleting Distributions<a class="headerlink" href="#moving-or-deleting-distributions" title="Permalink to this headline">¶</a></h2>
+<p>A common usecase is migrate a distribution several times to a target host after
+the original host has changed.  However, the thaw process does not clobber file
+system objects that already exist, which implies that for each file set change
+and thaw the target host’s files won’t update.</p>
+<p>Only files specified in the [configuration file] are moved to a directory with
+the same directory structure by moving files.  If a directory is specified, the
+directory itself is moved.  If a file is specified for which there is no
+directory in the target, the directory is created.</p>
+<p>After everything is moved, a process called <em>directory reduction</em> occurs by
+which empty directories are removed.  This is an optional step given to the
+<code class="docutils literal notranslate"><span class="pre">move</span></code> action.</p>
+<p>Because the action works with a distribution file (ideally the original) you
+must specify where to find the <code class="docutils literal notranslate"><span class="pre">dist.zip</span></code>.  In situations where you’ve already
+deleted the original distribution zip, you’ll have to create a new distribution
+by freezing what you have.  For this reason it is recommended that you always
+include the original <code class="docutils literal notranslate"><span class="pre">grsync.yml</span></code> [configuration file] (see the
+[configuration](#configuration section)) in your distribution so it <em>migrates</em>
+along with each of your freeze/thaw iterations.</p>
+</div>
+<div class="section" id="command-line-help">
+<h2>Command Line Help<a class="headerlink" href="#command-line-help" title="Permalink to this headline">¶</a></h2>
+<p>This information is given by the command line <code class="docutils literal notranslate"><span class="pre">grsync</span> <span class="pre">-h</span></code>, but repeated here
+for convenience:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">Usage</span><span class="p">:</span> <span class="k">usage</span><span class="p">:</span> <span class="n">grsync</span> <span class="o">&lt;</span><span class="n">list</span><span class="o">|</span><span class="k">freeze</span><span class="o">|</span><span class="n">info</span><span class="o">|</span><span class="n">repoinfo</span><span class="o">|</span><span class="n">repos</span><span class="o">|</span><span class="n">thaw</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">options</span><span class="p">]</span>
+
+<span class="k">Options</span><span class="p">:</span>
+<span class="c1">--version             show program&#39;s version number and exit</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="c1">--help            show this help message and exit</span>
+<span class="o">-</span><span class="n">w</span> <span class="nb">NUMBER</span><span class="p">,</span> <span class="c1">--whine=NUMBER</span>
+<span class="k">add</span> <span class="n">verbosity</span> <span class="k">to</span> <span class="n">logging</span>
+<span class="o">-</span><span class="k">c</span> <span class="n">FILE</span><span class="p">,</span> <span class="c1">--config=FILE</span>
+<span class="n">configuration</span> <span class="n">file</span>
+<span class="n">Actions</span><span class="p">:</span>
+<span class="k">freeze</span>    <span class="k">Create</span> <span class="n">a</span> <span class="n">distribution</span>
+<span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="c1">--distdir &lt;string&gt;                    the location of build out distribution</span>
+<span class="c1">--wheeldep &lt;string&gt;       zensols.grsync  used to create the wheel dep files</span>
+<span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="c1">--profiles &lt;string&gt;                   comma spearated list of objects to freeze</span>
+
+<span class="n">info</span>      <span class="n">Pretty</span> <span class="n">print</span> <span class="n">discovery</span> <span class="n">information</span>
+
+<span class="n">repoinfo</span>  <span class="k">Get</span> <span class="n">information</span> <span class="k">on</span> <span class="n">repositories</span>
+<span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="c1">--name &lt;string&gt;                       comma spearated list of repo names</span>
+<span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="c1">--profiles &lt;string&gt;                   comma spearated list of objects to freeze</span>
+
+<span class="n">repos</span>     <span class="k">Output</span> <span class="k">all</span> <span class="n">repository</span> <span class="n">top</span> <span class="k">level</span> <span class="n">info</span>
+<span class="o">-</span><span class="n">f</span><span class="p">,</span> <span class="c1">--format &lt;string&gt;     {path}          format string (i.e. {name}: {path} ({remotes}))</span>
+<span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="c1">--profiles &lt;string&gt;                   comma spearated list of objects to freeze</span>
+
+<span class="n">thaw</span>      <span class="n">Build</span> <span class="k">out</span> <span class="n">a</span> <span class="n">distribution</span>
+<span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="c1">--distdir &lt;string&gt;                    the location of build out distribution</span>
+<span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="c1">--targetdir &lt;string&gt;                  the location of build out target dir</span>
+<span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="c1">--profiles &lt;string&gt;                   comma spearated list of objects to freeze</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

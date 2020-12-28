@@ -1,0 +1,1223 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>zensols.grsync package &mdash; GRSync: Persist create build out environments 0.0.17 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="../CONTRIBUTING.html" />
+    <link rel="prev" title="API Reference" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../top.html" class="icon icon-home" alt="Documentation Home"> GRSync: Persist create build out environments
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.17
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doc/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doc/usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">zensols.grsync package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.bootstrap">zensols.grsync.bootstrap module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.cli">zensols.grsync.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.config">zensols.grsync.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.distmng">zensols.grsync.distmng module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.distribution">zensols.grsync.distribution module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.domain">zensols.grsync.domain module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.freeze">zensols.grsync.freeze module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.mover">zensols.grsync.mover module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.repospec">zensols.grsync.repospec module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync.thaw">zensols.grsync.thaw module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-zensols.grsync">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../top.html">GRSync: Persist create build out environments</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../top.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API Reference</a> &raquo;</li>
+        
+      <li>zensols.grsync package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/zensols.grsync.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zensols-grsync-package">
+<h1>zensols.grsync package<a class="headerlink" href="#zensols-grsync-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-zensols.grsync.bootstrap">
+<span id="zensols-grsync-bootstrap-module"></span><h2>zensols.grsync.bootstrap module<a class="headerlink" href="#module-zensols.grsync.bootstrap" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.bootstrap.BootstrapGenerator">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.bootstrap.</code><code class="sig-name descname">BootstrapGenerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/bootstrap.html#BootstrapGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.bootstrap.BootstrapGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Generate the script that creates the distribution on the target machine.</p>
+<dl class="py attribute">
+<dt id="zensols.grsync.bootstrap.BootstrapGenerator.PARAM_PATH">
+<code class="sig-name descname">PARAM_PATH</code><em class="property"> = 'discover.bootstrap'</em><a class="headerlink" href="#zensols.grsync.bootstrap.BootstrapGenerator.PARAM_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.bootstrap.BootstrapGenerator.SCRIPT">
+<code class="sig-name descname">SCRIPT</code><em class="property"> = '#!/bin/sh\n\nif [ $# -eq 0 ] ; then\n    echo &quot;usage: $0 &lt;python_dir&gt; [grsync dir] [python&lt;version&gt;]&quot;\n    echo &quot;where: python_dir is the bin directory where python is installed&quot;\n    echo &quot;       grsync_dir is the distribution directory copied from the source&quot;\n    echo &quot;       python&lt;version&gt; is the version of python (i.e. python3.6)&quot;\n    exit 1\nfi\nNATIVE_PYTHON_BIN_DIR=$1\n\nif [ $# -ge 2 ]; then\n    echo &quot;setting inst dir: $2&quot;\n    GRSYNC_INST_DIR=$2\nelse\n    GRSYNC_INST_DIR=`pwd`\nfi\n\nif [ $# -ge 3 ]; then\n    echo &quot;setting python ver: $3&quot;\n    PYTHON_VER=$3\nelse\n    PYTHON_VER=$NATIVE_PYTHON_BIN_DIR\nfi\n\nPYTHON_DIR=${HOME}/opt/lib/python3\nPIP=${PYTHON_DIR}/bin/pip\nVIRTUAL_ENV=${NATIVE_PYTHON_BIN_DIR}/virtualenv\nPYTHON_PAR=`dirname $PYTHON_DIR`\nWHEELS_DIR=${GRSYNC_INST_DIR}/%(wheel_dir)s\nWHEELS=${WHEELS_DIR}/*.whl\n\nif [ -f ${PIP} ] ; then\n    PIP=${PYTHON_DIR}/bin/pip3\nfi\n\necho &quot;GRSYNC_INST_DIR=${GRSYNC_INST_DIR}&quot;\necho &quot;PYTHON_DIR=${PYTHON_DIR}&quot;\necho &quot;PYTHON_VER=${PYTHON_VER}&quot;\necho &quot;PIP=${PIP}&quot;\necho &quot;VIRTUAL_ENV=${VIRTUAL_ENV}&quot;\necho &quot;PYTHON_PAR=${PYTHON_PAR}&quot;\necho &quot;WHEELS_DIR=${WHEELS_DIR}&quot;\necho &quot;WHEELS=${WHEELS}&quot;\n\nif [ ! -e &quot;${VIRTUAL_ENV}&quot; ] ; then\n    echo &quot;virtual environment not installed: \'pip3 install virtualenv\'&quot;\n    exit 1\nfi\n\necho &quot;bootstrapping python env in ${PYTHON_DIR}, wheels: ${WHEELS}&quot;\n\nrm -rf $PYTHON_PAR\n\ncmd=&quot;${VIRTUAL_ENV} -p ${PYTHON_VER} `basename ${PYTHON_DIR}`&quot;\n\necho &quot;invoke $cmd&quot;\nmkdir -p $PYTHON_PAR &amp;&amp;     cd $PYTHON_PAR &amp;&amp;     $cmd &amp;&amp;     cd - || exit 1\n\nif [ -d ${WHEELS_DIR} ] ; then\n    echo &quot;installing from wheel&quot;\n    ${PIP} install ${GRSYNC_INST_DIR}/%(wheel_dir)s/zensols.grsync*\nelse\n    echo &quot;installing from net&quot;\n    ${PIP} install zensols.grsync\nfi\n\n# ${PIP} install ${WHEELS}\n\nrm ${HOME}/.bash* ${HOME}/.profile*\n# echo to thaw the repo: ${PYTHON_DIR}/bin/grsync thaw -d ${GRSYNC_INST_DIR}\n${PYTHON_DIR}/bin/grsync thaw -d ${GRSYNC_INST_DIR}\n'</em><a class="headerlink" href="#zensols.grsync.bootstrap.BootstrapGenerator.SCRIPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.bootstrap.BootstrapGenerator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/bootstrap.html#BootstrapGenerator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.bootstrap.BootstrapGenerator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.bootstrap.BootstrapGenerator.generate">
+<code class="sig-name descname">generate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/bootstrap.html#BootstrapGenerator.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.bootstrap.BootstrapGenerator.generate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.cli">
+<span id="zensols-grsync-cli-module"></span><h2>zensols.grsync.cli module<a class="headerlink" href="#module-zensols.grsync.cli" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.cli.ConfAppCommandLine">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.cli.</code><code class="sig-name descname">ConfAppCommandLine</code><a class="reference internal" href="../_modules/zensols/grsync/cli.html#ConfAppCommandLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.ConfAppCommandLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://plandes.github.io/util/api/zensols.cli.html#zensols.cli.peraction.OneConfPerActionOptionsCliEnv" title="(in Zensols Utilities v1.3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">zensols.cli.peraction.OneConfPerActionOptionsCliEnv</span></code></a></p>
+<p>Command line entry point.</p>
+<dl class="py method">
+<dt id="zensols.grsync.cli.ConfAppCommandLine.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#ConfAppCommandLine.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.ConfAppCommandLine.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opt_config</strong> – the option configuration (see project documentation)</p></li>
+<li><p><strong>config_env_name</strong> – the name of the environment variable that holds the resource like
+name (i.e. ~/.&lt;program name&gt;rc); this will be used as the
+configuration file if it is given and found; otherwise a
+<code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is rasied if not found</p></li>
+<li><p><strong>no_os_environ</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code> do not add environment variables to the configuration
+environment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.cli.DistManagerCli">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.cli.</code><code class="sig-name descname">DistManagerCli</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dist_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">move_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wheel_dependency</span><span class="o">=</span><span class="default_value">'zensols.grsync'</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dir_reduce</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">repopref</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="zensols.grsync.cli.DistManagerCli.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dist_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">move_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wheel_dependency</span><span class="o">=</span><span class="default_value">'zensols.grsync'</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dir_reduce</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">repopref</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.DistManagerCli.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.DistManagerCli.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli.freeze" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.DistManagerCli.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli.move" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.DistManagerCli.thaw">
+<code class="sig-name descname">thaw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#DistManagerCli.thaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.DistManagerCli.thaw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.cli.InfoCli">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.cli.</code><code class="sig-name descname">InfoCli</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repo_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#InfoCli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.InfoCli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="zensols.grsync.cli.InfoCli.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repo_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#InfoCli.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.InfoCli.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.InfoCli.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#InfoCli.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.InfoCli.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.InfoCli.repo_info">
+<code class="sig-name descname">repo_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#InfoCli.repo_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.InfoCli.repo_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.cli.InfoCli.repos">
+<code class="sig-name descname">repos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#InfoCli.repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.InfoCli.repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="zensols.grsync.cli.main">
+<code class="sig-prename descclassname">zensols.grsync.cli.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/cli.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.cli.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.config">
+<span id="zensols-grsync-config-module"></span><h2>zensols.grsync.config module<a class="headerlink" href="#module-zensols.grsync.config" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.config.AppConfig">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.config.</code><code class="sig-name descname">AppConfig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_vars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/config.html#AppConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.config.AppConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://plandes.github.io/util/api/zensols.config.html#zensols.config.yaml.YamlConfig" title="(in Zensols Utilities v1.3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">zensols.config.yaml.YamlConfig</span></code></a></p>
+<p>Application specific configuration access and parsing.</p>
+<p>Since much of the application centers around configuration of what to
+persist, this class does more heavy lifting than most configuraetion like
+classes.</p>
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.EMPTY_DIR_PATH">
+<code class="sig-name descname">EMPTY_DIR_PATH</code><em class="property"> = 'discover.empty_dirs'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.EMPTY_DIR_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.EMPTY_DIR_PROFILE_PATH">
+<code class="sig-name descname">EMPTY_DIR_PROFILE_PATH</code><em class="property"> = 'discover.profiles.{}.empty_dirs'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.EMPTY_DIR_PROFILE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.OBJECTS_PATH">
+<code class="sig-name descname">OBJECTS_PATH</code><em class="property"> = 'discover.objects'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.OBJECTS_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.OBJECTS_PROFILE_PATH">
+<code class="sig-name descname">OBJECTS_PROFILE_PATH</code><em class="property"> = 'discover.profiles.{}.objects'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.OBJECTS_PROFILE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.PROFILES_PATH">
+<code class="sig-name descname">PROFILES_PATH</code><em class="property"> = 'discover.profiles'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.PROFILES_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.config.AppConfig.ROOT">
+<code class="sig-name descname">ROOT</code><em class="property"> = 'discover'</em><a class="headerlink" href="#zensols.grsync.config.AppConfig.ROOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_vars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/config.html#AppConfig.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.config.AppConfig.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize this instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file</strong> – the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> configuration file path to read from</p></li>
+<li><p><strong>default_section</strong> – default section (defaults to <cite>default</cite>)</p></li>
+<li><p><strong>default_vars</strong> – used use with existing configuration is not found</p></li>
+<li><p><strong>default_expect</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, raise exceptions when keys and/or
+sections are not found in the configuration</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.all_profiles">
+<em class="property">property </em><code class="sig-name descname">all_profiles</code><a class="headerlink" href="#zensols.grsync.config.AppConfig.all_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>rtype</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.bootstrap_script_file">
+<em class="property">property </em><code class="sig-name descname">bootstrap_script_file</code><a class="headerlink" href="#zensols.grsync.config.AppConfig.bootstrap_script_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.dist_dir">
+<em class="property">property </em><code class="sig-name descname">dist_dir</code><a class="headerlink" href="#zensols.grsync.config.AppConfig.dist_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.get_discoverable_objects">
+<code class="sig-name descname">get_discoverable_objects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">profiles</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/config.html#AppConfig.get_discoverable_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.config.AppConfig.get_discoverable_objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.get_empty_dirs">
+<code class="sig-name descname">get_empty_dirs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">profiles</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/config.html#AppConfig.get_empty_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.config.AppConfig.get_empty_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.get_profiles">
+<code class="sig-name descname">get_profiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">profile_overide_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/config.html#AppConfig.get_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.config.AppConfig.get_profiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.config.AppConfig.wheel_dir_name">
+<em class="property">property </em><code class="sig-name descname">wheel_dir_name</code><a class="headerlink" href="#zensols.grsync.config.AppConfig.wheel_dir_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.distmng">
+<span id="zensols-grsync-distmng-module"></span><h2>zensols.grsync.distmng module<a class="headerlink" href="#module-zensols.grsync.distmng" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.distmng.DistManager">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.distmng.</code><code class="sig-name descname">DistManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">dist_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repo_preference</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The main entry point that supports saving user home directory information
+(freezing) so that the data can later be restored (thawed).  It does this
+by finding git repositories and saving the remotes.  It also finds symbolic
+links, files and empty directories specified in the configuration.</p>
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">dist_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">profiles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repo_preference</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<a class="reference external" href="https://plandes.github.io/util/api/zensols.config.html#zensols.config.yaml.YamlConfig" title="(in Zensols Utilities v1.3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">YamlConfig</span></code></a>) – the app config</p></li>
+<li><p><strong>dist_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – the location of the frozen distribution</p></li>
+<li><p><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – the location of the distrbution to freeze or where
+to exapand (default to the user home)</p></li>
+<li><p><strong>profiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – the (maven like) profiles that define what to freeze</p></li>
+<li><p><strong>repo_preference</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – the repository to make master on thaw (default
+to configuration file)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.app_version">
+<em class="property">property </em><code class="sig-name descname">app_version</code><a class="headerlink" href="#zensols.grsync.distmng.DistManager.app_version" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>rtype</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a local distribution to a different directory on the local file
+system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.discover_info">
+<code class="sig-name descname">discover_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.discover_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.discover_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proviate information about what’s found in the user home directory.  This is
+later used to freeze the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.discoverer">
+<em class="property">property </em><code class="sig-name descname">discoverer</code><a class="headerlink" href="#zensols.grsync.distmng.DistManager.discoverer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.distribution">
+<em class="property">property </em><code class="sig-name descname">distribution</code><a class="headerlink" href="#zensols.grsync.distmng.DistManager.distribution" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wheel_dependency</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the current configuration and file set to the distribution zip.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">destination_path</span></em>, <em class="sig-param"><span class="n">dir_reduce</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a thawed file set to <code class="docutils literal notranslate"><span class="pre">destination_path</span></code>.  If <code class="docutils literal notranslate"><span class="pre">dir_reduce</span></code> is
+<code class="docutils literal notranslate"><span class="pre">True</span></code> then recursively remove directories.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.print_repo_info">
+<code class="sig-name descname">print_repo_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.print_repo_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.print_repo_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.print_repos">
+<code class="sig-name descname">print_repos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.print_repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.print_repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.thaw">
+<code class="sig-name descname">thaw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.thaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.thaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand the distribution zip on to the file system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distmng.DistManager.tmp">
+<code class="sig-name descname">tmp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distmng.html#DistManager.tmp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distmng.DistManager.tmp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.distribution">
+<span id="zensols-grsync-distribution-module"></span><h2>zensols.grsync.distribution module<a class="headerlink" href="#module-zensols.grsync.distribution" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.distribution.Distribution">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.distribution.</code><code class="sig-name descname">Distribution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">defs_file</span></em>, <em class="sig-param"><span class="n">target_dir</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distribution.html#Distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distribution.Distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represents a frozen distribution.</p>
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">defs_file</span></em>, <em class="sig-param"><span class="n">target_dir</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distribution.html#Distribution.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distribution.Distribution.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the distribution instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – points to the distribution file itself</p></li>
+<li><p><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – points to the directory where we thaw the
+distribution</p></li>
+<li><p><strong>path_translator</strong> (<a class="reference internal" href="#zensols.grsync.domain.PathTranslator" title="zensols.grsync.domain.PathTranslator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathTranslator</span></code></a>) – translates relative paths to the thaw directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.empty_dirs">
+<em class="property">property </em><code class="sig-name descname">empty_dirs</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.empty_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.files">
+<em class="property">property </em><code class="sig-name descname">files</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.from_discoverer">
+<em class="property">classmethod </em><code class="sig-name descname">from_discoverer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">discoverer</span></em>, <em class="sig-param"><span class="n">target_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distribution.html#Distribution.from_discoverer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distribution.Distribution.from_discoverer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a distrbution directly from the data structure created from
+<a class="reference internal" href="#zensols.grsync.freeze.Discoverer" title="zensols.grsync.freeze.Discoverer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Discoverer</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>discoverer</strong> (<a class="reference internal" href="#zensols.grsync.freeze.Discoverer" title="zensols.grsync.freeze.Discoverer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Discoverer</span></code></a>) – a discoverer instance created by the <em>freeze</em> state</p></li>
+<li><p><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – where the distribution will be <em>thawed</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#zensols.grsync.distribution.Distribution" title="zensols.grsync.distribution.Distribution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Distribution</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.from_struct">
+<em class="property">classmethod </em><code class="sig-name descname">from_struct</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">struct</span></em>, <em class="sig-param"><span class="n">target_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/distribution.html#Distribution.from_struct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.distribution.Distribution.from_struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a distrbution directly from the data structure created from
+<a class="reference internal" href="#zensols.grsync.freeze.Discoverer" title="zensols.grsync.freeze.Discoverer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Discoverer</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>struct</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – the data structure given by <a class="reference internal" href="#zensols.grsync.freeze.Discoverer.freeze" title="zensols.grsync.freeze.Discoverer.freeze"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Discoverer.freeze()</span></code></a>
+using <code class="docutils literal notranslate"><span class="pre">flatten=True</span></code></p></li>
+<li><p><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – where the distribution will be <em>thawed</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#zensols.grsync.distribution.Distribution" title="zensols.grsync.distribution.Distribution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Distribution</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.links">
+<em class="property">property </em><code class="sig-name descname">links</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.repos">
+<em class="property">property </em><code class="sig-name descname">repos</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.repos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.struct">
+<em class="property">property </em><code class="sig-name descname">struct</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.struct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.distribution.Distribution.version">
+<em class="property">property </em><code class="sig-name descname">version</code><a class="headerlink" href="#zensols.grsync.distribution.Distribution.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the distribution format version, which for now, is just the application
+version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.domain">
+<span id="zensols-grsync-domain-module"></span><h2>zensols.grsync.domain module<a class="headerlink" href="#module-zensols.grsync.domain" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.domain.FileEntry">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.domain.</code><code class="sig-name descname">FileEntry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">finfo</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#FileEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.FileEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represents a file based entry in the frozen version of the distribution zip.</p>
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">finfo</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#FileEntry.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.FileEntry.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.mode">
+<em class="property">property </em><code class="sig-name descname">mode</code><a class="headerlink" href="#zensols.grsync.domain.FileEntry.mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.modestr">
+<em class="property">property </em><code class="sig-name descname">modestr</code><a class="headerlink" href="#zensols.grsync.domain.FileEntry.modestr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.modify_time">
+<em class="property">property </em><code class="sig-name descname">modify_time</code><a class="headerlink" href="#zensols.grsync.domain.FileEntry.modify_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.path">
+<em class="property">property </em><code class="sig-name descname">path</code><a class="headerlink" href="#zensols.grsync.domain.FileEntry.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.FileEntry.relative">
+<em class="property">property </em><code class="sig-name descname">relative</code><a class="headerlink" href="#zensols.grsync.domain.FileEntry.relative" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.domain.LinkEntry">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.domain.</code><code class="sig-name descname">LinkEntry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">finfo</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#LinkEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.LinkEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#zensols.grsync.domain.FileEntry" title="zensols.grsync.domain.FileEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">zensols.grsync.domain.FileEntry</span></code></a></p>
+<p>Represents a symbolic link in the frozen version of the distribution zip.</p>
+<dl class="py method">
+<dt id="zensols.grsync.domain.LinkEntry.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">finfo</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#LinkEntry.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.LinkEntry.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.LinkEntry.relative">
+<em class="property">property </em><code class="sig-name descname">relative</code><a class="headerlink" href="#zensols.grsync.domain.LinkEntry.relative" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.LinkEntry.source">
+<em class="property">property </em><code class="sig-name descname">source</code><a class="headerlink" href="#zensols.grsync.domain.LinkEntry.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.LinkEntry.target">
+<em class="property">property </em><code class="sig-name descname">target</code><a class="headerlink" href="#zensols.grsync.domain.LinkEntry.target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.domain.PathTranslator">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.domain.</code><code class="sig-name descname">PathTranslator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#PathTranslator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.PathTranslator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Utility class around helping with paths.</p>
+<dl class="py method">
+<dt id="zensols.grsync.domain.PathTranslator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#PathTranslator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.PathTranslator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.PathTranslator.expand">
+<code class="sig-name descname">expand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#PathTranslator.expand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.PathTranslator.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the user’s home directory as a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.PathTranslator.relative_to">
+<code class="sig-name descname">relative_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#PathTranslator.relative_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.PathTranslator.relative_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a path that’s relative to the user’s home directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.PathTranslator.to_relative">
+<code class="sig-name descname">to_relative</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#PathTranslator.to_relative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.PathTranslator.to_relative" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.domain.RemoteSpec">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.domain.</code><code class="sig-name descname">RemoteSpec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">remote</span></em>, <em class="sig-param"><span class="n">is_master</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#RemoteSpec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.RemoteSpec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class represents a remote for a git repo.</p>
+<dl class="py method">
+<dt id="zensols.grsync.domain.RemoteSpec.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">remote</span></em>, <em class="sig-param"><span class="n">is_master</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#RemoteSpec.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.RemoteSpec.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>remote</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Remote</span></code>) – a remote object from the git repo</p></li>
+<li><p><strong>is_master</strong> – whether or not the remote is the primary (upstream)
+remote</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.RemoteSpec.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#RemoteSpec.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.RemoteSpec.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze/create an object graph representation of the remote as a dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.RemoteSpec.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#zensols.grsync.domain.RemoteSpec.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the remote’s name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.RemoteSpec.rename">
+<code class="sig-name descname">rename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#RemoteSpec.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.RemoteSpec.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename the remote in the git repository itself, along with the class
+instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.domain.SymbolicLink">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.domain.</code><code class="sig-name descname">SymbolicLink</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#SymbolicLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This classs represents a file system symbolic link.  The class also freezes
+created symbol links.</p>
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#SymbolicLink.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – the <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code> that points to the symbolic link on
+the local file system.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#SymbolicLink.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an object graph as a dict of the link.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.increment_use_count">
+<code class="sig-name descname">increment_use_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/domain.html#SymbolicLink.increment_use_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.increment_use_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate this symblic link is used (linked) to another target.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.source_relative">
+<em class="property">property </em><code class="sig-name descname">source_relative</code><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.source_relative" title="Permalink to this definition">¶</a></dt>
+<dd><p>The relative location source (to the user’s home).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.target">
+<em class="property">property </em><code class="sig-name descname">target</code><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.target" title="Permalink to this definition">¶</a></dt>
+<dd><p>The target (where it point to).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.domain.SymbolicLink.target_relative">
+<em class="property">property </em><code class="sig-name descname">target_relative</code><a class="headerlink" href="#zensols.grsync.domain.SymbolicLink.target_relative" title="Permalink to this definition">¶</a></dt>
+<dd><p>The relative location (where it points to) relative to the user’s home.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.freeze">
+<span id="zensols-grsync-freeze-module"></span><h2>zensols.grsync.freeze module<a class="headerlink" href="#module-zensols.grsync.freeze" title="Permalink to this headline">¶</a></h2>
+<p>Includes classes that read the configuration and traverse the file system to
+find matching objects to use to freeze the distribution.</p>
+<dl class="py class">
+<dt id="zensols.grsync.freeze.Discoverer">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.freeze.</code><code class="sig-name descname">Discoverer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">profiles</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">repo_preference</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#Discoverer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.Discoverer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Discover git repositories, links, files and directories to save to
+reconstitute a user home directory later.</p>
+<dl class="py attribute">
+<dt id="zensols.grsync.freeze.Discoverer.CONF_TARG_KEY">
+<code class="sig-name descname">CONF_TARG_KEY</code><em class="property"> = 'discover.target.config'</em><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.CONF_TARG_KEY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.freeze.Discoverer.REPO_PREF">
+<code class="sig-name descname">REPO_PREF</code><em class="property"> = 'discover.repo.remote_pref'</em><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.REPO_PREF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.freeze.Discoverer.TARG_LINKS">
+<code class="sig-name descname">TARG_LINKS</code><em class="property"> = 'discover.target.links'</em><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.TARG_LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">profiles</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">repo_preference</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#Discoverer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.discover">
+<code class="sig-name descname">discover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flatten</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#Discoverer.discover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.discover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main worker method to capture all the user home information (git repos,
+files, sym links and empty directories per the configuration file).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>flatten</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code> then return a data structure appropriate
+for pretty printing; this will omit data needed to
+create the distrubtion so it shouldn’t be used for the
+freeze task</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flatten</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#Discoverer.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main entry point method that creates an object graph of all the data that
+needs to be saved (freeze) in the user home directory to reconstitute
+later (thaw).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>flatten</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code> then return a data structure appropriate
+for pretty printing; this will omit data needed to
+create the distrubtion so it shouldn’t be used for the
+freeze task</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.get_discoverable_objects">
+<code class="sig-name descname">get_discoverable_objects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#Discoverer.get_discoverable_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.get_discoverable_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find git repos, files, sym links and directories to reconstitute
+later.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.profiles">
+<em class="property">property </em><code class="sig-name descname">profiles</code><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.profiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.Discoverer.repo_preference">
+<em class="property">property </em><code class="sig-name descname">repo_preference</code><a class="headerlink" href="#zensols.grsync.freeze.Discoverer.repo_preference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the preference for which repo to make primary on thaw</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.freeze.FreezeManager">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.freeze.</code><code class="sig-name descname">FreezeManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">dist_file</span></em>, <em class="sig-param"><span class="n">defs_file</span></em>, <em class="sig-param"><span class="n">discoverer</span></em>, <em class="sig-param"><span class="n">app_version</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#FreezeManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.FreezeManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Invoked by a client to create <em>frozen</em> distribution .</p>
+<dl class="py method">
+<dt id="zensols.grsync.freeze.FreezeManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">dist_file</span></em>, <em class="sig-param"><span class="n">defs_file</span></em>, <em class="sig-param"><span class="n">discoverer</span></em>, <em class="sig-param"><span class="n">app_version</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#FreezeManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.FreezeManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.freeze.FreezeManager.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wheel_dependency</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/freeze.html#FreezeManager.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.freeze.FreezeManager.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the distribution by saving creating a script to thaw along with all
+artifacts (i.e. repo definitions) in a zip file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.mover">
+<span id="zensols-grsync-mover-module"></span><h2>zensols.grsync.mover module<a class="headerlink" href="#module-zensols.grsync.mover" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="zensols.grsync.mover.DistributionMover">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.mover.</code><code class="sig-name descname">DistributionMover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">destination_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force_repo</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_dirs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/mover.html#DistributionMover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.mover.DistributionMover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class moves thawed files that are defined in a distribution zip.  If
+the file is not defined in the distribution then it doesn’t move it.</p>
+<p>In situations where you’ve already deleted the distribution zip, you’ll
+have to create a new distribution by freezing what you have.  For this
+reason it is recommended that you always include the original <cite>grsync.yml</cite>
+configuration file in your distribution so it <em>migrates</em> along with each of
+your freeze/thaw iterations.</p>
+<dl class="py method">
+<dt id="zensols.grsync.mover.DistributionMover.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">target_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">destination_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force_repo</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_dirs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/mover.html#DistributionMover.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.mover.DistributionMover.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dist</strong> (<a class="reference internal" href="#zensols.grsync.distribution.Distribution" title="zensols.grsync.distribution.Distribution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Distribution</span></code></a>) – the distrbution that represent the distribution zip</p></li>
+<li><p><strong>target_dir</strong> – the directory with the thawed files</p></li>
+<li><p><strong>destination_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – where the thawed files/repos will be moved</p></li>
+<li><p><strong>force_repo</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code> move repositories even if they’re dirty</p></li>
+<li><p><strong>force_dirs</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code> move directories even if they’re not empty</p></li>
+<li><p><strong>dry_run</strong> – don’t actually do anything, but log like we are</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.mover.DistributionMover.dir_reduce">
+<code class="sig-name descname">dir_reduce</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/mover.html#DistributionMover.dir_reduce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.mover.DistributionMover.dir_reduce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove empty directories recursively starting at <code class="docutils literal notranslate"><span class="pre">parent</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.mover.DistributionMover.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/mover.html#DistributionMover.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.mover.DistributionMover.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the files over.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.repospec">
+<span id="zensols-grsync-repospec-module"></span><h2>zensols.grsync.repospec module<a class="headerlink" href="#module-zensols.grsync.repospec" title="Permalink to this headline">¶</a></h2>
+<p>This module includes repository domain classes.</p>
+<dl class="py class">
+<dt id="zensols.grsync.repospec.FrozenRepo">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.repospec.</code><code class="sig-name descname">FrozenRepo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">remotes</span></em>, <em class="sig-param"><span class="n">links</span></em>, <em class="sig-param"><span class="n">target_dir</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">repo_pref</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#FrozenRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.FrozenRepo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="zensols.grsync.repospec.FrozenRepo.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">remotes</span></em>, <em class="sig-param"><span class="n">links</span></em>, <em class="sig-param"><span class="n">target_dir</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">repo_pref</span></em>, <em class="sig-param"><span class="n">path_translator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#FrozenRepo.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.FrozenRepo.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>remotes</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – a list of dicts with keys <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">url</span></code> and
+<code class="docutils literal notranslate"><span class="pre">is_master</span></code> representing a git repository remote</p></li>
+<li><p><strong>links</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#zensols.grsync.domain.LinkEntry" title="zensols.grsync.domain.LinkEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinkEntry</span></code></a>]) – symbol links that link in to what will become the new
+repository after thawed (cloned)</p></li>
+<li><p><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – the root target directory of where the repository
+will be thawed (cloned)</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – the directory where the repository will be thawed (cloned)</p></li>
+<li><p><strong>repo_pref</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the remote to use as the first remote when thawed</p></li>
+<li><p><strong>path_translator</strong> (<a class="reference internal" href="#zensols.grsync.domain.PathTranslator" title="zensols.grsync.domain.PathTranslator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathTranslator</span></code></a>) – translates the distribution root</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.FrozenRepo.exists">
+<em class="property">property </em><code class="sig-name descname">exists</code><a class="headerlink" href="#zensols.grsync.repospec.FrozenRepo.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether or not the repo represented by this frozen repo already
+exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.FrozenRepo.repo_spec">
+<em class="property">property </em><code class="sig-name descname">repo_spec</code><a class="headerlink" href="#zensols.grsync.repospec.FrozenRepo.repo_spec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.FrozenRepo.thaw">
+<code class="sig-name descname">thaw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#FrozenRepo.thaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.FrozenRepo.thaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thaw a RepoSpec object, which does a clone and then creates the (remaining
+if any) remotes.  This also creates the symbol links that link into
+this repo.  Then return the object represented by the new repo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#zensols.grsync.repospec.RepoSpec" title="zensols.grsync.repospec.RepoSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepoSpec</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="zensols.grsync.repospec.RepoSpec">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.repospec.</code><code class="sig-name descname">RepoSpec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">repo</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class represents a git repository and all the symbolic links from the
+distribution (usually the user’s home directory) that link into it.</p>
+<dl class="py attribute">
+<dt id="zensols.grsync.repospec.RepoSpec.DEFAULT_FORMAT">
+<code class="sig-name descname">DEFAULT_FORMAT</code><em class="property"> = '{name}: {path}, remotes={remotes}, dirty={dirty}'</em><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.DEFAULT_FORMAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="zensols.grsync.repospec.RepoSpec.SHORT_FORMAT">
+<code class="sig-name descname">SHORT_FORMAT</code><em class="property"> = '{name}: {path} ({remotes})'</em><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.SHORT_FORMAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">repo</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create with the path to the repo and optionally a git.Repo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – the directory where the repository will be thawed (cloned)</p></li>
+<li><p><strong>path_translator</strong> (<a class="reference internal" href="#zensols.grsync.domain.PathTranslator" title="zensols.grsync.domain.PathTranslator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathTranslator</span></code></a>) – translates the distribution root</p></li>
+<li><p><strong>repo</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Repo</span></code>]) – the git repository to use in this instance, otherwise it
+will be created that points to what the
+<code class="docutils literal notranslate"><span class="pre">path_translator</span></code> resolves</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.add_linked">
+<code class="sig-name descname">add_linked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">links</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec.add_linked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.add_linked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.format">
+<code class="sig-name descname">format</code><span class="sig-paren">(</span><em class="sig-param">fmt=None</em>, <em class="sig-param">writer=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='utf-8'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Human readable format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.freeze">
+<code class="sig-name descname">freeze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freeze the data in this instance in to a tree of dicts usable in a JSON
+dump.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.master_remote">
+<em class="property">property </em><code class="sig-name descname">master_remote</code><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.master_remote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first (preferred) remote that is used as the master for pull,
+fetch and push.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.remotes">
+<em class="property">property </em><code class="sig-name descname">remotes</code><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.remotes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list or remote specs used as the repo’s remotes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#zensols.grsync.domain.RemoteSpec" title="zensols.grsync.domain.RemoteSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteSpec</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.repo">
+<em class="property">property </em><code class="sig-name descname">repo</code><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.repo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Git repository instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Repo</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.repospec.RepoSpec.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">writer=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='utf-8'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/repospec.html#RepoSpec.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.repospec.RepoSpec.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Human readable output.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync.thaw">
+<span id="zensols-grsync-thaw-module"></span><h2>zensols.grsync.thaw module<a class="headerlink" href="#module-zensols.grsync.thaw" title="Permalink to this headline">¶</a></h2>
+<p>Contains utility classes used to <em>thaw</em> distributions.</p>
+<dl class="py class">
+<dt id="zensols.grsync.thaw.ThawManager">
+<em class="property">class </em><code class="sig-prename descclassname">zensols.grsync.thaw.</code><code class="sig-name descname">ThawManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">app_version</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/thaw.html#ThawManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.thaw.ThawManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="zensols.grsync.thaw.ThawManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">path_translator</span></em>, <em class="sig-param"><span class="n">app_version</span></em>, <em class="sig-param"><span class="n">dry_run</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/thaw.html#ThawManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.thaw.ThawManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.thaw.ThawManager.assert_version">
+<code class="sig-name descname">assert_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/thaw.html#ThawManager.assert_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.thaw.ThawManager.assert_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.thaw.ThawManager.thaw">
+<code class="sig-name descname">thaw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/thaw.html#ThawManager.thaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.thaw.ThawManager.thaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thaw the distribution, which includes creating git repositories, extracting
+(frozen) files, creating symbolic links, and creating empty directories
+that were captured/configured during the freezing phase.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="zensols.grsync.thaw.ThawManager.thaw_from_in_memory">
+<code class="sig-name descname">thaw_from_in_memory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/zensols/grsync/thaw.html#ThawManager.thaw_from_in_memory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zensols.grsync.thaw.ThawManager.thaw_from_in_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a local distribution to a different directory on the local file system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – the distribution directory from where to copy files</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-zensols.grsync">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-zensols.grsync" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../CONTRIBUTING.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

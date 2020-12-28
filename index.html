@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GRSync: Persist create build out environments &mdash; GRSync: Persist create build out environments 0.0.17 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="doc/configuration.html" />
+    <link rel="prev" title="GRSync: Persist create build out environments" href="top.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="top.html" class="icon icon-home" alt="Documentation Home"> GRSync: Persist create build out environments
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.17
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining">Obtaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#symbolic-links">Symbolic Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#planned-future-features">Planned Future Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changelog">Changelog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="top.html">GRSync: Persist create build out environments</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="top.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>GRSync: Persist create build out environments</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="grsync-persist-create-build-out-environments">
+<h1>GRSync: Persist create build out environments<a class="headerlink" href="#grsync-persist-create-build-out-environments" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://pypi.python.org/pypi/zensols.grsync"><img alt="PyPI" src="https://img.shields.io/pypi/v/zensols.grsync.svg" /></a>
+<a class="reference external" href="https://www.python.org/downloads/release/python-370"><img alt="Python 3.7" src="https://img.shields.io/badge/python-3.7-blue.svg" /></a>
+<a class="reference external" href="https://www.python.org/downloads/release/python-380"><img alt="Python 3.8" src="https://img.shields.io/badge/python-3.8-blue.svg" /></a>
+<a class="reference external" href="https://github.com/plandes/grsync/actions"><img alt="Build Status" src="https://github.com/plandes/grsync/workflows/CI/badge.svg" /></a></p>
+<p>This program captures your home directory and synchronize it with another host
+using Git repo metadata, symbolic links and persisted files.</p>
+<p>I wrote this because I couldn’t find anything that creates repositories with
+the idea of having a portable and easy to recreate your home directory on
+another host.  If I’ve reinvented the wheel, please let me know :)</p>
+<p>More specifically: it persists and creates build out environments in a nascent
+account.  The program <em>memorizing</em> a users home directory and building it out
+on another system (see <a class="reference external" href="#overview">overview</a>).  This is done by:</p>
+<ol class="simple">
+<li><p>Copying files, directories and git repos configuration.</p></li>
+<li><p>Creating a distribution compressed file.</p></li>
+<li><p>Uncompress on the destination system and create repos.</p></li>
+</ol>
+<p>A future release will also synchronize and manage multiple GitHub repositories.</p>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference external" href="https://plandes.github.io/grsync/index.html">full documentation</a>.  The
+<a class="reference external" href="https://plandes.github.io/grsync/api.html">API reference</a> is also available.</p>
+</div>
+<div class="section" id="obtaining">
+<h2>Obtaining<a class="headerlink" href="#obtaining" title="Permalink to this headline">¶</a></h2>
+<p>The easist way to install the command line program is via the <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install zensols.grsync
+</pre></div>
+</div>
+<p>Binaries are also available on <a class="reference external" href="https://pypi.org/project/zensols.grsync/">pypi</a>.</p>
+</div>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Not only is the aim to create a repproducable development (or like)
+environment, it is also to create a <em>clean</em> environment.  This means we have
+temporary directories we might expect to exist for our process(es), and of
+course repositories cloned in their nascent state.  These steps are summarized
+below:</p>
+<ol class="simple">
+<li><p><strong>Freeze</strong>: This process captures the current host’s setup and
+configuration (specified in the <a class="reference external" href="test-resources/midsize-test.yml#L29">configuration file</a>) and includes:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Empty directories.</p></li>
+<li><p>Git repository meta data.</p></li>
+<li><p>Locations of files to copy, top level directories of files to recursively
+copy, where symlinks are considered files as well and currently not
+followed.  See <a class="reference external" href="#symbolic-links">caveat</a>.</p></li>
+</ul>
+<p>A sub-step of this process is <em>discover</em>, which reads the file system as
+indicated by the configuration file.  This includes reading git repostiory
+metadata, identifying file metadata (i.e. permissions) etc.</p>
+<ol class="simple">
+<li><p><strong>Bootstraping</strong>: create an Python virtual environment on the target machine
+that can be loaded with this program and depenedencies.  This is not a
+necessary step as the program is available as a <a class="reference external" href="https://docs.python.org/3/installing/index.html">pip</a> install.  However, if
+this step can be used to help automate new environments, after which, you
+could futher add/install software with tools such as <a class="reference external" href="https://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>.</p></li>
+<li><p><strong>Thaw</strong>: This includes two steps:</p></li>
+<li><p><strong>File Extraction</strong>: extracts the files from the distribution zip created
+in the <em>freeze</em> step.</p></li>
+<li><p><strong>Repo Cloning</strong>: this step recursively clones all repositories.</p></li>
+</ol>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The program has two phases: <em>freeze</em> and <em>thaw</em> (see <a class="reference external" href="#overview">overview</a>).
+The command line program is used twice: first on the <em>freeze</em> on the source
+system and then <em>thaw</em> on the target machine.</p>
+<p>See <a class="reference internal" href="doc/usage.html"><span class="doc">usage</span></a> for more information.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>The configuration is used the <em>freeze</em> phase to create the distribution file.
+This fil contains all git repositories, files, empty directory paths on the
+current file system that is stored to be <em>thawed</em> on the target system.</p>
+<p>See <a class="reference internal" href="doc/configuration.html"><span class="doc">configuration</span></a> for detailed documentation on
+configuration <a class="reference external" href="test-resources/midsize-test.yml">test case yaml file</a> for an
+example of a simple configuration file to capture a set of git repositories and
+small set of files.  The freeze/thaw/move test case uses <a class="reference external" href="test-resources/fs-test.yml">this configuration
+file</a>, which is more comprehensive and up to date.</p>
+</div>
+<div class="section" id="symbolic-links">
+<h2>Symbolic Links<a class="headerlink" href="#symbolic-links" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned in the <a class="reference external" href="#usage">usage</a> section, symbolic links pointing to any
+file in a repository are <em>froozen</em>, which means that integrity at thaw time is
+ensured.  However, links <strong>not</strong> pointing to a repository are persisted, but
+the files and directories they point to are not.</p>
+<p>A future release might have a <em>follow symbolic links</em> type functionality that
+allows this.  However, for now, you must include both the link and the data it
+points to get this integrity.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>At least <a class="reference external" href="https://www.python.org">Python 3.7</a></p></li>
+<li><p>A system that supports <a class="reference external" href="https://pyyaml.org">PyYAML</a></p></li>
+</ul>
+</div>
+<div class="section" id="planned-future-features">
+<h2>Planned Future Features<a class="headerlink" href="#planned-future-features" title="Permalink to this headline">¶</a></h2>
+<p>Preserve and restore file and directory timestamps.</p>
+</div>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
+<p>An extensive changelog is available <a class="reference internal" href="CHANGELOG.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="LICENSE.html"><span class="doc">MIT License</span></a></p>
+<p>Copyright (c) 2020 Paul Landes</p>
+<!-- links --></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="doc/configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="top.html" class="btn btn-neutral float-left" title="GRSync: Persist create build out environments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

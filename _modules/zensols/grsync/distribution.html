@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>zensols.grsync.distribution &mdash; GRSync: Persist create build out environments 0.0.17 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../top.html" class="icon icon-home" alt="Documentation Home"> GRSync: Persist create build out environments
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.17
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../top.html">GRSync: Persist create build out environments</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../top.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>zensols.grsync.distribution</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for zensols.grsync.distribution</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="sd">&quot;&quot;&quot;&quot;Contains the class needed to thaw the distribution.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Paul Landes&#39;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">zensols.persist</span> <span class="kn">import</span> <span class="n">persisted</span><span class="p">,</span> <span class="n">PersistedWork</span>
+<span class="kn">from</span> <span class="nn">zensols.grsync</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">FrozenRepo</span><span class="p">,</span>
+    <span class="n">FileEntry</span><span class="p">,</span>
+    <span class="n">LinkEntry</span><span class="p">,</span>
+    <span class="n">PathTranslator</span><span class="p">,</span>
+    <span class="n">Discoverer</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Distribution"><a class="viewcode-back" href="../../../api/zensols.grsync.html#zensols.grsync.distribution.Distribution">[docs]</a><span class="k">class</span> <span class="nc">Distribution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a frozen distribution.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Distribution.__init__"><a class="viewcode-back" href="../../../api/zensols.grsync.html#zensols.grsync.distribution.Distribution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">defs_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+                 <span class="n">path_translator</span><span class="p">:</span> <span class="n">PathTranslator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the distribution instance.</span>
+
+<span class="sd">        :param path: points to the distribution file itself</span>
+
+<span class="sd">        :param target_dir: points to the directory where we thaw the</span>
+<span class="sd">                           distribution</span>
+
+<span class="sd">        :param path_translator: translates relative paths to the thaw directory</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">defs_file</span> <span class="o">=</span> <span class="n">defs_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_dir</span> <span class="o">=</span> <span class="n">target_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path_translator</span> <span class="o">=</span> <span class="n">path_translator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span></div>
+
+<div class="viewcode-block" id="Distribution.from_struct"><a class="viewcode-back" href="../../../api/zensols.grsync.html#zensols.grsync.distribution.Distribution.from_struct">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_struct</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">struct</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+                    <span class="n">target_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Distribution</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a distrbution directly from the data structure created from</span>
+<span class="sd">        :class:`.Discoverer`.</span>
+
+<span class="sd">        :param struct: the data structure given by :meth:`.Discoverer.freeze`</span>
+<span class="sd">                       using ``flatten=True``</span>
+
+<span class="sd">        :param target_dir: where the distribution will be *thawed*</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="n">PathTranslator</span><span class="p">(</span><span class="n">target_dir</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_struct</span> <span class="o">=</span> <span class="n">PersistedWork</span><span class="p">(</span><span class="s1">&#39;_struct&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="n">struct</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Distribution.from_discoverer"><a class="viewcode-back" href="../../../api/zensols.grsync.html#zensols.grsync.distribution.Distribution.from_discoverer">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_discoverer</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">discoverer</span><span class="p">:</span> <span class="n">Discoverer</span><span class="p">,</span>
+                        <span class="n">target_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Distribution</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a distrbution directly from the data structure created from</span>
+<span class="sd">        :class:`.Discoverer`.</span>
+
+<span class="sd">        :param discoverer: a discoverer instance created by the *freeze* state</span>
+
+<span class="sd">        :param target_dir: where the distribution will be *thawed*</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fspec</span> <span class="o">=</span> <span class="n">discoverer</span><span class="o">.</span><span class="n">freeze</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_struct</span><span class="p">(</span><span class="n">fspec</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_struct&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">struct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the JSON deserialized (meta data) of the distribution.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()))</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">zf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defs_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">jstr</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                <span class="n">struct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jstr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">struct</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the distribution format version, which for now, is just the application</span>
+<span class="sd">        version.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;app_version&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;app_version&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_files&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">FileEntry</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get the files in the distribution.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">fi</span><span class="p">:</span> <span class="n">FileEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_empty_dirs&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">empty_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">FileEntry</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get empty directories defined in the dist configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">fi</span><span class="p">:</span> <span class="n">FileEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;empty_dirs&#39;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_links&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">links</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">LinkEntry</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Pattern links and symbolic links not pointing to repositories.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">fi</span><span class="p">:</span> <span class="n">LinkEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fi</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_repos&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">repos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">FrozenRepo</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Repository specifications.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">repos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">repo_pref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;repo_pref&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">rdef</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="s1">&#39;repo_specs&#39;</span><span class="p">]:</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">fi</span><span class="p">:</span> <span class="n">LinkEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fi</span><span class="p">),</span>
+                              <span class="n">rdef</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]))</span>
+            <span class="n">repo</span> <span class="o">=</span> <span class="n">FrozenRepo</span><span class="p">(</span><span class="n">rdef</span><span class="p">[</span><span class="s1">&#39;remotes&#39;</span><span class="p">],</span> <span class="n">links</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_dir</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">path_translator</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">rdef</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]),</span>
+                              <span class="n">repo_pref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_translator</span><span class="p">)</span>
+            <span class="n">repos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">repos</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

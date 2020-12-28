@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration &mdash; GRSync: Persist create build out environments 0.0.17 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="GRSync: Persist create build out environments" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../top.html" class="icon icon-home" alt="Documentation Home"> GRSync: Persist create build out environments
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.17
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#variable-substitution">Variable Substitution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#links">Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#profiles">Profiles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#excluding-top-level-objects">Excluding Top Level Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-configuration">Example Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../top.html">GRSync: Persist create build out environments</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../top.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/doc/configuration.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>The configuration is used the <em>freeze</em> phase to create the distribution file.
+This fil contains all git repositories, files, empty directory paths on the
+current file system that is stored to be <em>thawed</em> on the target system.</p>
+<p>The structure of the configuration file is not validated, and generally
+speaking, can be leveraged for variable substitution (see <a class="reference external" href="#variable-substitution">variable
+substitution</a>.  An overview of the structure follows:</p>
+<ul class="simple">
+<li><p><strong>discover</strong>: root</p></li>
+<li><p><strong>objects</strong>: a list of files, directories and repository directories.</p></li>
+<li><p><strong>empty_dirs</strong>: A list of directories.</p></li>
+<li><p><strong>target</strong>: contains information used during the <em>thaw</em> process on the
+target host.</p></li>
+<li><p><strong>config</strong>: the path to create this configuration file, which is optional
+and should not be given if already declared in as an <strong>object</strong> file
+entry.</p></li>
+<li><p><strong>links</strong>: a list of file path pattern symbolic links to create during
+the <strong>thaw</strong> (see <a class="reference external" href="#links">links</a>).</p></li>
+<li><p><strong>link</strong>: a specific link entry.</p></li>
+<li><p><strong>source</strong>: the source path at <em>thaw</em> time of the symbolic link.</p></li>
+<li><p><strong>target</strong>: the target path at <em>thaw</em> time of the symbolic link.</p></li>
+<li><p><strong>default_profiles</strong>: a comma-separated list of profile names (including
+<code class="docutils literal notranslate"><span class="pre">nodefault</span></code>) to be used when the command line option (<code class="docutils literal notranslate"><span class="pre">-p</span></code>) is not given.
+See <a class="reference external" href="#profiles">profiles</a>.</p></li>
+<li><p><strong>profiles</strong>: contains all profile definitions for this configuration
+file.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">&lt;any</span> <span class="pre">valid</span> <span class="pre">YAML</span> <span class="pre">string&gt;</span></code></strong>: this profile name</p></li>
+<li><p><strong>objects</strong>: same as top level but pertains only to this profile.</p></li>
+<li><p><strong>empty_dirs</strong>: same as top level but pertains only to this profile.</p></li>
+<li><p><strong>repo</strong>: contains information used when thawing repositories.</p></li>
+<li><p><strong>remote_pref</strong>: the remote (and respective URL) to make the primary
+‘master’ default repository when thawing the repository.  This is
+helpful when there are more than one remotes.</p></li>
+<li><p><strong>wheel</strong>: instructs the program on what/how wheels are created during the
+<em>freeze</em> process.</p></li>
+<li><p><strong>create</strong>: if <code class="docutils literal notranslate"><span class="pre">true</span></code> create wheels.</p></li>
+<li><p><strong>local</strong>: specifies how to create the distribution during the <em>freeze</em>
+process.</p></li>
+<li><p><strong>dist_dir</strong>: the default directory to create the distribution (used
+when not specified on the command line with <code class="docutils literal notranslate"><span class="pre">-d</span></code>).</p></li>
+<li><p><strong>wheels_dir</strong>: the directory of where to create the wheels when wheel
+creation is turned on.</p></li>
+<li><p><strong>bootstrap</strong>: indicates target information used to create the bootstrap
+script/process.</p></li>
+<li><p><strong>inst_dir</strong>: install directory of the boot strap files on the target on
+<em>thaw</em>.</p></li>
+<li><p><strong>python_dir</strong>: where the virutal environment python directory is
+created.</p></li>
+<li><p><strong>wheel_dir</strong>: location of the wheels directory (if created during
+<em>freeze</em>) to be installed during bootstrap.</p></li>
+</ul>
+<div class="section" id="variable-substitution">
+<h2>Variable Substitution<a class="headerlink" href="#variable-substitution" title="Permalink to this headline">¶</a></h2>
+<p>The configuration file can be leveraged for variable substitution using a
+<code class="docutils literal notranslate"><span class="pre">^{name}</span></code> syntax where <code class="docutils literal notranslate"><span class="pre">name</span></code> is any dot (.) separated path.  The
+<code class="docutils literal notranslate"><span class="pre">discovery.codedir</span></code> variable in the [configuration file] is an example of a
+variable with substituions in the <code class="docutils literal notranslate"><span class="pre">objects</span></code> entry.  The exception to variable
+names in the configuration file are those given to define repositories, files,
+etc.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<p>Configuration link entries tell the program what symolic links to create.
+This is useful when you have a repository that keeps track of your
+confgiuration information on a per OS or host basis.  For example, your
+<code class="docutils literal notranslate"><span class="pre">~/.profile</span></code> might include different <code class="docutils literal notranslate"><span class="pre">PATH</span></code> set up on MacOS vs. Linux.</p>
+<p><a class="reference external" href="#variable-substitution">Variable substitution</a> is allowed in both the source
+and target paths.</p>
+</div>
+<div class="section" id="profiles">
+<h2>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline">¶</a></h2>
+<p>Profiles allow you to generate a <em>frozen</em> distribution of a subset of declared
+repositories and files.  The idea is similar [maven-profiles] with each having
+a top level name in the configuration that mirrors the same structure as under
+the <code class="docutils literal notranslate"><span class="pre">discover</span></code> level in the [configuration file] with entry <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.</p>
+<p>Profiles are always given in a comma-separated list to allow more than one
+profile to be added to the list of objects to <em>freeze</em>.</p>
+<p>The order in which the program decides what profiles to use is (only one of)
+the following:</p>
+<ol class="simple">
+<li><p>Command line with option <code class="docutils literal notranslate"><span class="pre">-p</span></code>.</p></li>
+<li><p>Configuration file.</p></li>
+<li><p>All profiles.</p></li>
+</ol>
+<div class="section" id="excluding-top-level-objects">
+<h3>Excluding Top Level Objects<a class="headerlink" href="#excluding-top-level-objects" title="Permalink to this headline">¶</a></h3>
+<p>The top level objects (i.e. <code class="docutils literal notranslate"><span class="pre">objects</span></code> and <code class="docutils literal notranslate"><span class="pre">empty_dirs</span></code>) are always added to the
+distribution with one exception: by excluding the <em>default</em> profile.  The
+<em>default</em> profile is a special profile that includes all default objects to the
+distribution.  If you don’t want these top level elements, you can specify a
+special <code class="docutils literal notranslate"><span class="pre">nodefault</span></code> keyword.</p>
+</div>
+</div>
+<div class="section" id="example-configuration">
+<h2>Example Configuration<a class="headerlink" href="#example-configuration" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference external" href="test-resources/midsize-test.yml">test case yaml file</a> for an example
+of a simple configuration file to capture a set of git repositories and small
+set of files.  The freeze/thaw/move test case uses <a class="reference external" href="test-resources/fs-test.yml">this configuration
+file</a>, which is more comprehensive and up to date
+and follows.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">## this file is only available on a freeze, not thaw</span>
+
+<span class="nt">discover</span><span class="p">:</span>
+  <span class="nt">test_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./target/mock</span>
+  <span class="c1"># a variable binding used for interpolation later on</span>
+  <span class="nt">view</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/view</span>
+  <span class="c1"># indicate whether or not to create wheels from dependencies</span>
+  <span class="c1"># specify directories to unthaw on the atarget</span>
+  <span class="nt">empty_dirs</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/opt/empty_dir</span>
+  <span class="c1"># specify repositories, symbol links and files that will (recursively) be</span>
+  <span class="c1"># added to the target un unthaw</span>
+  <span class="nt">objects</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.view}/repo_def</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/dir_a</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/symlink_to_repo</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/symlink.txt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/no_dst_symlink_to_a_dir</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/no_dst_symlink_to_a_file.txt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/dir_w_symlinks/*</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/file_0.txt</span>
+  <span class="c1"># profiles configuration, defined on the next line if none given on the</span>
+  <span class="c1"># command line (or empty for using only the default)</span>
+  <span class="nt">default_profiles</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">source</span>
+  <span class="nt">profiles</span><span class="p">:</span>
+    <span class="c1"># source and open source repositories</span>
+    <span class="nt">source</span><span class="p">:</span>
+      <span class="nt">objects</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.view}/repo_src</span>
+  <span class="c1"># default remote when thawing repositories</span>
+  <span class="nt">repo</span><span class="p">:</span>
+    <span class="nt">remote_pref</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">target</span><span class="p">:</span>
+    <span class="nt">links</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">link</span><span class="p">:</span>
+          <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/profile_{os}</span>
+          <span class="nt">target</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.test_dir}/dir_a/dir_b/file_b.txt</span>
+  <span class="c1"># indicate to create all wheel dependencies (useful for target machine</span>
+  <span class="c1"># offline--see docs)</span>
+  <span class="nt">wheel</span><span class="p">:</span>
+    <span class="nt">create</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="c1"># used to freeze the distribution zip file</span>
+  <span class="nt">local</span><span class="p">:</span>
+    <span class="c1"># the default location if the -d flag is not given on the command line</span>
+    <span class="nt">dist_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./dist</span>
+    <span class="c1"># the directory to add the dependency wheels (if discover.wheel.create is</span>
+    <span class="c1"># true)</span>
+    <span class="nt">wheels_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wheels</span>
+  <span class="c1"># used to create the bootstrap script--you probably want to leave this alone</span>
+  <span class="nt">bootstrap</span><span class="p">:</span>
+    <span class="nt">inst_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${HOME}/grsync</span>
+    <span class="nt">python_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${HOME}/opt/lib/python3</span>
+    <span class="nt">wheel_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">^{discover.local.wheels_dir}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="GRSync: Persist create build out environments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
