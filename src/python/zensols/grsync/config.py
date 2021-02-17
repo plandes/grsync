@@ -25,7 +25,8 @@ class AppConfig(YamlConfig):
 
     def __init__(self, config_file=None, default_vars=None):
         super(AppConfig, self).__init__(
-            config_file, delimiter='^', default_vars=default_vars)
+            config_file, delimiter='^', default_vars=default_vars,
+            expect=False)
 
     @property
     def _find_profiles(self):
@@ -44,8 +45,7 @@ class AppConfig(YamlConfig):
 
     @property
     def _default_profiles(self):
-        strlist = self.get_option(
-            f'{self.ROOT}.default_profiles', expect=False)
+        strlist = self.get_option(f'{self.ROOT}.default_profiles')
         if strlist is not None:
             return self._split_profiles(strlist)
 
@@ -70,7 +70,7 @@ class AppConfig(YamlConfig):
             path = self.OBJECTS_PATH
         else:
             path = self.OBJECTS_PROFILE_PATH.format(profile)
-        opts = self.get_options(path, expect=False)
+        opts = self.get_options(path)
         if opts is None and profile == 'default':
             opts = ()
         if opts is None:
@@ -102,7 +102,10 @@ class AppConfig(YamlConfig):
         return map(lambda x: Path(x).expanduser().absolute(), paths)
 
     def _get_path(self, name):
-        return Path(self.get_option(name, expect=True)).expanduser().absolute()
+        path = self.get_option(name)
+        if path is None:
+            raise ValueError('no path defined for option: {name}')
+        return Path(path).expanduser().absolute()
 
     @property
     def dist_dir(self):
