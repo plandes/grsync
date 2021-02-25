@@ -164,8 +164,8 @@ class Discoverer(object):
         # these are the Path objects to where the repo lives on the local fs
         repo_paths = set(map(lambda x: x.path, repo_specs))
         # add the configuration used to freeze so the target can freeze again
-        config_targ = self.config.get_option(self.CONF_TARG_KEY)
-        if config_targ is not None:
+        if self.config.has_option(self.CONF_TARG_KEY):
+            config_targ = self.config.get_option(self.CONF_TARG_KEY)
             src = Path(self.config.config_file)
             dst = Path(config_targ).expanduser()
             files.append(self._create_file(dst, dst))

@@ -25,14 +25,14 @@ class AppConfig(YamlConfig):
 
     def __init__(self, config_file=None, default_vars=None):
         super(AppConfig, self).__init__(
-            config_file, delimiter='^', default_vars=default_vars,
-            expect=False)
+            config_file, delimiter='^', default_vars=default_vars)
 
     @property
     def _find_profiles(self):
-        opts = self.get_options(self.PROFILES_PATH, expect=False)
-        if opts is None:
+        if not self.has_option(self.PROFILES_PATH):
             opts = ()
+        else:
+            opts = self.get_options(self.PROFILES_PATH)
         return opts
 
     @property
