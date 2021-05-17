@@ -196,8 +196,8 @@ class Discoverer(object):
         # pattern symlinks are special links that can change name based on
         # variables like the platform name so each link points to a
         # configuration file for that platform.
-        dec_links = self.config.get_option(self.TARG_LINKS)
-        if dec_links is not None:
+        if self.config.has_option(self.TARG_LINKS):
+            dec_links = self.config.get_option(self.TARG_LINKS)
             for link in map(lambda x: x['link'],
                             filter(lambda x: 'link' in x, dec_links)):
                 src = Path(link['source']).expanduser().absolute()
@@ -245,7 +245,9 @@ class Discoverer(object):
         """Return the preference for which repo to make primary on thaw
 
         """
-        return self._repo_preference or self.config.get_option(self.REPO_PREF)
+        return self._repo_preference or \
+            (self.config.has_option(self.REPO_PREF) and
+             self.config.get_option(self.REPO_PREF))
 
     def freeze(self, flatten=False):
         """Main entry point method that creates an object graph of all the data that
@@ -276,6 +278,8 @@ class FreezeManager(object):
     """Invoked by a client to create *frozen* distribution .
 
     """
+    CREATE_WHEEL = 'discover.wheel.create'
+
     def __init__(self, config, dist_file, defs_file, discoverer, app_version):
         self.config = config
         self.dist_file = dist_file
@@ -332,6 +336,7 @@ class FreezeManager(object):
         bg.generate(script_file)
         script_file.chmod(0o755)
         # wheel creation last since pip clobers/reconfigures logging
-        create_wheel = self.config.get_option('discover.wheel.create')
-        if create_wheel and wheel_dependency is not None:
-            self._create_wheels(wheel_dependency)
+        if self.config.has_option(self.CREATE_WHEEL):
+            create_wheel = self.config.get_option(self.CREATE_WHEEL)
+            if create_wheel and wheel_dependency is not None:
+                self._create_wheels(wheel_dependency)
