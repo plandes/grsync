@@ -250,7 +250,7 @@ class FrozenRepo(object):
             else:
                 par = link.source.parent
                 if not par.exists():
-                    logger.info('creating link directory: {par}')
+                    logger.info(f'creating link directory: {par}')
                     par.mkdir(parents=True)
                 link.source.symlink_to(link.target)
         repo_spec.links = self.links
