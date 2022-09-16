@@ -103,7 +103,7 @@ points to get this integrity.
 
 ## Requirements
 
-* At least [Python 3.7]
+* At least [Python 3.9]
 * A system that supports [PyYAML]
 
 
@@ -135,7 +135,7 @@ Copyright (c) 2020 Paul Landes
 [build-badge]: https://github.com/plandes/grsync/workflows/CI/badge.svg
 [build-link]: https://github.com/plandes/grsync/actions
 
-[Python 3.7]: https://www.python.org
+[Python 3.9]: https://www.python.org
 [PyYAML]: https://pyyaml.org
 [test configuration]: test-resources/grsync-test.yml
 
