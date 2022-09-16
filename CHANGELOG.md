@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.1.0] - 2022-09-15
+Stable release.
+
+### Changed
+- Minor 3.x bug fixes.
+- Update GitHub continuous integration workflow.
+
+
 ## [0.0.17] - 2020-12-23
 ### Added
 - Feature to copy a local distribution to somewhere else on the file system.
@@ -100,7 +108,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.0.17...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/plandes/grsync/compare/v0.0.17...v0.1.0
 [0.0.17]: https://github.com/plandes/grsync/compare/v0.0.16...v0.0.17
 [0.0.16]: https://github.com/plandes/grsync/compare/v0.0.15...v0.0.16
 [0.0.15]: https://github.com/plandes/grsync/compare/v0.0.14...v0.0.15
