@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 """"Contains the class needed to thaw the distribution.
 
 """
+from __future__ import annotations
 __author__ = 'Paul Landes'
-
 from typing import Dict, Any, Iterable
 import logging
 from pathlib import Path

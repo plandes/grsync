@@ -1,4 +1,9 @@
-from typing import Set
+"""Specialized application configuration.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import List, Union
 import logging
 from pathlib import Path
 import itertools as it
@@ -35,25 +40,24 @@ class AppConfig(YamlConfig):
             opts = self.get_options(self.PROFILES_PATH)
         return opts
 
-    @property
-    def all_profiles(self) -> Set[str]:
-        return set(self._find_profiles.keys())
-
     @staticmethod
-    def _split_profiles(profile_str):
+    def split_profiles(profile_str):
         return re.split(r'\s*,\s*', profile_str)
 
     @property
     def _default_profiles(self):
         strlist = self.get_option(f'{self.ROOT}.default_profiles')
         if strlist is not None:
-            return self._split_profiles(strlist)
+            return self.split_profiles(strlist)
 
-    def get_profiles(self, profile_overide_str):
-        if profile_overide_str is None:
+    def get_profiles(self, profile_overide: Union[str, List[str]] = None):
+        if profile_overide is None:
             profiles = self._default_profiles
         else:
-            profiles = self._split_profiles(profile_overide_str)
+            if isinstance(profile_overide, str):
+                profiles = self.split_profiles(profile_overide)
+            else:
+                profiles = profile_overide
         if profiles is None:
             profiles = self._find_profiles
         profiles = list(profiles)

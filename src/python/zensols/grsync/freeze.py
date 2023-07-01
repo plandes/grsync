@@ -86,7 +86,9 @@ class Discoverer(object):
 
         """
         paths = []
-        logger.info(f'finding objects to perist for {self.config}')
+        if logger.isEnabledFor(logging.INFO):
+            path: Path = {self.config.config_file}
+            logger.info(f'finding objects to perist defined in {path}')
         for fname in self.config.get_discoverable_objects(self.profiles):
             path = Path(fname).expanduser().absolute()
             logger.debug(f'file pattern {fname} -> {path}')
@@ -280,12 +282,14 @@ class FreezeManager(object):
     """
     CREATE_WHEEL = 'discover.wheel.create'
 
-    def __init__(self, config, dist_file, defs_file, discoverer, app_version):
+    def __init__(self, config, dist_file, defs_file, discoverer, app_version,
+                 dry_run: bool):
         self.config = config
         self.dist_file = dist_file
         self.defs_file = defs_file
         self.discoverer = discoverer
         self.app_version = app_version
+        self.dry_run = dry_run
 
     def _create_wheels(self, wheel_dependency):
         """Create wheel dependencies on this software so the host doesn't need Internet
@@ -309,20 +313,21 @@ class FreezeManager(object):
 
         """
         dist_dir = self.dist_file.parent
-        if not dist_dir.exists():
+        if not self.dry_run and not dist_dir.exists():
             dist_dir.mkdir(parents=True, exist_ok=True)
         data = self.discoverer.freeze()
         data['app_version'] = self.app_version
-        with zipfile.ZipFile(self.dist_file, mode='w') as zf:
-            for finfo in data['files']:
-                fabs = finfo['abs']
-                frel = str(Path(finfo['rel']))
-                logger.debug(f'adding file: {fabs}')
-                zf.write(fabs, arcname=frel)
-                del finfo['abs']
-                finfo['rel'] = frel
-            logger.info(f'writing distribution defs to {self.defs_file}')
-            zf.writestr(self.defs_file, json.dumps(data, indent=2))
+        if not self.dry_run:
+            with zipfile.ZipFile(self.dist_file, mode='w') as zf:
+                for finfo in data['files']:
+                    fabs = finfo['abs']
+                    frel = str(Path(finfo['rel']))
+                    logger.debug(f'adding file: {fabs}')
+                    zf.write(fabs, arcname=frel)
+                    del finfo['abs']
+                    finfo['rel'] = frel
+                logger.info(f'writing distribution defs to {self.defs_file}')
+                zf.writestr(self.defs_file, json.dumps(data, indent=2))
         logger.info(f'created frozen distribution in {self.dist_file}')
 
     def freeze(self, wheel_dependency=None):
@@ -332,9 +337,10 @@ class FreezeManager(object):
         """
         self._freeze_dist()
         script_file = self.config.bootstrap_script_file
-        bg = BootstrapGenerator(self.config)
-        bg.generate(script_file)
-        script_file.chmod(0o755)
+        if not self.dry_run:
+            bg = BootstrapGenerator(self.config)
+            bg.generate(script_file)
+            script_file.chmod(0o755)
         # wheel creation last since pip clobers/reconfigures logging
         if self.config.has_option(self.CREATE_WHEEL):
             create_wheel = self.config.get_option(self.CREATE_WHEEL)

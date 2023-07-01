@@ -1,3 +1,9 @@
+"""Distribution manager class.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import List
 import logging
 from pathlib import Path
 from zensols.config import YamlConfig
@@ -22,7 +28,7 @@ class DistManager(object):
 
     """
     def __init__(self, config: YamlConfig, dist_dir: Path = None,
-                 target_dir: Path = None, profiles: list = None,
+                 target_dir: Path = None, profiles: List[str] = None,
                  repo_preference: str = None, dry_run: bool = False):
         """Initialize.
 
@@ -112,7 +118,8 @@ class DistManager(object):
         """
         fmng = FreezeManager(
             self.config, self.dist_file, self.defs_file, self.discoverer,
-            self.app_version)
+            self.app_version,
+            dry_run=self.dry_run)
         fmng.freeze(wheel_dependency)
 
     def thaw(self):

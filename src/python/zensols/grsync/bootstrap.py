@@ -4,11 +4,9 @@ logger = logging.getLogger(__name__)
 
 
 class BootstrapGenerator(object):
-    """
-    Generate the script that creates the distribution on the target machine.
+    """Generate the script that creates the distribution on the target machine.
 
     """
-
     SCRIPT = """\
 #!/bin/sh
 
@@ -36,8 +34,7 @@ else
 fi
 
 PYTHON_DIR=${HOME}/opt/lib/python3
-PIP=${PYTHON_DIR}/bin/pip
-VIRTUAL_ENV=${NATIVE_PYTHON_BIN_DIR}/virtualenv
+PIP=${PYTHON_DIR}/bin/pip3
 PYTHON_PAR=`dirname $PYTHON_DIR`
 WHEELS_DIR=${GRSYNC_INST_DIR}/%(wheel_dir)s
 WHEELS=${WHEELS_DIR}/*.whl
@@ -50,21 +47,15 @@ echo "GRSYNC_INST_DIR=${GRSYNC_INST_DIR}"
 echo "PYTHON_DIR=${PYTHON_DIR}"
 echo "PYTHON_VER=${PYTHON_VER}"
 echo "PIP=${PIP}"
-echo "VIRTUAL_ENV=${VIRTUAL_ENV}"
 echo "PYTHON_PAR=${PYTHON_PAR}"
 echo "WHEELS_DIR=${WHEELS_DIR}"
 echo "WHEELS=${WHEELS}"
-
-if [ ! -e "${VIRTUAL_ENV}" ] ; then
-    echo "virtual environment not installed: 'pip3 install virtualenv'"
-    exit 1
-fi
 
 echo "bootstrapping python env in ${PYTHON_DIR}, wheels: ${WHEELS}"
 
 rm -rf $PYTHON_PAR
 
-cmd="${VIRTUAL_ENV} -p ${PYTHON_VER} `basename ${PYTHON_DIR}`"
+cmd="${NATIVE_PYTHON_BIN_DIR}/bin/python3 -m venv --copies ${PYTHON_DIR}"
 
 echo "invoke $cmd"
 mkdir -p $PYTHON_PAR && \

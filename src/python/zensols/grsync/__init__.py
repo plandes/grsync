@@ -7,4 +7,5 @@ from .distribution import *
 from .thaw import *
 from .mover import *
 from .distmng import *
+from .app import *
 from .cli import *
