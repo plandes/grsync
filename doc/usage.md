@@ -62,11 +62,11 @@ freeze/thaw iterations.
 
 ## Utility Git Script
 
-The [repoutil.py](../src/bin/repoutil.py) script iterates through all of your
-configured repositories and performs an action on it, such as using GNU make to
-clean, getting status, pulling etc.  It also provides an example of how to use
-the [tool's programmatic API](#api) and how it can increase your productivity
-by extending the library.
+The [repoutil.py] script iterates through all of your configured repositories
+and performs an action on it, such as using GNU make to clean, getting status,
+pulling etc.  It also provides an example of how to use the [tool's
+programmatic API](#api) and how it can increase your productivity by extending
+the library.
 
 The program needs the `plac` package: `pip3 install plac`.
 
@@ -75,8 +75,8 @@ The program needs the `plac` package: `pip3 install plac`.
 
 The package provides an easy to use convenient way to access your
 configuration, which includes your discovered Git repositories.  The following
-is a shortened version of the [dirty repository example](../example/dirty-repo.py)
-that lists all dirty (containing un-tracked or modified files) repositories:
+is a shortened version of the [dirty repository example] that lists all dirty
+(containing un-tracked or modified files) repositories:
 
 ```python
 >>> from zensols.grsync import ApplicationFactory
@@ -92,3 +92,5 @@ that lists all dirty (containing un-tracked or modified files) repositories:
 <!-- links -->
 [configuration]: https://github.com/plandes/grsync#configuration
 [configuration file]: https://github.com/plandes/grsync/blob/master/test-resources/midsize-test.yml#L29
+[repoutil.py]: https://github.com/plandes/grsync/blob/master/src/bin/repoutil.py
+[dirty repository example]: https://github.com/plandes/grsync/blob/master/example/dirty-repo.py
