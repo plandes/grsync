@@ -1,8 +1,8 @@
 # Usage
 
-The program has two phases: *freeze* and *thaw* (see [overview](#overview)).
-The command line program is used twice: first on the *freeze* on the source
-system and then *thaw* on the target machine.
+The program has two phases: *freeze* and *thaw*.  The command line program is
+used twice: first on the *freeze* on the source system and then *thaw* on the
+target machine.
 
 First the distribution is created as a configuration file along with saved
 files in a distribution zip file.  This distribution file is then copied to the
@@ -12,7 +12,7 @@ environment and then invokes the program to *thaw* the distributing.
 
 1. Install the `grsync` program (`pip install zensols.grsync`).
 2. Decide what you want to transfer to the target system (see
-   [configuration](#configuration.md)).  This file explains each section of the
+   [configuration](configuration.md)).  This file explains each section of the
    file with inline comments and should be sufficient to munge your own.
 3. Create the distribution, for example: `grsync freeze -c grsync.yml -d ./dist`.
 4. Copy the distribution zip file to the host, for example: `scp -r ./dist
@@ -29,11 +29,10 @@ To do this step manually:
 
 ## Repository Information
 
-As you build your `grsync.yml` [configuration file] (see the
-[configuration](#configuration section)), it's helpful to see what repositories
-it's finding.  This is you can do this with the `repos` and `repoinfo`, which
-show repositories, remotes, and indexed symbol links to or within the
-repositories.
+As you build your `grsync.yml` [configuration file] (see the [configuration],
+it's helpful to see what repositories it's finding.  This is you can do this
+with the `repos` and `repoinfo`, which show repositories, remotes, and indexed
+symbol links to or within the repositories.
 
 
 ## Moving or Deleting Distributions
@@ -57,11 +56,11 @@ must specify where to find the `dist.zip`.  In situations where you've already
 deleted the original distribution zip, you'll have to create a new distribution
 by freezing what you have.  For this reason it is recommended that you always
 include the original `grsync.yml` [configuration file] (see the
-[configuration](#configuration section)) in your distribution so it *migrates*
-along with each of your freeze/thaw iterations.
+[configuration]) in your distribution so it *migrates* along with each of your
+freeze/thaw iterations.
 
 
-## Utility git script
+## Utility Git Script
 
 The [repoutil.py](../src/bin/repoutil.py) script iterates through all of your
 configured repositories and performs an action on it, such as using GNU make to
@@ -76,7 +75,7 @@ The program needs the `plac` package: `pip3 install plac`.
 
 The package provides an easy to use convenient way to access your
 configuration, which includes your discovered Git repositories.  The following
-is a shortened version of the [dirty repository example](example/dirty-repo.py)
+is a shortened version of the [dirty repository example](../example/dirty-repo.py)
 that lists all dirty (containing un-tracked or modified files) repositories:
 
 ```python
@@ -88,3 +87,8 @@ that lists all dirty (containing un-tracked or modified files) repositories:
 /some/path/to/a/git/repo
 ...
 ```
+
+
+<!-- links -->
+[configuration]: https://github.com/plandes/grsync#configuration
+[configuration file]: test-resources/midsize-test.yml#L29

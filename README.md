@@ -21,6 +21,9 @@ on another system (see [overview](#overview)).  This is done by:
 
 A future release will also synchronize and manage multiple GitHub repositories.
 
+A [utility script] also provided to do operations on all configured local git
+repositories.
+
 
 ## Documentation
 
@@ -73,7 +76,7 @@ The program has two phases: *freeze* and *thaw* (see [overview](#overview)).
 The command line program is used twice: first on the *freeze* on the source
 system and then *thaw* on the target machine.
 
-See [usage](doc/usage.md) for more information.
+See [usage](https://plandes.github.io/grsync/doc/usage.html) for more information.
 
 
 ## Configuration
@@ -144,3 +147,4 @@ Copyright (c) 2020 - 2023 Paul Landes
 [configuration file profile entry]: test-resources/midsize-test.yml#L29
 [pip]: https://docs.python.org/3/installing/index.html
 [Puppet]: https://en.wikipedia.org/wiki/Puppet_(software)
+[utility script]: https://plandes.github.io/grsync/doc/usage.html#utility-git-script
