@@ -61,6 +61,17 @@ include the original `grsync.yml` [configuration file] (see the
 along with each of your freeze/thaw iterations.
 
 
+## Utility git script
+
+The [repoutil.py](../src/bin/repoutil.py) script iterates through all of your
+configured repositories and performs an action on it, such as using GNU make to
+clean, getting status, pulling etc.  It also provides an example of how to use
+the [tool's programmatic API](#api) and how it can increase your productivity
+by extending the library.
+
+The program needs the `plac` package: `pip3 install plac`.
+
+
 ## API
 
 The package provides an easy to use convenient way to access your
