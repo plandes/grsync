@@ -68,6 +68,16 @@ pulling etc.  It also provides an example of how to use the [tool's
 programmatic API](#api) and how it can increase your productivity by extending
 the library.
 
+It can also be used on the command line.  For example, to push all uncommitted
+changes, for remote `github`:
+
+```bash
+for i in `repoutil uncommitted -r github` ; do 
+    echo "pushing repository at $i"
+	( cd $i ; git push github )
+done
+```
+
 The program needs the `plac` package: `pip3 install plac`.
 
 
