@@ -12,15 +12,15 @@ environment and then invokes the program to *thaw* the distributing.
 
 1. Install the `grsync` program (`pip install zensols.grsync`).
 2. Decide what you want to transfer to the target system (see
-[configuration](#configuration.md)).  This file explains each section of the
-file with inline comments and should be sufficient to munge your own.
+   [configuration](#configuration.md)).  This file explains each section of the
+   file with inline comments and should be sufficient to munge your own.
 3. Create the distribution, for example: `grsync freeze -c grsync.yml -d ./dist`.
 4. Copy the distribution zip file to the host, for example: `scp -r ./dist
-~/<somehost>`
+   ~/<somehost>`
 5. Log into that host: `slogin <host>`
-6. Call the bootstrapper: `cd ./dist && ./bootstrap.sh /usr/bin ./dist python3.7`
-This attempts to create the Python virtual environment, install the program
-dependencies and *thaw* the distribution.
+6. Call the bootstrapper: `cd ./dist && ./bootstrap.sh /usr/bin ./dist
+   python3.9` This attempts to create the Python virtual environment, install
+   the program dependencies and *thaw* the distribution.
 
 To do this step manually:
 1. Install the `grsync` program (`pip install zensols.grsync`).
@@ -61,38 +61,19 @@ include the original `grsync.yml` [configuration file] (see the
 along with each of your freeze/thaw iterations.
 
 
-## Command Line Help
+## API
 
-This information is given by the command line `grsync -h`, but repeated here
-for convenience:
-```sql
-Usage: usage: grsync <list|freeze|info|repoinfo|repos|thaw> [options]
+The package provides an easy to use convenient way to access your
+configuration, which includes your discovered Git repositories.  The following
+is a shortened version of the [dirty repository example](example/dirty-repo.py)
+that lists all dirty (containing un-tracked or modified files) repositories:
 
-Options:
---version             show program's version number and exit
--h, --help            show this help message and exit
--w NUMBER, --whine=NUMBER
-add verbosity to logging
--c FILE, --config=FILE
-configuration file
-Actions:
-freeze    Create a distribution
--d, --distdir <string>                    the location of build out distribution
---wheeldep <string>       zensols.grsync  used to create the wheel dep files
--p, --profiles <string>                   comma spearated list of objects to freeze
-
-info      Pretty print discovery information
-
-repoinfo  Get information on repositories
--n, --name <string>                       comma spearated list of repo names
--p, --profiles <string>                   comma spearated list of objects to freeze
-
-repos     Output all repository top level info
--f, --format <string>     {path}          format string (i.e. {name}: {path} ({remotes}))
--p, --profiles <string>                   comma spearated list of objects to freeze
-
-thaw      Build out a distribution
--d, --distdir <string>                    the location of build out distribution
--t, --targetdir <string>                  the location of build out target dir
--p, --profiles <string>                   comma spearated list of objects to freeze
+```python
+>>> from zensols.grsync import ApplicationFactory
+>>> app = ApplicationFactory.create_harness().get_instance('repos')
+>>> discoverer = app.dist_mng.discoverer
+>>> repo_specs = discoverer.discover(False)['repo_specs']
+>>> for spec in filter(lambda rs: rs.repo.is_dirty(), repo_specs): print(spec.path)
+/some/path/to/a/git/repo
+...
 ```
