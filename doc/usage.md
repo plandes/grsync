@@ -91,4 +91,4 @@ that lists all dirty (containing un-tracked or modified files) repositories:
 
 <!-- links -->
 [configuration]: https://github.com/plandes/grsync#configuration
-[configuration file]: test-resources/midsize-test.yml#L29
+[configuration file]: https://github.com/plandes/grsync/blob/master/test-resources/midsize-test.yml#L29
