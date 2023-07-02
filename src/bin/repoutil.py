@@ -8,12 +8,13 @@ GNU make to clean, getting status, pulling etc.
 """
 __author__ = 'Paul Landes'
 
-from typing import Iterable, Callable
+from typing import Iterable, Callable, Tuple, Dict
 from dataclasses import dataclass, field
 import sys
 import logging
 from pathlib import Path
 import plac
+import git
 from zensols.cli import CliHarness
 from zensols.grsync import (
     RepoSpec, Discoverer, DistManager, ApplicationFactory, InfoApplication
@@ -68,10 +69,25 @@ class RepoUtil(object):
 
     def dirty(self):
         """Print dirty repos, which are those that need committing."""
+        rs: RepoSpec
         for rs in filter(lambda rs: rs.repo.is_dirty(), self.repo_specs):
             print(rs.path)
-            print(f'untracked: {rs.repo.untracked_files}')
-            print(f'difs:      {rs.repo.index.diff(None)}')
+
+    def uncommitted(self, remote: str = 'origin', branch: str = 'master'):
+        """Print repos that have commits that haven't been pushed yet."""
+        def has_commits(rs: RepoSpec) -> bool:
+            commits: Tuple[git.Commit] = ()
+            try:
+                spec: str = f'{remote}/{branch}..{branch}'
+                # only the given remote and branch is supported for now
+                commits = tuple(rs.repo.iter_commits(spec))
+            except git.GitCommandError:
+                pass
+            return len(commits) > 0
+
+        rs: RepoSpec
+        for rs in filter(has_commits, self.repo_specs):
+            print(rs.path)
 
     def clean(self):
         """Do a make clean on all repo paths."""
@@ -90,21 +106,27 @@ class RepoUtil(object):
 
     def list(self):
         """Print a list of actions for this script"""
-        print('\n'.join('dirty clean status pull list'.split()))
+        print('\n'.join('dirty uncommitted clean status pull list'.split()))
 
 
 @plac.annotations(
-    action=('Action: (<dirty|clean|status|pull|fix|list>)',
+    action=('Action: (<dirty|uncommitted [-b,-r]]|clean|status|pull|fix|list>)',
             'positional', None, str),
-    dryrun=('Don\'t actually move the file.', 'flag', 'd'))
-def main(action, dryrun=False):
+    dryrun=('don\'t do anything, just act like it', 'flag', 'd'),
+    remote=('repo remote', 'option', 'r'),
+    branch=('repo branch', 'option', 'b'))
+def main(action: str, dryrun: bool = False,
+         remote: str = 'origin', branch: str = 'master'):
     logging.basicConfig(level=logging.WARNING, format='%(message)s')
     logger.setLevel(level=logging.INFO)
     ru = RepoUtil(dry_run=dryrun)
+    params: Dict[str, str] = {}
+    if action == 'uncommitted':
+        params.update({'remote': remote, 'branch': branch})
     try:
-        getattr(ru, action)()
-    except AttributeError:
-        print(f'no such action: {action}', file=sys.stderr)
+        getattr(ru, action)(**params)
+    except AttributeError as e:
+        print(f'no such action: {action}: {e}', file=sys.stderr)
         sys.exit(1)
 
 
