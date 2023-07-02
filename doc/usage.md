@@ -72,7 +72,7 @@ It can also be used on the command line.  For example, to push all uncommitted
 changes, for remote `github`:
 
 ```bash
-for i in `repoutil uncommitted -r github` ; do 
+for i in `repoutil uncommitted -r github` ; do
     echo "pushing repository at $i"
 	( cd $i ; git push github )
 done
