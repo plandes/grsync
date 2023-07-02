@@ -1,3 +1,8 @@
+"""Domain and container classes, mostly modeling Git repos.
+
+"""
+__author__ = 'Paul Landes'
+
 import logging
 from git import Remote
 from pathlib import Path

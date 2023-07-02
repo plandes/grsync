@@ -1,3 +1,8 @@
+"""A utility class to create a bootstrapping script to install Python.
+
+"""
+__author__ = 'Paul Landes'
+
 import logging
 
 logger = logging.getLogger(__name__)
