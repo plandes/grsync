@@ -63,7 +63,7 @@ class DistributionMover(object):
                 if isinstance(obj, FrozenRepo):
                     try:
                         grepo = obj.repo_spec.repo
-                    except Exception as e:
+                    except Exception:
                         # git.exc.InvalidGitRepositoryError
                         logger.error(f'invalid repository: {obj}--skipping')
                         continue

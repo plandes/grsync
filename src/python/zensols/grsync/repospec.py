@@ -9,11 +9,7 @@ import sys
 from pathlib import Path
 from git import Repo
 from zensols.persist import persisted
-from zensols.grsync import (
-    LinkEntry,
-    RemoteSpec,
-    PathTranslator
-)
+from zensols.grsync import LinkEntry, RemoteSpec, PathTranslator
 
 logger = logging.getLogger(__name__)
 MASTER_SECTION = 'branch "master"'
