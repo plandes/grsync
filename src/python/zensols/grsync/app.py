@@ -17,7 +17,11 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DistManagerFactory(object):
+    """Creates instances of :class:`.DistManager`.
+
+    """
     path: Path = field()
+    """The path to the YAML application configuration file."""
 
     @property
     @persisted('_config')
