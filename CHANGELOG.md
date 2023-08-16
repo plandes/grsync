@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.3.0] - 2023-08-16
+### Changed
+- Updated [zensols.util] to 1.13.0.
+- Fix setuptool warning.
+
+
 ## [0.2.0] - 2023-02-02
 ### Changed
 - Updated [zensols.util] to 1.12.0.
@@ -113,7 +119,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/plandes/grsync/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/plandes/grsync/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/plandes/grsync/compare/v0.0.17...v0.1.0
 [0.0.17]: https://github.com/plandes/grsync/compare/v0.0.16...v0.0.17
