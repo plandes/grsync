@@ -1,0 +1,7 @@
+<map id="inheritancef7b00881b7" name="inheritancef7b00881b7">
+<area shape="rect" id="node1" href="#zensols.grsync.domain.FileEntry" target="_top" title="Represents a file based entry in the frozen version of the distribution zip." alt="" coords="7,5,101,36"/>
+<area shape="rect" id="node2" href="#zensols.grsync.domain.LinkEntry" target="_top" title="Represents a symbolic link in the frozen version of the distribution zip." alt="" coords="5,84,103,115"/>
+<area shape="rect" id="node3" href="#zensols.grsync.domain.PathTranslator" target="_top" title="Utility class around helping with paths." alt="" coords="264,5,404,36"/>
+<area shape="rect" id="node4" href="#zensols.grsync.domain.RemoteSpec" target="_top" title="This class represents a remote for a git repo." alt="" coords="497,5,624,36"/>
+<area shape="rect" id="node5" href="#zensols.grsync.domain.SymbolicLink" target="_top" title="This classs represents a file system symbolic link. &#160;The class also freezes" alt="" coords="683,5,812,36"/>
+</map>

@@ -1,0 +1,123 @@
+zensols.grsync package
+======================
+
+Submodules
+----------
+
+zensols.grsync.app
+------------------
+.. inheritance-diagram:: zensols.grsync.app
+   :parts: 1
+
+.. automodule:: zensols.grsync.app
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.bootstrap
+------------------------
+.. inheritance-diagram:: zensols.grsync.bootstrap
+   :parts: 1
+
+.. automodule:: zensols.grsync.bootstrap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.cli
+------------------
+.. inheritance-diagram:: zensols.grsync.cli
+   :parts: 1
+
+.. automodule:: zensols.grsync.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.config
+---------------------
+.. inheritance-diagram:: zensols.grsync.config
+   :parts: 1
+
+.. automodule:: zensols.grsync.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.distmng
+----------------------
+.. inheritance-diagram:: zensols.grsync.distmng
+   :parts: 1
+
+.. automodule:: zensols.grsync.distmng
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.distribution
+---------------------------
+.. inheritance-diagram:: zensols.grsync.distribution
+   :parts: 1
+
+.. automodule:: zensols.grsync.distribution
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.domain
+---------------------
+.. inheritance-diagram:: zensols.grsync.domain
+   :parts: 1
+
+.. automodule:: zensols.grsync.domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.freeze
+---------------------
+.. inheritance-diagram:: zensols.grsync.freeze
+   :parts: 1
+
+.. automodule:: zensols.grsync.freeze
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.mover
+--------------------
+.. inheritance-diagram:: zensols.grsync.mover
+   :parts: 1
+
+.. automodule:: zensols.grsync.mover
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.repospec
+-----------------------
+.. inheritance-diagram:: zensols.grsync.repospec
+   :parts: 1
+
+.. automodule:: zensols.grsync.repospec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.grsync.thaw
+-------------------
+.. inheritance-diagram:: zensols.grsync.thaw
+   :parts: 1
+
+.. automodule:: zensols.grsync.thaw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: zensols.grsync
+   :members:
+   :undoc-members:
+   :show-inheritance:

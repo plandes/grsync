@@ -1,0 +1,4 @@
+<map id="inheritanced2140c7dd9" name="inheritanced2140c7dd9">
+<area shape="rect" id="node1" href="#zensols.grsync.freeze.Discoverer" target="_top" title="Discover git repositories, links, files and directories to save to" alt="" coords="5,5,113,36"/>
+<area shape="rect" id="node2" href="#zensols.grsync.freeze.FreezeManager" target="_top" title="Invoked by a client to create *frozen* distribution ." alt="" coords="277,5,428,36"/>
+</map>
