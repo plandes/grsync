@@ -1,8 +1,8 @@
 # GRSync: Persist create build out environments
 
 [![PyPI][pypi-badge]][pypi-link]
-[![Python 3.9][python39-badge]][python39-link]
 [![Python 3.10][python310-badge]][python310-link]
+[![Python 3.11][python311-badge]][python311-link]
 [![Build Status][build-badge]][build-link]
 
 This program captures your home directory and synchronize it with another host
@@ -104,20 +104,15 @@ allows this.  However, for now, you must include both the link and the data it
 points to get this integrity.
 
 
-## Requirements
-
-* At least [Python 3.9]
-* A system that supports [PyYAML]
-
-
-## Planned Future Features
-
-Preserve and restore file and directory timestamps.
-
-
 ## Changelog
 
 An extensive changelog is available [here](CHANGELOG.md).
+
+
+## Community
+
+Please star this repository and let me know how and where you use this API.
+Contributions as pull requests, feedback and any input is welcome.
 
 
 ## License
@@ -131,10 +126,10 @@ Copyright (c) 2020 - 2023 Paul Landes
 [pypi]: https://pypi.org/project/zensols.grsync/
 [pypi-link]: https://pypi.python.org/pypi/zensols.grsync
 [pypi-badge]: https://img.shields.io/pypi/v/zensols.grsync.svg
-[python39-badge]: https://img.shields.io/badge/python-3.9-blue.svg
-[python39-link]: https://www.python.org/downloads/release/python-390
 [python310-badge]: https://img.shields.io/badge/python-3.10-blue.svg
 [python310-link]: https://www.python.org/downloads/release/python-3100
+[python311-badge]: https://img.shields.io/badge/python-3.11-blue.svg
+[python311-link]: https://www.python.org/downloads/release/python-3110
 [build-badge]: https://github.com/plandes/grsync/workflows/CI/badge.svg
 [build-link]: https://github.com/plandes/grsync/actions
 
