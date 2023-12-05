@@ -152,4 +152,3 @@ Stable release.
 <!-- links -->
 [zensols.util]: https://github.com/plandes/util
 [zenbuild]: https://github.com/plandes/zenbuild
-
