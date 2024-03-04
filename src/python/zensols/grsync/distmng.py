@@ -3,18 +3,14 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import List
+from typing import List, Iterable
 import logging
 from pathlib import Path
 from zensols.config import YamlConfig
 from zensols.persist import persisted
 from zensols.grsync import (
-    Discoverer,
-    Distribution,
-    FreezeManager,
-    ThawManager,
-    PathTranslator,
-    DistributionMover,
+    RepoSpec, Discoverer, Distribution, FreezeManager, ThawManager,
+    PathTranslator, DistributionMover
 )
 
 logger = logging.getLogger(__name__)
@@ -84,6 +80,13 @@ class DistManager(object):
             self.config, self.profiles, self.path_translator,
             self.repo_preference)
 
+    def get_repo_specs(self) -> Iterable[RepoSpec]:
+        """The information on each git repository found by the GRSync
+        configuraiton.
+
+        """
+        return self.discoverer.discover(False)['repo_specs']
+
     @property
     def distribution(self):
         return Distribution(
@@ -91,8 +94,8 @@ class DistManager(object):
             self.path_translator)
 
     def discover_info(self):
-        """Proviate information about what's found in the user home directory.  This is
-        later used to freeze the data.
+        """Proviate information about what's found in the user home directory.
+        This is later used to freeze the data.
 
         """
         from pprint import pprint
@@ -113,7 +116,8 @@ class DistManager(object):
             specs[name].write()
 
     def freeze(self, wheel_dependency=None):
-        """Freeze the current configuration and file set to the distribution zip.
+        """Freeze the current configuration and file set to the distribution
+        zip.
 
         """
         fmng = FreezeManager(
@@ -152,10 +156,3 @@ class DistManager(object):
         tmng = ThawManager(dist, self.path_translator,
                            self.app_version, self.dry_run)
         tmng.thaw_from_in_memory(self.target_dir)
-
-    def tmp(self):
-        destination_path = Path('target/thaw').absolute()
-        mv = DistributionMover(
-            self.distribution, self.target_dir,
-            destination_path, dry_run=self.dry_run)
-        mv.dir_reduce()
