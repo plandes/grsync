@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.4.1] - 2024-03-10
+### Added
+- Programmatic access to the distribution manager via the `ApplicationFactory`.
+
+
 ## [0.4.0] - 2023-12-05
 ### Changed
 - Upgrade to [zensols.util] version 1.14.
@@ -130,7 +135,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/plandes/grsync/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/plandes/grsync/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/plandes/grsync/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/plandes/grsync/compare/v0.1.0...v0.2.0
