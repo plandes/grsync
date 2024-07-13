@@ -322,7 +322,8 @@ class FreezeManager(object):
                 for finfo in data['files']:
                     fabs = finfo['abs']
                     frel = str(Path(finfo['rel']))
-                    logger.debug(f'adding file: {fabs}')
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f'adding file: {fabs}')
                     zf.write(fabs, arcname=frel)
                     del finfo['abs']
                     finfo['rel'] = frel
