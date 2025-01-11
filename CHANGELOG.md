@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.0.0] - 2025-01-11
+### Removed
+- Support for Python 3.10.
+
+### Changed
+- Upgraded to [zensols.util] version 1.15.
+
+
 ## [0.4.1] - 2024-03-10
 ### Added
 - Programmatic access to the distribution manager via the `ApplicationFactory`.
@@ -135,7 +143,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/plandes/grsync/compare/v0.4.1...v1.0.0
 [0.4.1]: https://github.com/plandes/grsync/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/plandes/grsync/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/plandes/grsync/compare/v0.2.0...v0.3.0
