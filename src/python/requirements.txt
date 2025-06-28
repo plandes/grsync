@@ -1,3 +1,0 @@
-GitPython~=3.1.29
-gitdb2~=2.0.3
-zensols.util~=1.15.0
