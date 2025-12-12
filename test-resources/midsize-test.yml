@@ -18,6 +18,12 @@ discover:
     - ~/.emacs.d
     - ^{discover.codedir}/home-dir
     - ^{discover.codedir}/emacs
+  repo:
+    # set a preferred remote
+    remote_pref: github
+    # a list of path regular expressions to skip when discovering repos
+    skip:
+      - '.+\/\.pixi.+\/work$'
   # symbolic links that are string interpolated with the platform's name
   target:
     config: ~/opt/etc/grsync.yml
