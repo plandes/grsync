@@ -1,60 +1,37 @@
 ## makefile automates the build and deployment for python projects
 
+
+## Build
+#
 PROJ_TYPE=		python
 PROJ_MODULES =		python/doc python/package python/deploy python/envdist
-CONFIG=			test-resources/midsize-test.yml
-ADD_CLEAN=		dist
 
+
+## Project
+#
+CONFIG_FILE ?=		test-resources/midsize-test.yml
+
+
+## Includes
+#
 include ./zenbuild/main.mk
 
-.PHONY:		version
-version:
-		make PYTHON_BIN_ARGS='--version' run
 
+## Functions
+#
+define run
+	$(MAKE) $(PY_MAKE_ARGS) pyharn ARG="--config $(CONFIG_FILE) $(1)"
+endef
+
+
+## Targets
+#
+# pretty print discovery information
 .PHONY:		discover
 discover:
-		make PYTHON_BIN_ARGS='info -c $(CONFIG) $(ARGS)' run
+		@$(call run,info)
 
+# output all repository top level info
 .PHONY:		repos
 repos:
-		make PYTHON_BIN_ARGS='repos -c $(CONFIG) $(ARGS) ' run
-
-.PHONY:		repoinfo
-repoinfo:
-		make PYTHON_BIN_ARGS='repoinfo -c $(CONFIG) $(ARGS) -n home-dir' run
-
-.PHONY:		freeze
-freeze:
-		mkdir -p $(MTARG)
-		make PYTHON_BIN_ARGS='freeze -c $(CONFIG) -d $(MTARG)/dist $(ARGS)' run
-
-.PHONY:		thaw
-thaw:
-		rm -rf $(MTARG)/t
-		make PYTHON_BIN_ARGS='thaw -d $(MTARG) -t $(MTARG)/t $(ARGS)' run
-
-.PHONY:		appinfo
-appinfo:
-		rm -rf $(MTARG)/t
-		make PYTHON_BIN_ARGS='info -c $(CONFIG)' run
-
-.PHONY:		help
-help:
-		rm -rf $(MTARG)/t
-		make PYTHON_BIN_ARGS='--help' run
-
-.PHONY:		rethaw
-rethaw:		clean freeze thaw
-
-.PHONY:		delete
-delete:
-		make PYTHON_BIN_ARGS='delete --dryrun -t $(MTARG)/t -c $(CONFIG) $(ARGS)' run
-
-.PHONY:		testfreezethaw
-testfreezethaw:
-		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_freeze test
-		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_thaw test
-
-.PHONY:		testmove
-testmove:
-		make PY_SRC_TEST_PKGS=test_freeze.TestFreezeThaw.test_move test
+		@$(call run,repos)
