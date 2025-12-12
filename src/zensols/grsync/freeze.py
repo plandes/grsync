@@ -87,15 +87,17 @@ class Discoverer(object):
         """
         paths = []
         if logger.isEnabledFor(logging.INFO):
-            path: Path = {self.config.config_file}
+            path: Path = self.config.config_file
             logger.info(f'finding objects to perist defined in {path}')
         for fname in self.config.get_discoverable_objects(self.profiles):
             path = Path(fname).expanduser().absolute()
-            logger.debug(f'file pattern {fname} -> {path}')
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f'file pattern {fname} -> {path}')
             bname = path.name
             dname = path.parent.expanduser()
             files = list(dname.glob(bname))
-            logger.debug(f'expanding {path} -> {dname} / {bname}: {files}')
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f'expanding {path} -> {dname} / {bname}: {files}')
             paths.extend(files)
         return paths
 
@@ -155,9 +157,8 @@ class Discoverer(object):
         # find the directories that have git repos in them (recursively)
         git_paths = self._get_repo_paths(dirs_or_gits)
         # create symbolic link objects from those objects that are links
-        links = tuple(map(lambda l: SymbolicLink(l, self.path_translator),
+        links = tuple(map(lambda lk: SymbolicLink(lk, self.path_translator),
                           filter(lambda x: x.is_symlink(), dobjs)))
-        #logger.debug(f'links: {links}')
         # normal files are kept track of so we can compress them later
         for f in filter(lambda x: x.is_file() and not x.is_symlink(), dobjs):
             files.append(self._create_file(f))
@@ -232,10 +233,11 @@ class Discoverer(object):
                 if link.target in files_by_name:
                     dst = files_by_name[link.target]
                     # follow links enhancement picks up here
-                    logger.debug(f'source {link.source} -> {dst}')
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f'source {link.source} -> {dst}')
                 else:
-                    logger.warning(f'hanging link with no target: {link}--' +
-                                   'proceeding anyway')
+                    if logger.isEnabledFor(logging.INFO):
+                        logger.info(f'hanging link with no target: {link}')
 
         return {'repo_specs': repo_specs,
                 'empty_dirs': empty_dirs,
@@ -252,9 +254,9 @@ class Discoverer(object):
              self.config.get_option(self.REPO_PREF))
 
     def freeze(self, flatten=False):
-        """Main entry point method that creates an object graph of all the data that
-        needs to be saved (freeze) in the user home directory to reconstitute
-        later (thaw).
+        """Main entry point method that creates an object graph of all the data
+        that needs to be saved (freeze) in the user home directory to
+        reconstitute later (thaw).
 
         :param flatten: if ``True`` then return a data structure appropriate
                         for pretty printing; this will omit data needed to
@@ -265,8 +267,9 @@ class Discoverer(object):
         disc = self.discover(flatten)
         repo_specs = tuple(x.freeze() for x in disc['repo_specs'])
         files = disc['files']
-        logger.info('freeezing with git repository ' +
-                    f'preference: {self.repo_preference}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info('freeezing with git repository ' +
+                        f'preference: {self.repo_preference}')
         disc.update({'repo_specs': repo_specs,
                      'repo_pref': self.repo_preference,
                      'files': files,
