@@ -295,20 +295,24 @@ class FreezeManager(object):
         self.dry_run = dry_run
 
     def _create_wheels(self, wheel_dependency):
-        """Create wheel dependencies on this software so the host doesn't need Internet
-        connectivity.  Currently the YAML dependency breaks this since only
-        binary per host wheels are available for download and the wrong was is
-        given of spanning platforms (i.e. OSX to Linux).
+        """Create wheel dependencies on this software so the host doesn't need
+        Internet connectivity.  Currently the YAML dependency breaks this since
+        only binary per host wheels are available for download and the wrong was
+        is given of spanning platforms (i.e. OSX to Linux).
 
         """
         wheel_dir_name = self.config.wheel_dir_name
         wheel_dir = Path(self.dist_dir, wheel_dir_name)
-        logger.info(f'creating wheels from dependency {wheel_dependency} in {wheel_dir}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'creating wheels from dependency {wheel_dependency} ' +
+                        f'in {wheel_dir}')
         if not wheel_dir.exists():
             wheel_dir.mkdir(parents=True, exist_ok=True)
         from pip._internal import main
-        pip_cmd = f'wheel --wheel-dir={wheel_dir} --no-cache-dir {wheel_dependency}'
-        logger.debug('pip cmd: {}'.format(pip_cmd))
+        pip_cmd = (f'wheel --wheel-dir={wheel_dir} '
+                   f'--no-cache-dir {wheel_dependency}')
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug('pip cmd: {}'.format(pip_cmd))
         main(pip_cmd.split())
 
     def _freeze_dist(self):
@@ -332,11 +336,12 @@ class FreezeManager(object):
                     finfo['rel'] = frel
                 logger.info(f'writing distribution defs to {self.defs_file}')
                 zf.writestr(self.defs_file, json.dumps(data, indent=2))
-        logger.info(f'created frozen distribution in {self.dist_file}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'created frozen distribution in {self.dist_file}')
 
     def freeze(self, wheel_dependency=None):
-        """Freeze the distribution by saving creating a script to thaw along with all
-        artifacts (i.e. repo definitions) in a zip file.
+        """Freeze the distribution by saving creating a script to thaw along
+        with all artifacts (i.e. repo definitions) in a zip file.
 
         """
         self._freeze_dist()
