@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.0.1] - 2025-12-12
+### Added
+- An optional list of regular expressions under configuration
+  `discover.repo.skip` to skip paths to repositories.
+
+### Changed
+- Checks on logging to speed up discovery.
+
+
 ## [1.0.0] - 2025-01-11
 ### Removed
 - Support for Python 3.10.
@@ -143,7 +152,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/plandes/grsync/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/plandes/grsync/compare/v0.4.1...v1.0.0
 [0.4.1]: https://github.com/plandes/grsync/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/plandes/grsync/compare/v0.3.0...v0.4.0

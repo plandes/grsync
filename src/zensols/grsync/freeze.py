@@ -4,11 +4,12 @@ find matching objects to use to freeze the distribution.
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, Any
+from typing import Tuple, List, Dict, Iterable, Any
 import os
 import stat
 import socket
 import logging
+import re
 import json
 import zipfile
 from pathlib import Path
@@ -33,6 +34,7 @@ class Discoverer(object):
     CONF_TARG_KEY = 'discover.target.config'
     TARG_LINKS = 'discover.target.links'
     REPO_PREF = 'discover.repo.remote_pref'
+    SKIP_REPOS = 'discover.repo.skip'
 
     def __init__(self, config: AppConfig, profiles: list,
                  path_translator: PathTranslator, repo_preference: str):
@@ -55,17 +57,28 @@ class Discoverer(object):
                     git_paths.append(rootpath.parent)
         return git_paths
 
-    def _discover_repo_specs(self, paths, links):
+    def _discover_repo_specs(self, paths: Iterable[Path],
+                             links: Tuple[SymbolicLink, ...]) -> List[RepoSpec]:
         """Return a list of RepoSpec objects.
 
         :param paths: a list of paths each of which start a new RepoSpec
+
         :param links: a list of symlinks to check if they point to the
-        repository, and if so, add them to the RepoSpec
+                      repository, and if so, add them to the RepoSpec
 
         """
-        repo_specs = []
+        repo_specs: List[RepoSpec] = []
+        if self.config.has_option(self.SKIP_REPOS):
+            regex: str
+            for regex in self.config.get_option(self.SKIP_REPOS):
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f"filter paths on regex: '{regex}'")
+                pat: re.Pattern = re.compile(regex)
+                paths = tuple(filter(
+                    lambda p: pat.match(str(p)) is None, paths))
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'repo spec paths: {paths}')
+        path: Path
         for path in paths:
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(f'found repo at path {path}')
@@ -91,8 +104,7 @@ class Discoverer(object):
         """
         paths = []
         if logger.isEnabledFor(logging.INFO):
-            path: Path = self.config.config_file
-            logger.info(f'finding objects to perist defined in {path}')
+            logger.info(f'finding persist objects in {self.config.config_file}')
         for fname in self.config.get_discoverable_objects(self.profiles):
             path = Path(fname).expanduser().absolute()
             if logger.isEnabledFor(logging.DEBUG):
@@ -136,7 +148,7 @@ class Discoverer(object):
             fobj['rel'] = self.path_translator.relative_to(dst)
         return fobj
 
-    def discover(self, flatten) -> Dict[str, Any]:
+    def discover(self, flatten: bool) -> Dict[str, Any]:
         """Main worker method to capture all the user home information (git
         repos, files, sym links and empty directories per the configuration
         file).
@@ -197,7 +209,8 @@ class Discoverer(object):
 
         # configurated empty directories are added only if they exist so we can
         # recreate with the correct mode
-        logger.info(f'using profiles: {", ".join(self.profiles)}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'using profiles: {", ".join(self.profiles)}')
         for ed in self.config.get_empty_dirs(self.profiles):
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug('empty dir: {}'.format(str(ed)))
@@ -261,7 +274,7 @@ class Discoverer(object):
             (self.config.has_option(self.REPO_PREF) and
              self.config.get_option(self.REPO_PREF))
 
-    def freeze(self, flatten=False):
+    def freeze(self, flatten: bool = False):
         """Main entry point method that creates an object graph of all the data
         that needs to be saved (freeze) in the user home directory to
         reconstitute later (thaw).
@@ -342,7 +355,8 @@ class FreezeManager(object):
                     zf.write(fabs, arcname=frel)
                     del finfo['abs']
                     finfo['rel'] = frel
-                logger.info(f'writing distribution defs to {self.defs_file}')
+                if logger.isEnabledFor(logging.INFO):
+                    logger.info(f'writing distribution defs to {self.defs_file}')
                 zf.writestr(self.defs_file, json.dumps(data, indent=2))
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'created frozen distribution in {self.dist_file}')
