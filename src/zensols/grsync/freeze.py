@@ -44,9 +44,11 @@ class Discoverer(object):
     def _get_repo_paths(self, paths):
         """Recusively find git repository root directories."""
         git_paths = []
-        logger.debug('repo root search paths {}'.format(paths))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug('repo root search paths {}'.format(paths))
         for path in paths:
-            logger.debug('searching git paths in {}'.format(path.resolve()))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('searching git paths in {}'.format(path.resolve()))
             for root, dirs, files in os.walk(path.resolve()):
                 rootpath = Path(root)
                 if rootpath.name == '.git':
@@ -62,9 +64,11 @@ class Discoverer(object):
 
         """
         repo_specs = []
-        logger.debug(f'repo spec paths: {paths}')
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'repo spec paths: {paths}')
         for path in paths:
-            logger.debug(f'found repo at path {path}')
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f'found repo at path {path}')
             repo_spec = RepoSpec(path, self.path_translator)
             repo_spec.add_linked(links)
             if len(repo_spec.remotes) == 0:
@@ -133,8 +137,9 @@ class Discoverer(object):
         return fobj
 
     def discover(self, flatten) -> Dict[str, Any]:
-        """Main worker method to capture all the user home information (git repos,
-        files, sym links and empty directories per the configuration file).
+        """Main worker method to capture all the user home information (git
+        repos, files, sym links and empty directories per the configuration
+        file).
 
         :param flatten: if ``True`` then return a data structure appropriate
                         for pretty printing; this will omit data needed to
@@ -172,7 +177,8 @@ class Discoverer(object):
             src = Path(self.config.config_file)
             dst = Path(config_targ).expanduser()
             files.append(self._create_file(dst, dst))
-        logger.debug(f'files: {files}')
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'files: {files}')
 
         # recusively find files that don't belong to git repos
         def gather(par):
@@ -184,7 +190,8 @@ class Discoverer(object):
 
         # find files that don't belong to git repos
         for path in filter(lambda x: x not in repo_paths, dirs_or_gits):
-            logger.debug('dir {}'.format(path))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('dir {}'.format(path))
             dirs.append({'abs': path, 'rel': path_trans.relative_to(path)})
             gather(path)
 
@@ -192,7 +199,8 @@ class Discoverer(object):
         # recreate with the correct mode
         logger.info(f'using profiles: {", ".join(self.profiles)}')
         for ed in self.config.get_empty_dirs(self.profiles):
-            logger.debug('empty dir: {}'.format(str(ed)))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('empty dir: {}'.format(str(ed)))
             empty_dirs.append(self._create_file(
                 ed, no_path_obj=True, robust=True))
 
