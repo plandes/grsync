@@ -24,18 +24,18 @@ project:
     # Python interpreter versions
     version:
       # constraint on install eligibility
-      required: '>=3.11,<3.13'
+      required: '>=3.11,<3.15'
       # last supported version of Python supported for the project
-      previous: '3.11.12'
+      previous: '3.12.10'
       # Python version supported for current development
-      current: '3.12.10'
+      current: '3.13.11'
       # version of Python used to build/link specific to the host
-      package_host: '3.11.6'
+      package_host: '3.12.10'
     # pypi dependencies added to 'project'
     dependencies:
       - 'GitPython~=3.1.29'
       - 'gitdb2~=2.0.3'
-      - 'zensols.util~=1.15.11'
+      - 'zensols.util~=1.16.2'
   # the program is called on the command line
   has_entry_points: true
 doc:

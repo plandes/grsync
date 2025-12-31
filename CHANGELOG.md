@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.1.0] - 2025-12-31
+### Removed
+- Python 3.11 support.
+
+### Added
+- Python 3.13 support.
+
+### Changed
+- Upgrade [zensols.util] to v1.16.2.
+
+
 ## [1.0.1] - 2025-12-12
 ### Added
 - An optional list of regular expressions under configuration
@@ -152,7 +163,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/plandes/grsync/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/plandes/grsync/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/plandes/grsync/compare/v0.4.1...v1.0.0
 [0.4.1]: https://github.com/plandes/grsync/compare/v0.4.0...v0.4.1
