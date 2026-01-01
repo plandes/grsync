@@ -9,6 +9,7 @@ import os
 import stat
 import socket
 import logging
+import itertools as it
 import re
 import json
 import zipfile
@@ -34,6 +35,7 @@ class Discoverer(object):
     CONF_TARG_KEY = 'discover.target.config'
     TARG_LINKS = 'discover.target.links'
     REPO_PREF = 'discover.repo.remote_pref'
+    SKIP_OBJECTS = 'discover.skip'
     SKIP_REPOS = 'discover.repo.skip'
 
     def __init__(self, config: AppConfig, profiles: list,
@@ -43,9 +45,8 @@ class Discoverer(object):
         self.path_translator = path_translator
         self._repo_preference = repo_preference
 
-    def _get_repo_paths(self, paths):
+    def _get_repo_paths(self, paths) -> Iterable[Path]:
         """Recusively find git repository root directories."""
-        git_paths = []
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug('repo root search paths {}'.format(paths))
         for path in paths:
@@ -54,11 +55,11 @@ class Discoverer(object):
             for root, dirs, files in os.walk(path.resolve()):
                 rootpath = Path(root)
                 if rootpath.name == '.git':
-                    git_paths.append(rootpath.parent)
-        return git_paths
+                    yield rootpath.parent
 
     def _discover_repo_specs(self, paths: Iterable[Path],
-                             links: Tuple[SymbolicLink, ...]) -> List[RepoSpec]:
+                             links: Tuple[SymbolicLink, ...]) -> \
+            Iterable[RepoSpec]:
         """Return a list of RepoSpec objects.
 
         :param paths: a list of paths each of which start a new RepoSpec
@@ -67,15 +68,15 @@ class Discoverer(object):
                       repository, and if so, add them to the RepoSpec
 
         """
-        repo_specs: List[RepoSpec] = []
         if self.config.has_option(self.SKIP_REPOS):
             regex: str
             for regex in self.config.get_option(self.SKIP_REPOS):
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(f"filter paths on regex: '{regex}'")
                 pat: re.Pattern = re.compile(regex)
-                paths = tuple(filter(
-                    lambda p: pat.match(str(p)) is None, paths))
+                paths = map(lambda t: t[0],
+                            filter(lambda t: t[1].match(str(t[0])) is None,
+                                   zip(paths, it.repeat(pat))))
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'repo spec paths: {paths}')
         path: Path
@@ -87,8 +88,7 @@ class Discoverer(object):
             if len(repo_spec.remotes) == 0:
                 logger.warning(f'repo {repo_spec} has no remotes--skipping...')
             else:
-                repo_specs.append(repo_spec)
-        return repo_specs
+                yield repo_spec
 
     @property
     @persisted('_profiles')
@@ -97,15 +97,23 @@ class Discoverer(object):
             raise ValueError('no configuration given; use the --help option')
         return self.config.get_profiles(self.profiles_override)
 
-    def get_discoverable_objects(self):
+    def get_discoverable_objects(self) -> List[Path]:
         """Find git repos, files, sym links and directories to reconstitute
         later.
 
         """
+        fls: Iterable[str] = self.config.get_discoverable_objects(self.profiles)
         paths = []
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'finding persist objects in {self.config.config_file}')
-        for fname in self.config.get_discoverable_objects(self.profiles):
+        if self.config.has_option(self.SKIP_OBJECTS):
+            regex: str
+            for regex in self.config.get_option(self.SKIP_OBJECTS):
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f"filter paths on regex: '{regex}'")
+                pat: re.Pattern = re.compile(regex)
+                fls = tuple(filter(lambda p: pat.match(str(p)) is None, fls))
+        for fname in fls:
             path = Path(fname).expanduser().absolute()
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(f'file pattern {fname} -> {path}')
@@ -148,6 +156,39 @@ class Discoverer(object):
             fobj['rel'] = self.path_translator.relative_to(dst)
         return fobj
 
+    def _get_dirs_links_specs(self, files: List[Path]):
+        # find all things to persist (repos, symlinks, files, etc)
+        dobjs: List[Path] = self.get_discoverable_objects()
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'dobjs {len(dobjs)}')
+        # all directories are either repositories or base directories to
+        # persist files in the distribution file
+        dirs_or_gits: Tuple[Path, ...] = tuple(
+            filter(lambda x: x.is_dir() and not x.is_symlink(), dobjs))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'dirs_or_gits {len(dirs_or_gits)}')
+        # find the directories that have git repos in them (recursively)
+        git_paths: Iterable[Path] = self._get_repo_paths(dirs_or_gits)
+        # create symbolic link objects from those objects that are links
+        links = tuple(map(lambda lk: SymbolicLink(lk, self.path_translator),
+                          filter(lambda x: x.is_symlink(), dobjs)))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'links {len(links)}')
+        if files is not None:
+            # normal files are kept track of so we can compress them later
+            for f in filter(lambda x: x.is_file() and not x.is_symlink(), dobjs):
+                files.append(self._create_file(f))
+        # create RepoSpec objects that capture information about the git repo
+        repo_specs = self._discover_repo_specs(git_paths, links)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'repo_specs: {repo_specs}')
+        return (dirs_or_gits, links, repo_specs)
+
+    def get_repo_specs(self) -> Iterable[RepoSpec]:
+        """Return an iterable of :class:`.RepoSpec` instances."""
+        dirs_or_gits, links, repo_specs = self._get_dirs_links_specs(None)
+        return repo_specs
+
     def discover(self, flatten: bool) -> Dict[str, Any]:
         """Main worker method to capture all the user home information (git
         repos, files, sym links and empty directories per the configuration
@@ -159,30 +200,15 @@ class Discoverer(object):
                         freeze task
 
         """
-        files = []
+        files: List[Path] = []
         dirs = []
         empty_dirs = []
         pattern_links = []
         path_trans = self.path_translator
-
-        # find all things to persist (repos, symlinks, files, etc)
-        dobjs = self.get_discoverable_objects()
-        # all directories are either repositories or base directories to
-        # persist files in the distribution file
-        dirs_or_gits = tuple(
-            filter(lambda x: x.is_dir() and not x.is_symlink(), dobjs))
-        # find the directories that have git repos in them (recursively)
-        git_paths = self._get_repo_paths(dirs_or_gits)
-        # create symbolic link objects from those objects that are links
-        links = tuple(map(lambda lk: SymbolicLink(lk, self.path_translator),
-                          filter(lambda x: x.is_symlink(), dobjs)))
-        # normal files are kept track of so we can compress them later
-        for f in filter(lambda x: x.is_file() and not x.is_symlink(), dobjs):
-            files.append(self._create_file(f))
-        # create RepoSpec objects that capture information about the git repo
-        repo_specs = self._discover_repo_specs(git_paths, links)
+        dirs_or_gits, links, repo_specs = self._get_dirs_links_specs(files)
+        repo_specs: Tuple[RepoSpec, ...] = tuple(repo_specs)
         # these are the Path objects to where the repo lives on the local fs
-        repo_paths = set(map(lambda x: x.path, repo_specs))
+        repo_paths = set(map(lambda x: x.path, tuple(repo_specs)))
         # add the configuration used to freeze so the target can freeze again
         if self.config.has_option(self.CONF_TARG_KEY):
             config_targ = self.config.get_option(self.CONF_TARG_KEY)

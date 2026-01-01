@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Added
+- Provide a "streaming" feature to repository spec discovery with
+  `Discoverer.get_repo_specs` to iterate over repository specs.
+
+
 ## [1.1.0] - 2025-12-31
 ### Removed
 - Python 3.11 support.
