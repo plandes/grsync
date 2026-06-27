@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.1.1] - 2026-06-26
 ### Added
 - Provide a "streaming" feature to repository spec discovery with
   `Discoverer.get_repo_specs` to iterate over repository specs.
@@ -168,7 +169,8 @@ Stable release.
 - Initial version
 
 
-[Unreleased]: https://github.com/plandes/grsync/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/plandes/grsync/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/plandes/grsync/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/plandes/grsync/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/plandes/grsync/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/plandes/grsync/compare/v0.4.1...v1.0.0
