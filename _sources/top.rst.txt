@@ -1,0 +1,21 @@
+Synchronize and manage multiple GitHub repositories
+===================================================
+This program captures your home directory and synchronize it with another host using Git repo metadata, symbolic links and persisted files.
+
+.. toctree::
+   :maxdepth: 3
+   :glob:
+
+   Overview <index.md>
+   doc/*
+   API Reference <api.rst>
+   Contributing <CONTRIBUTING.md>
+   License <LICENSE.md>
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
